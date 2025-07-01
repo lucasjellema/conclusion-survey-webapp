@@ -1,0 +1,243 @@
+{
+  "title": "Conclusion European Cloud Survey",
+  "description": "This survey collects information about cloud computing adoption and challenges in European organizations.",
+  "steps": [
+    {
+      "id": "step1",
+      "title": "Organization Profile",
+      "description": "Basic information about your organization",
+      "questions": [
+        {
+          "id": "orgSize",
+          "type": "radio",
+          "title": "What is the size of your organization?",
+          "description": "Please select the option that best describes your organization's size.",
+          "required": true,
+          "options": [
+            { "value": "small", "label": "Small (1-50 employees)" },
+            { "value": "medium", "label": "Medium (51-250 employees)" },
+            { "value": "large", "label": "Large (251-1000 employees)" },
+            { "value": "enterprise", "label": "Enterprise (1000+ employees)" }
+          ]
+        },
+        {
+          "id": "industry",
+          "type": "radio",
+          "title": "Which industry does your organization primarily operate in?",
+          "description": "Select the most relevant industry sector.",
+          "required": true,
+          "allowComment": true,
+          "options": [
+            { "value": "finance", "label": "Financial Services" },
+            { "value": "healthcare", "label": "Healthcare" },
+            { "value": "manufacturing", "label": "Manufacturing" },
+            { "value": "retail", "label": "Retail" },
+            { "value": "technology", "label": "Technology" },
+            { "value": "education", "label": "Education" },
+            { "value": "government", "label": "Government" },
+            { "value": "other", "label": "Other" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "step2",
+      "title": "Cloud Adoption",
+      "description": "Information about your organization's cloud adoption status",
+      "questions": [
+        {
+          "id": "cloudUsage",
+          "type": "checkbox",
+          "title": "Which cloud services does your organization currently use?",
+          "description": "Select all that apply.",
+          "required": true,
+          "options": [
+            { "value": "iaas", "label": "Infrastructure as a Service (IaaS)" },
+            { "value": "paas", "label": "Platform as a Service (PaaS)" },
+            { "value": "saas", "label": "Software as a Service (SaaS)" },
+            { "value": "private", "label": "Private Cloud" },
+            { "value": "hybrid", "label": "Hybrid Cloud" },
+            { "value": "none", "label": "We don't use cloud services" }
+          ]
+        },
+        {
+          "id": "cloudProviders",
+          "type": "matrix2d",
+          "title": "For each provider, indicate your organization's usage status:",
+          "description": "Click on the cell that represents your organization's relationship with each provider.",
+          "matrix": {
+            "rows": [
+              { "id": "aws", "label": "Amazon Web Services" },
+              { "id": "azure", "label": "Microsoft Azure" },
+              { "id": "gcp", "label": "Google Cloud Platform" },
+              { "id": "ibm", "label": "IBM Cloud" },
+              { "id": "oracle", "label": "Oracle Cloud" }
+            ],
+            "columns": [
+              { "id": "not_using", "label": "Not Using" },
+              { "id": "evaluating", "label": "Evaluating" },
+              { "id": "limited_use", "label": "Limited Use" },
+              { "id": "extensive_use", "label": "Extensive Use" },
+              { "id": "primary", "label": "Primary Provider" }
+            ],
+            "allowMultiple": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "step3",
+      "title": "Cloud Benefits",
+      "description": "Assessment of the benefits your organization has experienced from cloud adoption",
+      "questions": [
+        {
+          "id": "benefitsRating",
+          "type": "likert",
+          "title": "Rate the benefits your organization has experienced from cloud adoption:",
+          "description": "For each benefit, indicate the level of impact experienced by your organization.",
+          "options": [
+            { "value": "cost_savings", "label": "Cost savings" },
+            { "value": "scalability", "label": "Scalability" },
+            { "value": "agility", "label": "Business agility" },
+            { "value": "innovation", "label": "Innovation acceleration" },
+            { "value": "remote_work", "label": "Support for remote work" }
+          ],
+          "likertScale": {
+            "min": 1,
+            "max": 5,
+            "labels": {
+              "1": "No benefit",
+              "2": "Minimal benefit",
+              "3": "Moderate benefit",
+              "4": "Significant benefit",
+              "5": "Transformational benefit"
+            }
+          }
+        },
+        {
+          "id": "roi",
+          "type": "rangeSlider",
+          "title": "What has been your organization's estimated ROI from cloud adoption?",
+          "description": "Slide to indicate your estimated return on investment percentage.",
+          "rangeSlider": {
+            "min": -20,
+            "max": 100,
+            "step": 5,
+            "labels": {
+              "-20": "Negative ROI",
+              "0": "Break even",
+              "25": "25%",
+              "50": "50%",
+              "75": "75%",
+              "100": "100%+"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "step4",
+      "title": "Challenges and Concerns",
+      "description": "Information about challenges faced during cloud adoption",
+      "questions": [
+        {
+          "id": "challenges",
+          "type": "checkbox",
+          "title": "Which challenges has your organization faced with cloud adoption?",
+          "description": "Select all that apply.",
+          "required": true,
+          "options": [
+            { "value": "security", "label": "Security concerns" },
+            { "value": "compliance", "label": "Regulatory compliance" },
+            { "value": "cost", "label": "Cost management" },
+            { "value": "skills", "label": "Skills gap" },
+            { "value": "integration", "label": "Integration with existing systems" },
+            { "value": "vendor_lock", "label": "Vendor lock-in" },
+            { "value": "data_sovereignty", "label": "Data sovereignty" }
+          ],
+          "allowComment": true
+        },
+        {
+          "id": "challenge_details",
+          "type": "longText",
+          "title": "Please describe your biggest cloud adoption challenge in detail:",
+          "description": "Provide specifics about the most significant challenge your organization has faced."
+        }
+      ]
+    },
+    {
+      "id": "step5",
+      "title": "Future Plans",
+      "description": "Information about your organization's future cloud plans",
+      "questions": [
+        {
+          "id": "future_investments",
+          "type": "radio",
+          "title": "How do you expect your organization's cloud investments to change over the next 2 years?",
+          "description": "Select the option that best describes your organization's plans.",
+          "required": true,
+          "options": [
+            { "value": "decrease_significantly", "label": "Decrease significantly" },
+            { "value": "decrease_somewhat", "label": "Decrease somewhat" },
+            { "value": "stay_same", "label": "Stay about the same" },
+            { "value": "increase_somewhat", "label": "Increase somewhat" },
+            { "value": "increase_significantly", "label": "Increase significantly" }
+          ]
+        },
+        {
+          "id": "cloud_tech_tags",
+          "type": "tags",
+          "title": "Which cloud technologies are you currently using?",
+          "description": "Select or add the cloud technologies used in your organization.",
+          "required": false,
+          "allowComment": true,
+          "tagOptions": {
+            "allowCustom": true,
+            "maxTags": 0,
+            "tags": [
+              "AWS",
+              "Microsoft Azure",
+              "Google Cloud Platform",
+              "IBM Cloud",
+              "Oracle Cloud",
+              "Alibaba Cloud",
+              "Kubernetes",
+              "Docker",
+              "Serverless",
+              "Terraform",
+              "Ansible",
+              "CI/CD Pipelines"
+            ]
+          }
+        },
+        {
+          "id": "additional_comments",
+          "type": "longText",
+          "title": "Any additional comments about your organization's cloud strategy?",
+          "description": "Please share any other insights or information about your cloud adoption journey.",
+          "allowComment": false
+        },
+        {
+          "id": "cloud_priorities",
+          "type": "rankOptions",
+          "title": "Rank the following cloud priorities for your organization:",
+          "description": "Drag and drop the items to rank them from highest priority (top) to lowest priority (bottom).",
+          "rankOptions": {
+            "showScale": true,
+            "scaleLabels": {
+              "high": "Highest Priority",
+              "low": "Lowest Priority"
+            },
+            "options": [
+              { "value": "cost_optimization", "label": "Cost optimization" },
+              { "value": "security", "label": "Security and compliance" },
+              { "value": "scalability", "label": "Scalability and flexibility" },
+              { "value": "innovation", "label": "Innovation and new capabilities" },
+              { "value": "time_to_market", "label": "Speed and time to market" }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
