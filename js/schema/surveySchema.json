@@ -77,7 +77,7 @@
                     "properties": {
                       "value": {
                         "type": "string",
-                        "description": "Value of the option"
+                        "description": "Value of the option; when value is other, the option is special and a text input is provided for the user to type in their other value"
                       },
                       "label": {
                         "type": "string",

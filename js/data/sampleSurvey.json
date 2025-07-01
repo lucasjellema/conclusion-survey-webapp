@@ -153,7 +153,8 @@
             { "value": "skills", "label": "Skills gap" },
             { "value": "integration", "label": "Integration with existing systems" },
             { "value": "vendor_lock", "label": "Vendor lock-in" },
-            { "value": "data_sovereignty", "label": "Data sovereignty" }
+            { "value": "data_sovereignty", "label": "Data sovereignty" },
+            { "value": "other", "label": "Other" }
           ],
           "allowComment": true
         },

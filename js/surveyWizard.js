@@ -191,8 +191,8 @@ function handleSurveySubmit(result) {
           // Try to find the question title from the survey definition
           let questionTitle = questionId;
           try {
-            // This is a simplified approach - you might need to search through the survey definition
-            const allSteps = window.surveyData.getAllSteps();
+            // Use the imported surveyData module instead of accessing it through window
+            const allSteps = surveyData.getAllSteps();
             if (allSteps) {
               for (const step of allSteps) {
                 for (const question of step.questions || []) {
