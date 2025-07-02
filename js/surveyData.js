@@ -8,6 +8,7 @@
  */
 
 import * as dataService from './dataService.js';
+import * as auth from './auth.js';
 
 // Constants for local storage keys
 const STORAGE_KEYS = {
@@ -286,12 +287,19 @@ export async function submitSurvey() {
   }
   
   try {
+    // Get username from token if available
+    const idTokenClaims = auth.getIdTokenClaims();
+    const username = idTokenClaims ? 
+      (idTokenClaims.preferred_username || idTokenClaims.email || idTokenClaims.name || 'unknown') : 
+      'unknown';
+    
     // Prepare submission data
     const submissionData = {
       surveyId: surveyState.definition.id || 'unknown',
       surveyTitle: surveyState.definition.title,
       completedAt: new Date().toISOString(),
-      responses: surveyState.responses
+      responses: surveyState.responses,
+      username: username // Include username from token
     };
     
     // Use the dataService to save the survey data
