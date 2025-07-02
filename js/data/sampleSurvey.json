@@ -229,7 +229,10 @@
               { "id": "aws", "label": "Amazon Web Services", "letter": "A", "shape": "circle", "defaultPosition": 80 },
               { "id": "azure", "label": "Microsoft Azure", "letter": "M", "shape": "rectangle", "defaultPosition": 60 },
               { "id": "gcp", "label": "Google Cloud Platform", "letter": "G", "shape": "triangle", "defaultPosition": 40 },
+              { "id": "alibaba", "label": "Alibaba Cloud", "letter": "L", "shape": "circle", "defaultPosition": 30 },
               { "id": "ibm", "label": "IBM Cloud", "letter": "I", "shape": "circle", "defaultPosition": 20 },
+              { "id": "stackit", "label": "StackIT", "letter": "S", "shape": "triangle", "defaultPosition": 15 },
+              { "id": "scaleway", "label": "Scaleway", "letter": "C", "shape": "rectangle", "defaultPosition": 5 },
               { "id": "oracle", "label": "Oracle Cloud", "letter": "O", "shape": "rectangle", "defaultPosition": 10 }
             ],
             "zones": [

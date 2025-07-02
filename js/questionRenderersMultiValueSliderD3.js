@@ -9,7 +9,8 @@ import { fixSvgRectDimensions } from './svgRectValidator.js';
 
 // Constants
 const SLIDER_MARGIN = { top: 40, right: 20, bottom: 40, left: 20 };
-const SLIDER_HEIGHT = 300;
+const BASE_SLIDER_HEIGHT = 300; // Base height for few options
+const MIN_OPTION_SPACING = 60; // Minimum vertical space per option
 const OPTION_RADIUS = 20;
 
 /**
@@ -115,14 +116,26 @@ function createD3Slider(container, config, questionId) {
     container.style.minWidth = '300px';
   }
   
+  // Extract configuration for sizing calculations
+  const configOptions = config.options || [];
+  
   // Calculate dimensions with safety checks
   const calculatedWidth = Math.max(container.clientWidth - SLIDER_MARGIN.left - SLIDER_MARGIN.right, 200);
-  const calculatedHeight = Math.max(SLIDER_HEIGHT - SLIDER_MARGIN.top - SLIDER_MARGIN.bottom, 200);
+  
+  // Calculate dynamic height based on number of options
+  // Use at least BASE_SLIDER_HEIGHT, but increase if we have many options
+  const optionCount = configOptions.length;
+  const recommendedHeight = Math.max(
+    BASE_SLIDER_HEIGHT,
+    optionCount * MIN_OPTION_SPACING
+  );
+  
+  const calculatedHeight = Math.max(recommendedHeight - SLIDER_MARGIN.top - SLIDER_MARGIN.bottom, 200);
   
   // Store these safe dimensions for reuse
   const width = calculatedWidth;
   const height = calculatedHeight;
-  console.log(`Creating slider with dimensions: ${width}x${height}`);
+  console.log(`Creating slider with dimensions: ${width}x${height} for ${optionCount} options`);
   
   // Create SVG element with explicit positive dimensions
   const svg = d3.select(container)
@@ -264,10 +277,18 @@ function createD3Slider(container, config, questionId) {
     // Clear any existing option markers
     svg.selectAll('.option-group').remove();
     
-    // Calculate vertical positions for the options
-    const laneHeight = height / (options.length + 1);
+    // Calculate vertical positions for the options with better spacing
+    // Use the full height with padding at top and bottom
+    const effectiveHeight = height - OPTION_RADIUS * 2; // Leave space at top and bottom edges
+    const optionCount = configOptions.length;
+    
+    // Calculate lane height based on number of options
+    // If we have few options, spread them out more evenly
+    const laneHeight = effectiveHeight / (Math.max(optionCount, 1));
+    
+    // Create option groups
     const optionGroups = svg.selectAll('.option-group')
-      .data(options)
+      .data(configOptions)
       .enter()
       .append('g')
       .attr('class', 'option-group')
@@ -275,7 +296,8 @@ function createD3Slider(container, config, questionId) {
       .attr('transform', (d, i) => {
         const xPos = x(d.defaultPosition || 0);
         // Distribute vertically with equal spacing
-        const yPos = laneHeight * (i + 1);
+        // Add offset to center first and last options relative to edges
+        const yPos = OPTION_RADIUS + (laneHeight * i) + (laneHeight / 2);
         positions[d.id] = d.defaultPosition || 0;
         return `translate(${xPos}, ${yPos})`;
       })
