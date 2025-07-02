@@ -243,6 +243,28 @@
           }
         },
         {
+          "id": "cloud_cost_benefit",
+          "type": "multiValueSlider",
+          "title": "Rate your cloud providers on the cost-benefit spectrum",
+          "description": "Position each provider along the spectrum from high cost/low benefit (left) to low cost/high benefit (right).",
+          "multiValueSlider": {
+            "mode": "continuous",
+            "options": [
+              { "id": "aws", "label": "Amazon Web Services", "letter": "A", "shape": "circle", "defaultPosition": 65 },
+              { "id": "azure", "label": "Microsoft Azure", "letter": "M", "shape": "rectangle", "defaultPosition": 50 },
+              { "id": "gcp", "label": "Google Cloud Platform", "letter": "G", "shape": "triangle", "defaultPosition": 75 },
+              { "id": "ibm", "label": "IBM Cloud", "letter": "I", "shape": "circle", "defaultPosition": 30 },
+              { "id": "oracle", "label": "Oracle Cloud", "letter": "O", "shape": "rectangle", "defaultPosition": 20 }
+            ],
+            "colorStart": "#dc3545",
+            "colorEnd": "#198754",
+            "min": 0,
+            "max": 100,
+            "showLabels": true,
+            "showLegend": true
+          }
+        },
+        {
           "id": "cloud_priorities",
           "type": "rankOptions",
           "title": "Rank the following cloud priorities for your organization:",

@@ -123,7 +123,16 @@ export function renderMultiValueSlider(question) {
   const optionsElements = [];
   const optionsData = {};
   
-  options.forEach(option => {
+  // Calculate number of lanes needed based on number of options
+  const numLanes = options.length;
+  const laneHeight = 40; // Height of each option marker
+  const totalHeight = sliderTrack.clientHeight;
+  
+  // Assign vertical lanes to each option
+  const lanePositions = calculateLanePositions(options.length, totalHeight);
+  
+  // Create the option elements
+  options.forEach((option, index) => {
     // Create the option marker element
     const optionEl = document.createElement('div');
     optionEl.className = 'slider-option';
@@ -146,22 +155,25 @@ export function renderMultiValueSlider(question) {
     tooltip.textContent = option.label;
     optionEl.appendChild(tooltip);
     
-    // Set initial position or default to 0
+    // Get the lane position for this option
     const initialPosition = option.defaultPosition ?? 0;
-    positionOptionElement(optionEl, initialPosition);
+    const lanePosition = lanePositions[index];
+    positionOptionElement(optionEl, initialPosition, lanePosition);
     
     // Store the option element and initial data
     optionsElements.push(optionEl);
     optionsData[option.id] = {
       position: initialPosition,
-      element: optionEl
+      lanePosition: lanePosition,
+      element: optionEl,
+      laneIndex: index
     };
     
     // Add the option element to the slider track
     sliderTrack.appendChild(optionEl);
     
     // Add drag and drop functionality
-    setupDragAndDrop(optionEl, sliderTrack, option.id, question.id);
+    setupDragAndDrop(optionEl, sliderTrack, option.id, question.id, lanePosition);
   });
   
   // Create legend if showLegend is true
@@ -205,7 +217,8 @@ export function renderMultiValueSlider(question) {
       Object.keys(savedPositions).forEach(optionId => {
         if (optionsData[optionId]) {
           const position = savedPositions[optionId];
-          positionOptionElement(optionsData[optionId].element, position);
+          const lanePosition = optionsData[optionId].lanePosition;
+          positionOptionElement(optionsData[optionId].element, position, lanePosition);
           optionsData[optionId].position = position;
         }
       });
@@ -252,15 +265,56 @@ export function renderMultiValueSlider(question) {
 }
 
 /**
+ * Calculate vertical positions for each lane
+ * @param {number} numOptions - Number of options/lanes needed
+ * @param {number} totalHeight - Total height of the slider track
+ * @returns {Array} - Array of vertical positions for each lane
+ */
+function calculateLanePositions(numOptions, totalHeight) {
+  // Predefine specific lane positions for common numbers of options
+  // This ensures consistent, well-spaced positioning with enough space from the top (zone labels)
+  const specificLanePositions = {
+    1: [150], // Center position for 1 option
+    2: [80, 220], // Top and bottom positions for 2 options
+    3: [80, 150, 220], // Top, middle, and bottom for 3 options
+    4: [80, 120, 180, 220], // Four evenly distributed lanes
+    5: [80, 115, 150, 185, 220]  // Five evenly distributed lanes
+  };
+  
+  // If we have a predefined set of positions for this number of options, use it
+  if (specificLanePositions[numOptions]) {
+    return specificLanePositions[numOptions];
+  }
+  
+  // For larger numbers, calculate positions dynamically
+  const lanes = [];
+  const padding = 35; // Increased padding from edges
+  const usableHeight = totalHeight - (padding * 2);
+  
+  // For many options, distribute them evenly
+  const step = usableHeight / (numOptions - 1);
+  
+  for (let i = 0; i < numOptions; i++) {
+    const position = padding + (i * step);
+    lanes.push(Math.floor(position));
+  }
+  
+  return lanes;
+}
+
+/**
  * Set the position of an option element on the slider
  * @param {HTMLElement} optionEl - The option element
- * @param {number} position - The position (0-100)
+ * @param {number} position - The horizontal position (0-100)
+ * @param {number} lanePosition - The vertical position in pixels
  */
-function positionOptionElement(optionEl, position) {
+function positionOptionElement(optionEl, position, lanePosition) {
   // Ensure position is between 0 and 100
   const safePosition = Math.max(0, Math.min(100, position));
   optionEl.style.left = `${safePosition}%`;
+  optionEl.style.top = `${lanePosition}px`;
   optionEl.dataset.position = safePosition;
+  optionEl.dataset.lane = lanePosition;
 }
 
 /**
@@ -269,8 +323,9 @@ function positionOptionElement(optionEl, position) {
  * @param {HTMLElement} sliderTrack - The slider track element
  * @param {string} optionId - The option ID
  * @param {string} questionId - The question ID
+ * @param {number} lanePosition - Vertical lane position in pixels
  */
-function setupDragAndDrop(optionEl, sliderTrack, optionId, questionId) {
+function setupDragAndDrop(optionEl, sliderTrack, optionId, questionId, lanePosition) {
   let dragState = DRAG_STATE.idle;
   let startX, startLeft;
   
@@ -318,8 +373,8 @@ function setupDragAndDrop(optionEl, sliderTrack, optionId, questionId) {
     const newLeft = Math.max(0, Math.min(sliderWidth, startLeft + deltaX));
     const newPosition = (newLeft / sliderWidth) * 100;
     
-    // Update position
-    positionOptionElement(optionEl, newPosition);
+    // Update position while maintaining vertical lane position
+    positionOptionElement(optionEl, newPosition, lanePosition);
     
     // Find and highlight current zone if in discrete mode
     if (sliderTrack.dataset.mode === 'discrete') {
@@ -338,9 +393,9 @@ function setupDragAndDrop(optionEl, sliderTrack, optionId, questionId) {
     const tooltip = optionEl.querySelector('.option-tooltip');
     if (tooltip) tooltip.classList.remove('visible');
     
-    // If in discrete mode, snap to zone
+    // If in discrete mode, snap to zone while maintaining lane position
     if (sliderTrack.dataset.mode === 'discrete') {
-      snapToZone(optionEl, sliderTrack);
+      snapToZone(optionEl, sliderTrack, lanePosition);
     }
     
     // Get all current option positions
@@ -388,9 +443,11 @@ function highlightCurrentZone(optionEl, sliderTrack) {
  * Snap an option to the nearest zone center
  * @param {HTMLElement} optionEl - The option element
  * @param {HTMLElement} sliderTrack - The slider track element
+ * @param {number} lanePosition - The vertical lane position to maintain
  */
-function snapToZone(optionEl, sliderTrack) {
+function snapToZone(optionEl, sliderTrack, lanePosition) {
   const position = parseFloat(optionEl.dataset.position);
+  const currentOptionId = optionEl.dataset.optionId;
   const zones = sliderTrack.querySelectorAll('.slider-zone');
   let bestZone = null;
   let bestDistance = Infinity;
@@ -421,12 +478,43 @@ function snapToZone(optionEl, sliderTrack) {
     const start = parseFloat(bestZone.style.left);
     const width = parseFloat(bestZone.style.width);
     const center = start + (width / 2);
-    positionOptionElement(optionEl, center);
+    const zoneId = bestZone.dataset.zoneId;
+    
+    // Simply maintain the lane position when snapping
+    // Since each option has its dedicated lane, we don't need to check for overlaps
+    positionOptionElement(optionEl, center, lanePosition);
     
     // Highlight the zone
     zones.forEach(zone => zone.classList.remove('highlight'));
     bestZone.classList.add('highlight');
   }
+}
+
+/**
+ * Find options that overlap with a specified horizontal position
+ * @param {HTMLElement} sliderTrack - The slider track element
+ * @param {number} position - The horizontal position to check (0-100)
+ * @param {string} excludeOptionId - Option ID to exclude from the check
+ * @returns {Array} - Array of overlapping option elements
+ */
+function findOverlappingOptions(sliderTrack, position, excludeOptionId) {
+  const allOptions = sliderTrack.querySelectorAll('.slider-option');
+  const threshold = 5; // % distance to consider as overlapping
+  const overlapping = [];
+  
+  allOptions.forEach(option => {
+    // Skip the option we're currently moving
+    if (option.dataset.optionId === excludeOptionId) return;
+    
+    const optionPosition = parseFloat(option.dataset.position);
+    
+    // Check if positions are close enough to be considered overlapping
+    if (Math.abs(optionPosition - position) <= threshold) {
+      overlapping.push(option);
+    }
+  });
+  
+  return overlapping;
 }
 
 /**
@@ -441,6 +529,78 @@ function getCurrentPositions(optionsData) {
     const option = optionsData[optionId];
     const position = parseFloat(option.element.dataset.position);
     positions[optionId] = position;
+  });
+  
+  return positions;
+}
+
+/**
+ * Calculate vertical positions for options to prevent overlapping
+ * @param {Array} sortedOptions - Options sorted by horizontal position
+ * @returns {Object} - Map of option IDs to vertical offset values
+ */
+function calculateVerticalPositions(sortedOptions) {
+  const positions = {};
+  const proximityThreshold = 15; // % distance below which options are considered overlapping
+  const rowHeight = 45; // Height in pixels between vertical positions
+  
+  // Track the position 'bands' - options that are close to each other
+  const bands = [];
+  
+  // Process each option
+  sortedOptions.forEach(option => {
+    const currentPos = option.defaultPosition ?? 0;
+    let bandIndex = -1;
+    
+    // Check if this option belongs to an existing band
+    for (let i = 0; i < bands.length; i++) {
+      const band = bands[i];
+      
+      // If any option in this band is close to the current option
+      const isClose = band.some(bandOption => {
+        const bandOptionPos = bandOption.defaultPosition ?? 0;
+        return Math.abs(currentPos - bandOptionPos) < proximityThreshold;
+      });
+      
+      if (isClose) {
+        bandIndex = i;
+        break;
+      }
+    }
+    
+    if (bandIndex === -1) {
+      // Create a new band with this option
+      bands.push([option]);
+    } else {
+      // Add to existing band
+      bands[bandIndex].push(option);
+    }
+  });
+  
+  // Assign vertical positions based on bands
+  bands.forEach(band => {
+    if (band.length === 1) {
+      // Single option in band - no offset needed
+      positions[band[0].id] = 0;
+    } else {
+      // Multiple options in band - assign alternating positions
+      band.forEach((option, index) => {
+        // Calculate vertical offset based on position in the band
+        // Using a staggered pattern
+        let offset;
+        if (band.length === 2) {
+          // With 2 options, place one above and one below
+          offset = index === 0 ? -rowHeight : rowHeight;
+        } else {
+          // With 3+ options, stagger them more
+          const middle = Math.floor(band.length / 2);
+          const relativePos = index - middle;
+          offset = relativePos * rowHeight;
+        }
+        
+        positions[option.id] = offset;
+      });
+    }
   });
   
   return positions;

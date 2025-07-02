@@ -44,21 +44,46 @@ The survey application uses a modular approach to question rendering, with speci
   - Long Text: Rich text editors with formatting capabilities
   - Radio: Single-select option lists with "Other" field support
   - Checkbox: Multi-select option lists with "Other" field support
+  - Multi-Value Slider: Positioning multiple options along a horizontal scale with dedicated vertical lanes
 - **Common Components**:
   - Question container creation
   - Comment field support
   - Response saving integration
 
-### Extended Question Rendering (questionRenderersExtended.js)
+### Extended Question Types (questionRenderersExtended.js)
 
-- **Specialized Renderers**:
-  - Likert Scale: Rating scale questions with customizable points
-  - Range Slider: Numeric sliders with configurable ranges and labels
-  - Matrix 2D: Grid-based selection interfaces with rows and columns
-- **Features**:
-  - Table-based layouts for Likert scales
-  - Interactive sliders with dynamic value display
-  - Cell-based selection for matrices
+- **Likert Scale Questions**: Multi-item rating scales with configurable range
+  - Support for custom range definitions (1-5, 1-7, etc.)
+  - Custom labels for scale points
+  - Matrix presentation for evaluating multiple items on the same scale
+- **Range Slider Questions**: Interactive sliders for selecting values within a range
+  - Configurable min/max values
+  - Step value control
+  - Custom tick marks and labels
+- **2D Matrix Questions**: Two-dimensional grid selection
+  - Configurable rows and columns
+  - Single or multi-select modes
+
+### Multi-Value Slider Questions (questionRenderersMultiValueSlider.js)
+
+- **Core Functionality**: Allows positioning multiple options along a horizontal scale
+- **Key Features**:
+  - Dedicated vertical lanes for each option to prevent overlapping
+  - Two operational modes: discrete zones and continuous range
+  - Support for different marker shapes (circle, rectangle, triangle)
+  - Option identification with capital letters and hover tooltips
+  - Legend mapping letters to full option labels
+  - Drag-and-drop positioning with snapping to zones in discrete mode
+- **Vertical Lanes Architecture**:
+  - Each option is assigned to a fixed vertical position
+  - Options maintain their lane position while being dragged horizontally
+  - Lanes are distributed evenly across the slider's height
+  - Visual lane markers help users understand the layout
+- **Implementation Details**:
+  - Zones with configurable colors and labels in discrete mode
+  - Color gradient background in continuous mode
+  - Position values saved as percentages (0-100) for each option
+  - Response format structured as mapping between option IDs and positions
 
 ### Ranking Question Rendering (questionRenderersRank.js)
 
