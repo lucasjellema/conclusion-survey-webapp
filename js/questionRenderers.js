@@ -11,6 +11,7 @@ import * as surveyData from './surveyData.js';
 import { renderLikert, renderRangeSlider, renderMatrix2D } from './questionRenderersExtended.js';
 import * as questionRenderersRank from './questionRenderersRank.js';
 import * as questionRenderersTags from './questionRenderersTags.js';
+import { renderMultiValueSlider } from './questionRenderersMultiValueSlider.js';
 
 // Constants for question types
 const QUESTION_TYPES = {
@@ -22,7 +23,8 @@ const QUESTION_TYPES = {
   RANGE_SLIDER: 'rangeSlider',
   MATRIX_2D: 'matrix2d',
   RANK_OPTIONS: 'rankOptions',
-  TAGS: 'tags'
+  TAGS: 'tags',
+  MULTI_VALUE_SLIDER: 'multiValueSlider'
 };
 
 /**
@@ -629,6 +631,9 @@ export function renderQuestion(question) {
     case QUESTION_TYPES.TAGS:
       // Render tags questions (select multiple tags or add custom tags)
       return questionRenderersTags.default.renderTagsQuestion(question);
+    case QUESTION_TYPES.MULTI_VALUE_SLIDER:
+      // Use the imported renderMultiValueSlider function
+      return renderMultiValueSlider(question);
     default:
       console.error(`Unknown question type: ${question.type}`);
       return null;

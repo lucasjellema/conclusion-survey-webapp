@@ -47,7 +47,7 @@
                 },
                 "type": {
                   "type": "string",
-                  "enum": ["shortText", "longText", "radio", "checkbox", "likert", "rangeSlider", "matrix2d"],
+                  "enum": ["shortText", "longText", "radio", "checkbox", "likert", "rangeSlider", "matrix2d", "multiValueSlider"],
                   "description": "Type of question"
                 },
                 "title": {
@@ -177,6 +177,110 @@
                       "type": "boolean",
                       "default": false,
                       "description": "Whether multiple cells can be selected"
+                    }
+                  }
+                },
+                "multiValueSlider": {
+                  "type": "object",
+                  "description": "Configuration for multi-value slider questions",
+                  "properties": {
+                    "options": {
+                      "type": "array",
+                      "description": "Options to position on the slider",
+                      "minItems": 1,
+                      "items": {
+                        "type": "object",
+                        "required": ["id", "label", "letter"],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the option"
+                          },
+                          "label": {
+                            "type": "string",
+                            "description": "Display label for the option"
+                          },
+                          "letter": {
+                            "type": "string",
+                            "description": "Capital letter to display inside the option shape",
+                            "pattern": "^[A-Z]$"
+                          },
+                          "shape": {
+                            "type": "string",
+                            "enum": ["circle", "rectangle", "triangle"],
+                            "default": "circle",
+                            "description": "Shape of the option marker"
+                          },
+                          "defaultPosition": {
+                            "type": "number",
+                            "description": "Initial position of the option on the slider (0-100)"
+                          }
+                        }
+                      }
+                    },
+                    "mode": {
+                      "type": "string",
+                      "enum": ["discrete", "continuous"],
+                      "default": "discrete",
+                      "description": "Whether the slider has discrete zones or a continuous range"
+                    },
+                    "min": {
+                      "type": "number",
+                      "default": 0,
+                      "description": "Minimum value of the slider"
+                    },
+                    "max": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "Maximum value of the slider"
+                    },
+                    "zones": {
+                      "type": "array",
+                      "description": "Zones for discrete mode",
+                      "items": {
+                        "type": "object",
+                        "required": ["id", "label", "color", "start", "end"],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the zone"
+                          },
+                          "label": {
+                            "type": "string",
+                            "description": "Label for the zone"
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "CSS color for the zone"
+                          },
+                          "start": {
+                            "type": "number",
+                            "description": "Start position of the zone (0-100)"
+                          },
+                          "end": {
+                            "type": "number",
+                            "description": "End position of the zone (0-100)"
+                          }
+                        }
+                      }
+                    },
+                    "colorStart": {
+                      "type": "string",
+                      "description": "Starting color for continuous mode gradient"
+                    },
+                    "colorEnd": {
+                      "type": "string",
+                      "description": "Ending color for continuous mode gradient"
+                    },
+                    "showLabels": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Whether to show labels on the slider"
+                    },
+                    "showLegend": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Whether to show the legend mapping letters to options"
                     }
                   }
                 }
