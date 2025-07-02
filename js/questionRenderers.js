@@ -11,7 +11,8 @@ import * as surveyData from './surveyData.js';
 import { renderLikert, renderRangeSlider, renderMatrix2D } from './questionRenderersExtended.js';
 import * as questionRenderersRank from './questionRenderersRank.js';
 import * as questionRenderersTags from './questionRenderersTags.js';
-import { renderMultiValueSlider } from './questionRenderersMultiValueSlider.js';
+// Import D3.js version of multi-value slider
+import { renderMultiValueSlider } from './questionRenderersMultiValueSliderD3.js';
 
 // Constants for question types
 const QUESTION_TYPES = {

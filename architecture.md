@@ -64,26 +64,30 @@ The survey application uses a modular approach to question rendering, with speci
   - Configurable rows and columns
   - Single or multi-select modes
 
-### Multi-Value Slider Questions (questionRenderersMultiValueSlider.js)
+### Multi-Value Slider Questions (questionRenderersMultiValueSliderD3.js)
 
 - **Core Functionality**: Allows positioning multiple options along a horizontal scale
 - **Key Features**:
-  - Dedicated vertical lanes for each option to prevent overlapping
+  - SVG-based implementation using D3.js for smooth interactions and scalability
+  - Dynamic support for many options (10-12+) with automatic vertical distribution
   - Two operational modes: discrete zones and continuous range
   - Support for different marker shapes (circle, rectangle, triangle)
   - Option identification with capital letters and hover tooltips
   - Legend mapping letters to full option labels
   - Drag-and-drop positioning with snapping to zones in discrete mode
-- **Vertical Lanes Architecture**:
-  - Each option is assigned to a fixed vertical position
-  - Options maintain their lane position while being dragged horizontally
-  - Lanes are distributed evenly across the slider's height
-  - Visual lane markers help users understand the layout
+- **D3.js Architecture**:
+  - Responsive SVG container that adapts to screen size
+  - Dynamic scaling with D3.js scale functions
+  - Declarative data binding between option data and visual elements
+  - Smooth transitions and visual feedback during interactions
+  - Equal vertical distribution of options for optimal spacing
 - **Implementation Details**:
   - Zones with configurable colors and labels in discrete mode
-  - Color gradient background in continuous mode
+  - Color gradient using SVG linear gradients in continuous mode
+  - D3.js drag behavior for smooth and precise positioning
   - Position values saved as percentages (0-100) for each option
   - Response format structured as mapping between option IDs and positions
+  - ResizeObserver for responsive layout adaptation
 
 ### Ranking Question Rendering (questionRenderersRank.js)
 
