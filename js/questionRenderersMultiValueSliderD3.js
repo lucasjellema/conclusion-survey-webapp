@@ -405,15 +405,15 @@ function createD3Slider(container, config, questionId) {
     });
   };
   
-  // Create the options initially
+  // Create option groups with vertical distribution
   createOptionsWithMarkers();
   
   // Create legend if enabled
   if (showLegend) {
-    createLegend(container, options);
+    createLegend(container, configOptions);
   }
   
-  // Load saved response if available
+  // Load saved positions for the question
   loadSavedResponse(questionId, positions, svg, x);
   
   // Handle window resize to make the slider responsive
@@ -800,36 +800,74 @@ function createLegend(container, options) {
  * @param {Function} x - D3 scale function
  */
 function loadSavedResponse(questionId, positions, svg, x) {
+  console.log(`Loading saved response for question ${questionId}...`);
   const existingResponse = surveyData.getResponse(questionId);
   
   if (existingResponse && existingResponse.value) {
     try {
       const savedPositions = existingResponse.value;
+      console.log('Found saved positions:', savedPositions);
       
       // Update positions object with saved values
-      Object.keys(savedPositions).forEach(optionId => {
+      Object.keys(savedPositions.value).forEach(optionId => {
         if (positions.hasOwnProperty(optionId)) {
-          positions[optionId] = savedPositions[optionId];
+          positions[optionId] = savedPositions.value[optionId];
+          console.log(`Updated position for ${optionId} to ${savedPositions.value[optionId]}`);
         }
       });
       
+      // Ensure we have option groups to update
+      const optionGroups = svg.selectAll('.option-group');
+      console.log(`Found ${optionGroups.size()} option groups to update`);
+      
       // Update option elements with saved positions
-      svg.selectAll('.option-group').each(function() {
+      optionGroups.each(function() {
         const optionId = d3.select(this).attr('data-option-id');
-        if (savedPositions[optionId] !== undefined) {
+        if (savedPositions.value[optionId] !== undefined) {
           // Get current vertical position from transform
           const currentTransform = d3.select(this).attr('transform');
-          const yPos = parseFloat(currentTransform.split(',')[1]);
+          if (!currentTransform) {
+            console.warn(`Transform not found for option ${optionId}`);
+            return;
+          }
+          
+          // Parse the transform to get Y position
+          const match = currentTransform.match(/translate\(([^,]+),([^)]+)\)/);
+          if (!match) {
+            console.warn(`Invalid transform format for option ${optionId}: ${currentTransform}`);
+            return;
+          }
+          
+          const yPos = parseFloat(match[2]);
           
           // Update position
-          const xPos = x(savedPositions[optionId]);
+          const xPos = x(savedPositions.value[optionId]);
+          console.log(`Moving option ${optionId} to x=${xPos} (value=${savedPositions.value[optionId]})`);
           d3.select(this).attr('transform', `translate(${xPos}, ${yPos})`);
+        } else {
+          console.log(`No saved position for option ${optionId}`);
         }
       });
+      
+      // Highlight zones if applicable
+      const questionElement = document.getElementById(`question-${questionId}`);
+      if (questionElement) {
+        // Trigger a small resize to ensure elements are properly positioned and rendered
+        setTimeout(() => {
+          const resizeEvent = new Event('resize');
+          window.dispatchEvent(resizeEvent);
+        }, 100);
+      }
+      
+      return true; // Successfully loaded saved response
     } catch (e) {
       console.error('Error loading saved positions:', e);
     }
+  } else {
+    console.log('No existing response found for this question');
   }
+  
+  return false; // No saved response loaded
 }
 
 /**
@@ -840,10 +878,32 @@ function loadSavedResponse(questionId, positions, svg, x) {
 function saveResponse(questionId, positions) {
   const currentResponse = surveyData.getResponse(questionId) || {};
   
+  // Save the response data
   surveyData.saveResponse(questionId, {
     value: { ...positions },
     comment: currentResponse.comment || ''
   });
+  
+  // Dispatch a custom event to notify that a response has changed
+  // This will trigger re-evaluation of conditional questions
+  const responseChangeEvent = new CustomEvent('survey:response-changed', {
+    detail: {
+      questionId: questionId,
+      value: { ...positions }
+    },
+    bubbles: true
+  });
+  
+  // Find the question container and dispatch the event
+  const questionContainer = document.getElementById(`question-${questionId}`);
+  if (questionContainer) {
+    console.log(`Dispatching response change event for ${questionId}`);
+    questionContainer.dispatchEvent(responseChangeEvent);
+  } else {
+    // If container not found, dispatch from document body
+    console.log(`Question container not found, dispatching from document body`);
+    document.body.dispatchEvent(responseChangeEvent);
+  }
 }
 
 export default {

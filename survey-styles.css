@@ -51,6 +51,61 @@
   width: 0%;
 }
 
+/* Step Styling */
+.survey-step {
+  position: relative;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Step Background Image */
+.survey-step-bg {
+  position: relative;
+}
+
+.survey-step-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.15; /* Default opacity for background images */
+  border-radius: 8px;
+  z-index: 0;
+}
+
+/* Positioning options */
+.survey-step-bg.bg-position-top::before {
+  background-position: center top;
+}
+
+.survey-step-bg.bg-position-bottom::before {
+  background-position: center bottom;
+}
+
+/* Background opacity options */
+.survey-step-bg.bg-opacity-light::before {
+  opacity: 0.1;
+}
+
+.survey-step-bg.bg-opacity-medium::before {
+  opacity: 0.2;
+}
+
+.survey-step-bg.bg-opacity-heavy::before {
+  opacity: 0.3;
+}
+
+/* Step content is positioned above background */
+.survey-step-content {
+  position: relative;
+  z-index: 1;
+}
+
 /* Step Titles and Descriptions */
 .step-title {
   margin-top: 0;

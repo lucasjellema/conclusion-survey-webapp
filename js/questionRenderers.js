@@ -13,6 +13,8 @@ import * as questionRenderersRank from './questionRenderersRank.js';
 import * as questionRenderersTags from './questionRenderersTags.js';
 // Import D3.js version of multi-value slider
 import { renderMultiValueSlider } from './questionRenderersMultiValueSliderD3.js';
+// Import condition evaluator
+import { shouldShowQuestion } from './conditionEvaluator.js';
 
 // Constants for question types
 const QUESTION_TYPES = {
@@ -672,13 +674,136 @@ export function renderQuestionsForStep(step, container) {
   const questionsContainer = document.createElement('div');
   questionsContainer.className = 'questions-container';
   
-  // Render each question
+  // Render each question (if conditions are met)
   step.questions.forEach(question => {
-    const questionElement = renderQuestion(question);
-    if (questionElement) {
-      questionsContainer.appendChild(questionElement);
+    // Check if question should be shown based on conditions
+    if (shouldShowQuestion(question)) {
+      const questionElement = renderQuestion(question);
+      if (questionElement) {
+        questionsContainer.appendChild(questionElement);
+      }
     }
   });
   
+  // Store questions that have conditions for dynamic updates
+  setupConditionalQuestionListeners(step, questionsContainer);
+  
   container.appendChild(questionsContainer);
+}
+
+/**
+ * Set up listeners to handle dynamic updates of conditional questions
+ * @param {Object} step - The step object containing questions
+ * @param {HTMLElement} container - The container holding the questions
+ */
+function setupConditionalQuestionListeners(step, container) {
+  if (!step || !step.questions) return;
+  
+  // Find questions that have conditions and the questions they depend on
+  const conditionalQuestions = step.questions.filter(q => q.conditions && q.conditions.rules);
+  if (conditionalQuestions.length === 0) return; // No conditional questions in this step
+  
+  // Create a map of dependent questions (questions whose answers might affect other questions)
+  const dependentQuestionIds = new Set();
+  conditionalQuestions.forEach(question => {
+    question.conditions.rules.forEach(rule => {
+      dependentQuestionIds.add(rule.questionId);
+    });
+  });
+  
+  // Add change event listeners to all form elements of dependent questions
+  dependentQuestionIds.forEach(questionId => {
+    // Find all form elements for this question
+    const formElements = document.querySelectorAll(`[data-question-id="${questionId}"]`);
+    
+    formElements.forEach(element => {
+      // Add event listener based on element type
+      if (element.tagName === 'INPUT') {
+        if (element.type === 'radio' || element.type === 'checkbox') {
+          element.addEventListener('change', () => refreshConditionalQuestions(step, container));
+        } else {
+          element.addEventListener('blur', () => refreshConditionalQuestions(step, container));
+          element.addEventListener('input', debounce(() => refreshConditionalQuestions(step, container), 500));
+        }
+      } else if (element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
+        element.addEventListener('change', () => refreshConditionalQuestions(step, container));
+        element.addEventListener('blur', () => refreshConditionalQuestions(step, container));
+      }
+    });
+  });
+  
+  // Listen for the custom response change event from complex components like multiValueSlider
+  // This event bubbles up from the components to the document
+  document.addEventListener('survey:response-changed', (event) => {
+    console.log('Caught survey:response-changed event:', event.detail);
+    
+    // Check if this is a dependent question that affects conditional questions
+    if (dependentQuestionIds.has(event.detail.questionId)) {
+      console.log('This affects conditional questions, refreshing...');
+      // Refresh the conditional questions display
+      refreshConditionalQuestions(step, container);
+    }
+  });
+}
+
+/**
+ * Refresh conditional questions when dependencies change
+ * @param {Object} step - The step object containing questions
+ * @param {HTMLElement} container - The container holding the questions
+ */
+function refreshConditionalQuestions(step, container) {
+  if (!step || !step.questions) return;
+  
+  // For each question with conditions, check if it should be shown or hidden
+  step.questions.forEach(question => {
+    if (!question.conditions) return; // Skip questions without conditions
+    
+    const questionId = question.id;
+    const shouldShow = shouldShowQuestion(question);
+    const questionElement = document.getElementById(`question-${questionId}`);
+    
+    if (shouldShow && !questionElement) {
+      // Question should be shown but isn't - render it
+      const newQuestionElement = renderQuestion(question);
+      if (newQuestionElement) {
+        // Find the right position to insert
+        let inserted = false;
+        const allQuestions = Array.from(container.querySelectorAll('.survey-question'));
+        
+        // Find where this question should be in the DOM based on its order in the step.questions array
+        const questionIndex = step.questions.findIndex(q => q.id === question.id);
+        
+        for (let i = questionIndex + 1; i < step.questions.length; i++) {
+          const nextQuestion = document.getElementById(`question-${step.questions[i].id}`);
+          if (nextQuestion) {
+            container.insertBefore(newQuestionElement, nextQuestion);
+            inserted = true;
+            break;
+          }
+        }
+        
+        if (!inserted) {
+          // If we didn't find a place to insert it, append it at the end
+          container.appendChild(newQuestionElement);
+        }
+      }
+    } else if (!shouldShow && questionElement) {
+      // Question is shown but shouldn't be - remove it
+      questionElement.remove();
+    }
+  });
+}
+
+/**
+ * Debounce function to limit how often a function is called
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Time to wait in milliseconds
+ * @returns {Function} - Debounced function
+ */
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
 }

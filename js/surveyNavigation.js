@@ -148,8 +148,56 @@ export function loadCurrentStep() {
     return;
   }
   
-  // Render questions for the step
-  renderQuestionsForStep(currentStep, navState.questionsContainer);
+  // Clear any previous step classes
+  navState.questionsContainer.className = 'survey-questions-container survey-step';
+  
+  // Apply background image if available
+  if (currentStep.backgroundImage) {
+    // Add background image class
+    navState.questionsContainer.classList.add('survey-step-bg');
+    
+    // Create or update the style for this specific step
+    const stepId = currentStep.id;
+    let styleEl = document.getElementById(`style-${stepId}`);
+    
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = `style-${stepId}`;
+      document.head.appendChild(styleEl);
+    }
+    
+    // Set the background image
+    const bgUrl = currentStep.backgroundImage.url;
+    styleEl.textContent = `
+      #${navState.questionsContainer.id}.survey-step-bg::before {
+        background-image: url(${bgUrl});
+      }
+    `;
+    
+    // Apply position class if specified
+    if (currentStep.backgroundImage.position) {
+      navState.questionsContainer.classList.add(`bg-position-${currentStep.backgroundImage.position}`);
+    }
+    
+    // Apply opacity class if specified
+    if (currentStep.backgroundImage.opacity) {
+      navState.questionsContainer.classList.add(`bg-opacity-${currentStep.backgroundImage.opacity}`);
+    }
+    
+    // Add wrapper for content to ensure it sits above background
+    const contentWrapper = document.createElement('div');
+    contentWrapper.className = 'survey-step-content';
+    
+    // Render questions for the step within the content wrapper
+    renderQuestionsForStep(currentStep, contentWrapper);
+    
+    // Clear container and add the wrapper
+    navState.questionsContainer.innerHTML = '';
+    navState.questionsContainer.appendChild(contentWrapper);
+  } else {
+    // No background image, render questions directly
+    renderQuestionsForStep(currentStep, navState.questionsContainer);
+  }
   
   // Update navigation buttons
   updateNavigationButtons();

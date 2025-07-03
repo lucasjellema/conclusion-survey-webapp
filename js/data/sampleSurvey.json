@@ -6,6 +6,11 @@
       "id": "step1",
       "title": "Organization Profile",
       "description": "Basic information about your organization",
+      "backgroundImage": {
+        "url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72",
+        "opacity": "light",
+        "position": "center"
+      },
       "questions": [
         {
           "id": "orgSize",
@@ -89,6 +94,11 @@
       "id": "step3",
       "title": "Cloud Benefits",
       "description": "Assessment of the benefits your organization has experienced from cloud adoption",
+      "backgroundImage": {
+        "url": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
+        "opacity": "medium",
+        "position": "bottom"
+      },
       "questions": [
         {
           "id": "benefitsRating",
@@ -163,6 +173,21 @@
           "type": "longText",
           "title": "Please describe your biggest cloud adoption challenge in detail:",
           "description": "Provide specifics about the most significant challenge your organization has faced."
+        },
+        {
+          "id": "security_details",
+          "type": "longText",
+          "title": "Please provide details about your security concerns:",
+          "description": "Explain the specific security challenges you've encountered with cloud adoption.",
+          "conditions": {
+            "rules": [
+              {
+                "questionId": "challenges",
+                "type": "contains",
+                "value": "security"
+              }
+            ]
+          }
         }
       ]
     },
@@ -171,6 +196,31 @@
       "title": "Future Plans",
       "description": "Information about your organization's future cloud plans",
       "questions": [
+        {
+          "id": "conditional_investment_reasoning",
+          "type": "longText",
+          "title": "Please explain why you expect significant increase in cloud investments:",
+          "description": "Provide details about the factors driving your organization's decision to significantly increase cloud investments.",
+          "conditions": {
+            "operator": "and",
+            "rules": [
+              {
+                "questionId": "cloudUsage", 
+                "type": "answered"
+              },
+              {
+                "questionId": "future_investments",
+                "type": "equals",
+                "value": "increase_significantly"
+              },
+              {
+                "questionId": "roi",
+                "type": "greaterThan",
+                "threshold": 50
+              }
+            ]
+          }
+        },
         {
           "id": "future_investments",
           "type": "radio",
@@ -265,6 +315,21 @@
             "max": 100,
             "showLabels": true,
             "showLegend": true
+          }
+        },
+        {
+          "id": "top_provider_strategy",
+          "type": "longText",
+          "title": "Describe your strategy with your top-ranked cloud provider:",
+          "description": "Please share details about your strategic plans with the provider you ranked highest on the cost-benefit spectrum.",
+          "conditions": {
+            "rules": [
+              {
+                "questionId": "cloud_cost_benefit",
+                "type": "topRanked",
+                "optionId": "gcp"
+              }
+            ]
           }
         },
         {
