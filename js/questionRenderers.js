@@ -754,6 +754,10 @@ function setupConditionalQuestionListeners(step, container) {
 function refreshConditionalQuestions(step, container) {
   if (!step || !step.questions) return;
   
+  // Find the actual container for questions (accounts for background image wrapper)
+  // If there's a survey-step-content wrapper inside the container, use that instead
+  const actualContainer = container.querySelector('.survey-step-content') || container;
+  
   // For each question with conditions, check if it should be shown or hidden
   step.questions.forEach(question => {
     if (!question.conditions) return; // Skip questions without conditions
@@ -768,15 +772,14 @@ function refreshConditionalQuestions(step, container) {
       if (newQuestionElement) {
         // Find the right position to insert
         let inserted = false;
-        const allQuestions = Array.from(container.querySelectorAll('.survey-question'));
         
         // Find where this question should be in the DOM based on its order in the step.questions array
         const questionIndex = step.questions.findIndex(q => q.id === question.id);
         
         for (let i = questionIndex + 1; i < step.questions.length; i++) {
           const nextQuestion = document.getElementById(`question-${step.questions[i].id}`);
-          if (nextQuestion) {
-            container.insertBefore(newQuestionElement, nextQuestion);
+          if (nextQuestion && nextQuestion.parentElement === actualContainer) {
+            actualContainer.insertBefore(newQuestionElement, nextQuestion);
             inserted = true;
             break;
           }
@@ -784,7 +787,7 @@ function refreshConditionalQuestions(step, container) {
         
         if (!inserted) {
           // If we didn't find a place to insert it, append it at the end
-          container.appendChild(newQuestionElement);
+          actualContainer.appendChild(newQuestionElement);
         }
       }
     } else if (!shouldShow && questionElement) {
