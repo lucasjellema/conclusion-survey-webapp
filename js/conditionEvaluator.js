@@ -16,7 +16,8 @@ const CONDITION_TYPES = {
   CONTAINS: 'contains',
   GREATER_THAN: 'greaterThan',
   LESS_THAN: 'lessThan',
-  TOP_RANKED: 'topRanked'
+  TOP_RANKED: 'topRanked',
+  OPTION_CHECKED: 'optionChecked' // New condition type for checkbox options
 };
 
 // Constants for logical operators
@@ -115,6 +116,20 @@ function evaluateCondition(condition) {
         
         // Check if the top option matches the condition's optionId
         return positions[0][0] === condition.optionId;
+      }
+      return false;
+      
+    case CONDITION_TYPES.OPTION_CHECKED:
+      // Check if a specific checkbox option is checked
+      if (!condition.optionId) {
+        console.error('Missing optionId for optionChecked condition', condition);
+        return false;
+      }
+      
+      // For checkbox questions
+      if (responseValue && typeof responseValue === 'object') {
+        // Look for the specific option being checked
+        return responseValue[condition.optionId] === true;
       }
       return false;
       

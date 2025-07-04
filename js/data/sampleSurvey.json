@@ -66,6 +66,20 @@
           ]
         },
         {
+          "id": "saas_details",
+          "type": "radio",
+          "title": "How extensively does your organization use {{option}}?",
+          "description": "Please indicate the level of {{option}} implementation within your organization.",
+          "linkedQuestionId": "cloudUsage",
+          "forOptionId": "saas",
+          "options": [
+            { "value": "minimal", "label": "Minimal - Only a few non-critical applications" },
+            { "value": "moderate", "label": "Moderate - Several business applications" },
+            { "value": "extensive", "label": "Extensive - Most business applications" },
+            { "value": "complete", "label": "Complete - All or nearly all applications" }
+          ]
+        },
+        {
           "id": "cloudProviders",
           "type": "matrix2d",
           "title": "For each provider, indicate your organization's usage status:",
@@ -188,6 +202,37 @@
               }
             ]
           }
+        },
+        {
+          "id": "cost_management_details",
+          "type": "shortText",
+          "title": "How much has {{option}} impacted your organization financially?",
+          "description": "Provide an estimate of the financial impact of {{option}} issues.",
+          "linkedQuestionId": "challenges",
+          "forOptionId": "cost"
+        },
+        {
+          "id": "skills_gap_details",
+          "type": "checkbox",
+          "title": "What specific {{option}} areas has your organization struggled with?",
+          "description": "Select all the skills areas where your team has faced challenges.",
+          "linkedQuestionId": "challenges",
+          "forOptionId": "skills",
+          "options": [
+            { "value": "cloud_architecture", "label": "Cloud Architecture" },
+            { "value": "security_expertise", "label": "Security Expertise" },
+            { "value": "data_engineering", "label": "Data Engineering" },
+            { "value": "devops", "label": "DevOps Practices" },
+            { "value": "multicloud", "label": "Multi-cloud Management" }
+          ]
+        },
+        {
+          "id": "integration_details",
+          "type": "longText",
+          "title": "Describe the {{option}} challenges you've faced:",
+          "description": "What specific difficulties have you encountered when integrating cloud services with existing systems?",
+          "linkedQuestionId": "challenges",
+          "forOptionId": "integration"
         }
       ]
     },
