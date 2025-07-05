@@ -409,7 +409,7 @@ function renderResults() {
         const dot = document.createElement('span');
         dot.className = 'progress-dot';
         dot.setAttribute('data-step', index);
-        dot.title = `Step ${index + 1}`;
+        dot.title = `Step ${index + 1} ${questionsByStep[stepIds[index]].title}`;
         
         // Add click event to jump to step
         dot.addEventListener('click', () => navigateToStep(index));
