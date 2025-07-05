@@ -1,0 +1,866 @@
+{
+  "title": "Conclusion European Cloud Survey",
+  "description": "This survey collects information about cloud computing adoption and challenges in European organizations.",
+  "responses": [
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-03T06:13:26.967Z",
+      "responses": {
+        "industry": {
+          "value": "retail",
+          "timestamp": "2025-07-03T05:51:31.577Z"
+        },
+        "orgSize": {
+          "value": "large",
+          "timestamp": "2025-07-03T05:51:32.382Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "saas"
+          ],
+          "timestamp": "2025-07-03T05:51:35.132Z"
+        },
+        "challenges": {
+          "value": [
+            "compliance",
+            "skills"
+          ],
+          "timestamp": "2025-07-03T06:04:01.896Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 65,
+              "azure": 85,
+              "gcp": 75,
+              "ibm": 30,
+              "oracle": 20
+            },
+            "comment": ""
+          },
+          "timestamp": "2025-07-03T06:06:21.250Z"
+        },
+        "cloud_placement": {
+          "value": {
+            "value": {
+              "aws": 80,
+              "azure": 60,
+              "gcp": 40,
+              "alibaba": 30,
+              "ibm": 20,
+              "stackit": 62.5,
+              "scaleway": 5,
+              "oracle": 10
+            },
+            "comment": ""
+          },
+          "timestamp": "2025-07-03T06:12:19.791Z"
+        },
+        "future_investments": {
+          "value": "stay_same",
+          "timestamp": "2025-07-03T06:13:24.303Z"
+        }
+      },
+      "username": "Lucas.Jellema@amis.nl",
+      "lastModified": "2025-07-03T06:13:26.967Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-02T14:23:45.123Z",
+      "responses": {
+        "industry": {
+          "value": "finance",
+          "timestamp": "2025-07-02T14:10:12.342Z"
+        },
+        "orgSize": {
+          "value": "enterprise",
+          "timestamp": "2025-07-02T14:10:45.678Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "iaas",
+            "paas",
+            "saas",
+            "hybrid"
+          ],
+          "timestamp": "2025-07-02T14:11:30.456Z"
+        },
+        "saas_details": {
+          "value": "extensive",
+          "timestamp": "2025-07-02T14:12:15.789Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "extensive_use",
+            "azure": "primary",
+            "gcp": "limited_use",
+            "ibm": "evaluating",
+            "oracle": "not_using"
+          },
+          "timestamp": "2025-07-02T14:13:20.123Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 3,
+            "scalability": 5,
+            "agility": 4,
+            "innovation": 4,
+            "remote_work": 5
+          },
+          "timestamp": "2025-07-02T14:15:10.234Z"
+        },
+        "roi": {
+          "value": 50,
+          "timestamp": "2025-07-02T14:16:30.345Z"
+        },
+        "challenges": {
+          "value": [
+            "security",
+            "compliance",
+            "vendor_lock",
+            "data_sovereignty"
+          ],
+          "timestamp": "2025-07-02T14:18:05.456Z"
+        },
+        "security_details": {
+          "value": "Our organization faces significant regulatory challenges with data protection requirements across multiple EU jurisdictions. Security certification processes are time-consuming and costly.",
+          "timestamp": "2025-07-02T14:19:25.567Z"
+        },
+        "future_investments": {
+          "value": "increase_somewhat",
+          "timestamp": "2025-07-02T14:20:45.678Z"
+        },
+        "cloud_tech_tags": {
+          "value": [
+            "Microsoft Azure",
+            "Kubernetes",
+            "Terraform",
+            "CI/CD Pipelines",
+            "Zero Trust Security"
+          ],
+          "timestamp": "2025-07-02T14:21:55.789Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "security",
+            "cost_optimization",
+            "scalability",
+            "time_to_market",
+            "innovation"
+          ],
+          "timestamp": "2025-07-02T14:22:35.890Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 70,
+              "azure": 85,
+              "gcp": 65,
+              "ibm": 40,
+              "oracle": 30
+            }
+          },
+          "timestamp": "2025-07-02T14:23:20.901Z"
+        }
+      },
+      "username": "maria.schmidt@eurobank.com",
+      "lastModified": "2025-07-02T14:23:45.123Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-01T09:48:32.456Z",
+      "responses": {
+        "industry": {
+          "value": "healthcare",
+          "timestamp": "2025-07-01T09:30:10.123Z"
+        },
+        "orgSize": {
+          "value": "medium",
+          "timestamp": "2025-07-01T09:30:45.234Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "saas",
+            "private"
+          ],
+          "timestamp": "2025-07-01T09:31:30.345Z"
+        },
+        "saas_details": {
+          "value": "moderate",
+          "timestamp": "2025-07-01T09:32:15.456Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "limited_use",
+            "azure": "evaluating",
+            "gcp": "not_using",
+            "ibm": "primary",
+            "oracle": "not_using"
+          },
+          "timestamp": "2025-07-01T09:33:45.567Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 2,
+            "scalability": 3,
+            "agility": 3,
+            "innovation": 2,
+            "remote_work": 4
+          },
+          "timestamp": "2025-07-01T09:35:10.678Z"
+        },
+        "roi": {
+          "value": 15,
+          "timestamp": "2025-07-01T09:36:30.789Z"
+        },
+        "challenges": {
+          "value": [
+            "security",
+            "compliance",
+            "data_sovereignty"
+          ],
+          "timestamp": "2025-07-01T09:38:20.890Z"
+        },
+        "security_details": {
+          "value": "Patient data privacy concerns and GDPR compliance are our primary challenges. We need to ensure all data remains within EU boundaries and complies with healthcare industry regulations.",
+          "timestamp": "2025-07-01T09:40:15.901Z"
+        },
+        "future_investments": {
+          "value": "increase_somewhat",
+          "timestamp": "2025-07-01T09:42:25.012Z"
+        },
+        "cloud_tech_tags": {
+          "value": [
+            "IBM Cloud",
+            "Private Cloud",
+            "Healthcare APIs",
+            "HIPAA Compliance Tools"
+          ],
+          "timestamp": "2025-07-01T09:45:10.123Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "security",
+            "compliance",
+            "cost_optimization",
+            "scalability",
+            "innovation"
+          ],
+          "timestamp": "2025-07-01T09:46:55.234Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 45,
+              "azure": 50,
+              "gcp": 40,
+              "ibm": 65,
+              "oracle": 30
+            }
+          },
+          "timestamp": "2025-07-01T09:47:40.345Z"
+        }
+      },
+      "username": "pieter.vandenberg@medcentral.eu",
+      "lastModified": "2025-07-01T09:48:32.456Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-06-30T16:42:18.789Z",
+      "responses": {
+        "industry": {
+          "value": "technology",
+          "timestamp": "2025-06-30T16:25:05.123Z"
+        },
+        "orgSize": {
+          "value": "small",
+          "timestamp": "2025-06-30T16:25:30.234Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "iaas",
+            "paas",
+            "saas"
+          ],
+          "timestamp": "2025-06-30T16:26:15.345Z"
+        },
+        "saas_details": {
+          "value": "complete",
+          "timestamp": "2025-06-30T16:27:05.456Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "limited_use",
+            "azure": "not_using",
+            "gcp": "primary",
+            "ibm": "not_using",
+            "oracle": "not_using"
+          },
+          "timestamp": "2025-06-30T16:28:30.567Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 4,
+            "scalability": 5,
+            "agility": 5,
+            "innovation": 5,
+            "remote_work": 5
+          },
+          "timestamp": "2025-06-30T16:30:10.678Z"
+        },
+        "roi": {
+          "value": 85,
+          "timestamp": "2025-06-30T16:31:20.789Z"
+        },
+        "challenges": {
+          "value": [
+            "cost",
+            "skills"
+          ],
+          "timestamp": "2025-06-30T16:32:40.890Z"
+        },
+        "cost_management_details": {
+          "value": "We've seen a 30% increase in cloud costs over the past year as our startup scaled. Better cost optimization tools would help us manage this growth.",
+          "timestamp": "2025-06-30T16:34:15.901Z"
+        },
+        "skills_gap_details": {
+          "value": [
+            "cloud_architecture",
+            "security_expertise",
+            "devops"
+          ],
+          "timestamp": "2025-06-30T16:35:55.012Z"
+        },
+        "future_investments": {
+          "value": "increase_significantly",
+          "timestamp": "2025-06-30T16:37:10.123Z"
+        },
+        "conditional_investment_reasoning": {
+          "value": "We're planning to expand to three new European markets in the next year and will need additional cloud infrastructure to support this growth. Our ROI calculations show that increased cloud investment will support faster time-to-market.",
+          "timestamp": "2025-06-30T16:38:45.234Z"
+        },
+        "cloud_tech_tags": {
+          "value": [
+            "Google Cloud Platform",
+            "Kubernetes",
+            "Docker",
+            "Serverless",
+            "CI/CD Pipelines",
+            "Microservices"
+          ],
+          "timestamp": "2025-06-30T16:40:20.345Z"
+        },
+        "top_provider_strategy": {
+          "value": "We're building our entire stack on GCP to take advantage of their ML and data analytics capabilities, which are crucial for our product roadmap.",
+          "timestamp": "2025-06-30T16:41:30.456Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "time_to_market",
+            "innovation",
+            "scalability",
+            "cost_optimization",
+            "security"
+          ],
+          "timestamp": "2025-06-30T16:42:05.567Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 70,
+              "azure": 65,
+              "gcp": 90,
+              "ibm": 40,
+              "oracle": 35
+            }
+          },
+          "timestamp": "2025-06-30T16:42:15.678Z"
+        }
+      },
+      "username": "sophie.laurent@technovate.io",
+      "lastModified": "2025-06-30T16:42:18.789Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-06-28T11:35:42.123Z",
+      "responses": {
+        "industry": {
+          "value": "manufacturing",
+          "timestamp": "2025-06-28T11:15:10.234Z"
+        },
+        "orgSize": {
+          "value": "large",
+          "timestamp": "2025-06-28T11:15:45.345Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "iaas",
+            "private",
+            "hybrid"
+          ],
+          "timestamp": "2025-06-28T11:16:30.456Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "primary",
+            "azure": "extensive_use",
+            "gcp": "limited_use",
+            "ibm": "limited_use",
+            "oracle": "evaluating"
+          },
+          "timestamp": "2025-06-28T11:18:15.567Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 3,
+            "scalability": 4,
+            "agility": 3,
+            "innovation": 2,
+            "remote_work": 3
+          },
+          "timestamp": "2025-06-28T11:20:45.678Z"
+        },
+        "roi": {
+          "value": 25,
+          "timestamp": "2025-06-28T11:22:10.789Z"
+        },
+        "challenges": {
+          "value": [
+            "integration",
+            "vendor_lock",
+            "cost"
+          ],
+          "timestamp": "2025-06-28T11:24:30.890Z"
+        },
+        "integration_details": {
+          "value": "Our factory automation systems and legacy ERP software have been challenging to integrate with cloud services. We've had to maintain hybrid solutions that add complexity to our IT landscape.",
+          "timestamp": "2025-06-28T11:27:15.901Z"
+        },
+        "cost_management_details": {
+          "value": "Approximately €1.2M additional costs annually compared to our previous on-premises solution.",
+          "timestamp": "2025-06-28T11:29:45.012Z"
+        },
+        "future_investments": {
+          "value": "increase_somewhat",
+          "timestamp": "2025-06-28T11:31:20.123Z"
+        },
+        "cloud_tech_tags": {
+          "value": [
+            "AWS",
+            "Microsoft Azure",
+            "Private Cloud",
+            "Hybrid Cloud",
+            "IoT Platform",
+            "Manufacturing Execution Systems"
+          ],
+          "timestamp": "2025-06-28T11:33:10.234Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "integration",
+            "cost_optimization",
+            "security",
+            "scalability",
+            "innovation"
+          ],
+          "timestamp": "2025-06-28T11:34:55.345Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 75,
+              "azure": 70,
+              "gcp": 60,
+              "ibm": 55,
+              "oracle": 45
+            }
+          },
+          "timestamp": "2025-06-28T11:35:30.456Z"
+        }
+      },
+      "username": "hans.mueller@europemfg.de",
+      "lastModified": "2025-06-28T11:35:42.123Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-04T14:23:12.456Z",
+      "responses": {
+        "industry": {
+          "value": "education",
+          "timestamp": "2025-07-04T14:05:22.111Z"
+        },
+        "orgSize": {
+          "value": "medium",
+          "timestamp": "2025-07-04T14:05:45.232Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "saas",
+            "paas"
+          ],
+          "timestamp": "2025-07-04T14:06:33.343Z"
+        },
+        "saas_details": {
+          "value": "moderate",
+          "timestamp": "2025-07-04T14:07:15.454Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "limited_use",
+            "azure": "primary",
+            "gcp": "extensive_use",
+            "ibm": "not_using",
+            "oracle": "not_using"
+          },
+          "timestamp": "2025-07-04T14:09:28.565Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 2,
+            "scalability": 5,
+            "agility": 4,
+            "innovation": 5,
+            "remote_work": 5
+          },
+          "timestamp": "2025-07-04T14:12:40.676Z"
+        },
+        "roi": {
+          "value": 40,
+          "timestamp": "2025-07-04T14:15:22.787Z"
+        },
+        "challenges": {
+          "value": [
+            "skills",
+            "security",
+            "compliance"
+          ],
+          "timestamp": "2025-07-04T14:17:35.898Z"
+        },
+        "skills_details": {
+          "value": "We struggle with finding IT staff that have both educational technology experience and cloud expertise. Training existing staff has been time-consuming and expensive.",
+          "timestamp": "2025-07-04T14:19:10.909Z"
+        },
+        "compliance_details": {
+          "value": "Student data privacy regulations (GDPR and local education laws) create challenges for cloud adoption in our institution.",
+          "timestamp": "2025-07-04T14:20:05.123Z"
+        },
+        "future_investments": {
+          "value": "increase_significantly",
+          "timestamp": "2025-07-04T14:21:18.234Z"
+        },
+        "conditional_investment_reasoning": {
+          "value": "We're planning a complete digital transformation of our learning management systems and student services. This will require significant cloud infrastructure expansion over the next 2-3 years.",
+          "timestamp": "2025-07-04T14:22:30.345Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "security",
+            "scalability",
+            "cost_optimization",
+            "privacy",
+            "user_experience"
+          ],
+          "timestamp": "2025-07-04T14:23:05.456Z"
+        }
+      },
+      "username": "maria.rossi@univ-europe.edu",
+      "lastModified": "2025-07-04T14:23:12.456Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-02T09:42:18.789Z",
+      "responses": {
+        "industry": {
+          "value": "government",
+          "timestamp": "2025-07-02T09:15:22.111Z"
+        },
+        "orgSize": {
+          "value": "enterprise",
+          "timestamp": "2025-07-02T09:15:45.232Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "private"
+          ],
+          "timestamp": "2025-07-02T09:16:33.343Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "evaluating",
+            "azure": "limited_use",
+            "gcp": "not_using",
+            "ibm": "primary",
+            "oracle": "evaluating"
+          },
+          "timestamp": "2025-07-02T09:18:28.565Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 1,
+            "scalability": 3,
+            "agility": 2,
+            "innovation": 2,
+            "remote_work": 4
+          },
+          "timestamp": "2025-07-02T09:22:40.676Z"
+        },
+        "roi": {
+          "value": 15,
+          "timestamp": "2025-07-02T09:25:22.787Z"
+        },
+        "challenges": {
+          "value": [
+            "security",
+            "compliance",
+            "legacy",
+            "vendor_lock"
+          ],
+          "timestamp": "2025-07-02T09:27:35.898Z"
+        },
+        "security_details": {
+          "value": "National security concerns and data sovereignty requirements severely limit our cloud adoption options.",
+          "timestamp": "2025-07-02T09:29:10.909Z"
+        },
+        "legacy_details": {
+          "value": "Multiple mission-critical systems date back to the 1990s and early 2000s. Integration and migration paths are complex and risky.",
+          "timestamp": "2025-07-02T09:30:05.123Z"
+        },
+        "future_investments": {
+          "value": "increase_somewhat",
+          "timestamp": "2025-07-02T09:35:18.234Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "security",
+            "compliance",
+            "sovereignty",
+            "reliability",
+            "cost_optimization"
+          ],
+          "timestamp": "2025-07-02T09:40:05.456Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 40,
+              "azure": 45,
+              "gcp": 30,
+              "ibm": 60,
+              "oracle": 35
+            }
+          },
+          "timestamp": "2025-07-02T09:41:30.456Z"
+        }
+      },
+      "username": "jurgen.schmidt@gov-agency.eu",
+      "lastModified": "2025-07-02T09:42:18.789Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-03T16:12:33.654Z",
+      "responses": {
+        "industry": {
+          "value": "other",
+          "timestamp": "2025-07-03T15:45:22.111Z"
+        },
+        "industry_comment": {
+          "value": "Energy/Utilities",
+          "timestamp": "2025-07-03T15:45:35.112Z"
+        },
+        "orgSize": {
+          "value": "large",
+          "timestamp": "2025-07-03T15:46:05.232Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "iaas",
+            "paas",
+            "hybrid"
+          ],
+          "timestamp": "2025-07-03T15:47:13.343Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "extensive_use",
+            "azure": "primary",
+            "gcp": "limited_use",
+            "ibm": "not_using",
+            "oracle": "not_using"
+          },
+          "timestamp": "2025-07-03T15:50:28.565Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 3,
+            "scalability": 5,
+            "agility": 4,
+            "innovation": 4,
+            "remote_work": 3
+          },
+          "timestamp": "2025-07-03T15:55:40.676Z"
+        },
+        "roi": {
+          "value": 50,
+          "timestamp": "2025-07-03T15:57:22.787Z"
+        },
+        "challenges": {
+          "value": [
+            "security",
+            "compliance",
+            "integration"
+          ],
+          "timestamp": "2025-07-03T16:00:35.898Z"
+        },
+        "security_details": {
+          "value": "Critical infrastructure protection requirements create significant security challenges for our cloud deployments.",
+          "timestamp": "2025-07-03T16:02:10.909Z"
+        },
+        "integration_details": {
+          "value": "Integrating cloud platforms with industrial control systems and SCADA environments has been our biggest challenge.",
+          "timestamp": "2025-07-03T16:04:05.123Z"
+        },
+        "future_investments": {
+          "value": "increase_somewhat",
+          "timestamp": "2025-07-03T16:06:18.234Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "reliability",
+            "security",
+            "performance",
+            "scalability",
+            "cost_optimization"
+          ],
+          "timestamp": "2025-07-03T16:09:05.456Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 70,
+              "azure": 80,
+              "gcp": 65,
+              "ibm": 40,
+              "oracle": 35
+            }
+          },
+          "timestamp": "2025-07-03T16:10:30.456Z"
+        }
+      },
+      "username": "elena.kowalski@europower.eu",
+      "lastModified": "2025-07-03T16:12:33.654Z"
+    },
+    {
+      "surveyId": "unknown",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-05T08:02:45.321Z",
+      "responses": {
+        "industry": {
+          "value": "healthcare",
+          "timestamp": "2025-07-05T07:40:22.111Z"
+        },
+        "orgSize": {
+          "value": "small",
+          "timestamp": "2025-07-05T07:41:05.232Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "saas",
+            "paas"
+          ],
+          "timestamp": "2025-07-05T07:42:33.343Z"
+        },
+        "saas_details": {
+          "value": "extensive",
+          "timestamp": "2025-07-05T07:43:15.454Z"
+        },
+        "cloudProviders": {
+          "value": {
+            "aws": "not_using",
+            "azure": "not_using",
+            "gcp": "primary",
+            "ibm": "limited_use",
+            "oracle": "not_using"
+          },
+          "timestamp": "2025-07-05T07:45:28.565Z"
+        },
+        "benefitsRating": {
+          "value": {
+            "cost_savings": 4,
+            "scalability": 3,
+            "agility": 5,
+            "innovation": 5,
+            "remote_work": 5
+          },
+          "timestamp": "2025-07-05T07:47:40.676Z"
+        },
+        "roi": {
+          "value": 65,
+          "timestamp": "2025-07-05T07:48:22.787Z"
+        },
+        "challenges": {
+          "value": [
+            "compliance",
+            "security",
+            "skills"
+          ],
+          "timestamp": "2025-07-05T07:50:35.898Z"
+        },
+        "compliance_details": {
+          "value": "Managing GDPR compliance with patient data in cloud environments is extremely challenging for our small team.",
+          "timestamp": "2025-07-05T07:52:10.909Z"
+        },
+        "future_investments": {
+          "value": "increase_significantly",
+          "timestamp": "2025-07-05T07:55:18.234Z"
+        },
+        "conditional_investment_reasoning": {
+          "value": "We're developing a new telemedicine platform that will be entirely cloud-based and will require significant investment in cloud infrastructure and security.",
+          "timestamp": "2025-07-05T07:57:30.345Z"
+        },
+        "cloud_tech_tags": {
+          "value": [
+            "Google Cloud Healthcare API",
+            "HIPAA Compliance",
+            "GDPR",
+            "Data Encryption",
+            "Telemedicine",
+            "Healthcare SaaS"
+          ],
+          "timestamp": "2025-07-05T08:00:45.456Z"
+        },
+        "cloud_priorities": {
+          "value": [
+            "security",
+            "compliance",
+            "privacy",
+            "innovation",
+            "user_experience"
+          ],
+          "timestamp": "2025-07-05T08:01:55.567Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 50,
+              "azure": 60,
+              "gcp": 85,
+              "ibm": 55,
+              "oracle": 40
+            }
+          },
+          "timestamp": "2025-07-05T08:02:30.678Z"
+        }
+      },
+      "username": "pierre.dubois@health-tech.fr",
+      "lastModified": "2025-07-05T08:02:45.321Z"
+    }
+  ]
+}
