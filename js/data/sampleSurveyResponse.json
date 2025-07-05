@@ -41,6 +41,10 @@
           },
           "timestamp": "2025-07-03T06:06:21.250Z"
         },
+        "additional_comments": {
+          "value": "We're transitioning from on-premises infrastructure to a hybrid cloud model. Azure has been our primary cloud provider, with strong support from their local European team. GDPR compliance remains our top concern when evaluating new cloud services.",
+          "timestamp": "2025-07-03T06:12:40.123Z"
+        },
         "cloud_placement": {
           "value": {
             "value": {
@@ -163,6 +167,10 @@
             }
           },
           "timestamp": "2025-07-02T14:23:20.901Z"
+        },
+        "additional_comments": {
+          "value": "Our financial institution is focusing on developing a multi-cloud strategy to avoid vendor lock-in. Security certification processes with cloud providers have been time-consuming but necessary for regulatory compliance. We've established a Cloud Center of Excellence to standardize cloud adoption practices across departments.",
+          "timestamp": "2025-07-02T14:23:30.789Z"
         }
       },
       "username": "maria.schmidt@eurobank.com",
