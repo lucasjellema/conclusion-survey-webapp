@@ -13,9 +13,9 @@ import { aggregateTextResponses } from '../resultsDataService.js';
  * @param {HTMLElement} container - The DOM element to render the visualization in
  * @param {Array} responses - Array of question responses
  * @param {Object} question - The question definition
- * @param {string} [type='list'] - Type of visualization ('list', 'wordcloud')
+ * @param {string} [type='wordcloud'] - Type of visualization ('wordcloud')
  */
-export function createTextSummary(container, responses, question, type = 'list') {
+export function createTextSummary(container, responses, question, type = 'wordcloud ') {
     if (!container || !Array.isArray(responses) || responses.length === 0) {
         container.innerHTML = '<p class="no-data">No data available for this question.</p>';
         return;
@@ -33,31 +33,27 @@ export function createTextSummary(container, responses, question, type = 'list')
     // Clear container
     container.innerHTML = '';
     
-    // Add statistics section
-    const stats = document.createElement('div');
-    stats.className = 'text-statistics';
-    stats.innerHTML = `
-        <div class="stat-item">
-            <div class="stat-value">${aggregatedData.totalResponses}</div>
-            <div class="stat-label">Total Responses</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value">${aggregatedData.averageLength}</div>
-            <div class="stat-label">Avg. Length (chars)</div>
-        </div>
-    `;
-    container.appendChild(stats);
+    
+    // Add a dedicated button to view all responses in modal
+    const viewAllButton = document.createElement('button');
+    viewAllButton.className = 'btn primary view-all-responses';
+    viewAllButton.textContent = `View All ${aggregatedData.totalResponses} Responses`;
+    viewAllButton.style.marginBottom = '20px';
+    
+    viewAllButton.addEventListener('click', () => {
+        // Create and show the responses modal
+        showResponsesModal(question, responses);
+    });
+    
+    container.appendChild(viewAllButton);
     
     // Render appropriate visualization based on type
     switch (type) {
         case 'wordcloud':
             renderWordCloud(container, aggregatedData, question);
             break;
-        case 'list':
-            renderResponseList(container, aggregatedData, question);
-            break;
         default:
-            renderResponseList(container, aggregatedData, question);
+            renderWordCloud(container, aggregatedData, question);
     }
 }
 
@@ -125,83 +121,292 @@ function renderWordCloud(container, data, question) {
     container.appendChild(note);
 }
 
+
 /**
- * Render a list of responses
- * @param {HTMLElement} container - Container element
- * @param {Object} data - Aggregated data
- * @param {Object} question - Question definition
+ * Create and show a modal with all responses and filtering capability
+ * @param {Object} question - The question definition
+ * @param {Array} responses - Array of all responses to display
  */
-function renderResponseList(container, data, question) {
-    const listContainer = document.createElement('div');
-    listContainer.className = 'response-list-container';
+function showResponsesModal(question, responses) {
+    // Create modal container
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
     
-    // Top words section
-    const topWordsContainer = document.createElement('div');
-    topWordsContainer.className = 'top-words';
-    topWordsContainer.innerHTML = '<h4>Common Terms</h4>';
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content responses-modal';
     
-    const topWordsList = document.createElement('div');
-    topWordsList.className = 'top-words-list';
+    // Add modal header with title and close button
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'modal-header';
+    modalHeader.innerHTML = `
+        <h3>All Responses: ${question.title}</h3>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+    `;
+    modalContent.appendChild(modalHeader);
     
-    // Display top 10 words with their counts
-    const topWords = data.topWords.slice(0, 10);
+    // Add filter section
+    const filterSection = document.createElement('div');
+    filterSection.className = 'filter-section';
+    filterSection.innerHTML = `
+        <div class="filter-input-container">
+            <input type="text" id="response-filter" class="filter-input" placeholder="Filter responses..." />
+            <span class="filter-icon">🔍</span>
+        </div>
+        <div class="filter-stats">
+            <span id="filter-count">${responses.length}</span> responses
+        </div>
+    `;
+    modalContent.appendChild(filterSection);
     
-    topWords.forEach(word => {
-        const wordItem = document.createElement('div');
-        wordItem.className = 'word-item';
-        
-        wordItem.innerHTML = `
-            <span class="word-text">${word.text}</span>
-            <span class="word-count">(${word.weight})</span>
-            <div class="word-bar" style="width: ${Math.max(20, word.weight * 10)}px;"></div>
-        `;
-        
-        topWordsList.appendChild(wordItem);
+    // Add responses container
+    const responsesContainer = document.createElement('div');
+    responsesContainer.className = 'responses-container';
+    modalContent.appendChild(responsesContainer);
+    
+    // Add pagination if necessary
+    const paginationContainer = document.createElement('div');
+    paginationContainer.className = 'pagination-container';
+    modalContent.appendChild(paginationContainer);
+    
+    // Add modal to DOM
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+    
+    // Add event listener to close modal
+    const closeButton = modalHeader.querySelector('.modal-close');
+    closeButton.addEventListener('click', () => {
+        document.body.removeChild(modalOverlay);
     });
     
-    topWordsContainer.appendChild(topWordsList);
-    listContainer.appendChild(topWordsContainer);
+    // Close on overlay click
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            document.body.removeChild(modalOverlay);
+        }
+    });
     
-    // Sample responses section
-    if (data.responses && data.responses.length > 0) {
-        const samplesContainer = document.createElement('div');
-        samplesContainer.className = 'sample-responses';
-        samplesContainer.innerHTML = '<h4>Sample Responses</h4>';
+    // Add escape key listener
+    const escListener = (e) => {
+        if (e.key === 'Escape') {
+            document.body.removeChild(modalOverlay);
+            document.removeEventListener('keydown', escListener);
+        }
+    };
+    document.addEventListener('keydown', escListener);
+    
+    // Initialize the response list with pagination
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    let filteredResponses = [...responses];
+    
+    // Filter listener
+    const filterInput = filterSection.querySelector('#response-filter');
+    filterInput.addEventListener('input', () => {
+        const filterValue = filterInput.value.toLowerCase().trim();
         
-        const responsesList = document.createElement('ul');
-        responsesList.className = 'responses-list';
+        // Filter responses
+        if (filterValue) {
+            filteredResponses = responses.filter(response => {
+                // Handle different response formats (string or object)
+                const text = typeof response === 'object' ? 
+                    (response.value || '').toString().toLowerCase() : 
+                    (response || '').toString().toLowerCase();
+                
+                return text.includes(filterValue);
+            });
+        } else {
+            filteredResponses = [...responses];
+        }
         
-        data.responses.forEach(response => {
-            const listItem = document.createElement('li');
-            listItem.className = 'response-item';
-            
-            // Sanitize response - in a real app you would use a proper sanitizer like DOMPurify
-            const sanitizedResponse = response
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
-            
-            listItem.innerHTML = sanitizedResponse;
-            responsesList.appendChild(listItem);
-        });
+        // Update filter count
+        const filterCount = filterSection.querySelector('#filter-count');
+        filterCount.textContent = filteredResponses.length;
         
-        samplesContainer.appendChild(responsesList);
-        listContainer.appendChild(samplesContainer);
+        // Reset pagination to first page
+        currentPage = 1;
+        
+        // Re-render responses
+        renderResponsePage(filteredResponses, responsesContainer, paginationContainer, currentPage, itemsPerPage);
+    });
+    
+    // Initial render
+    renderResponsePage(filteredResponses, responsesContainer, paginationContainer, currentPage, itemsPerPage);
+    
+    // Set focus on filter input
+    setTimeout(() => filterInput.focus(), 100);
+}
+
+/**
+ * Render a page of responses with pagination
+ * @param {Array} responses - Filtered responses to display
+ * @param {HTMLElement} container - Container to render responses in
+ * @param {HTMLElement} paginationContainer - Container for pagination controls
+ * @param {Number} currentPage - Current page number
+ * @param {Number} itemsPerPage - Number of items to show per page
+ */
+function renderResponsePage(responses, container, paginationContainer, currentPage, itemsPerPage) {
+    // Clear container
+    container.innerHTML = '';
+    
+    // Calculate pagination
+    const totalPages = Math.ceil(responses.length / itemsPerPage);
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = Math.min(startIdx + itemsPerPage, responses.length);
+    
+    // No responses
+    if (responses.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+        emptyState.textContent = 'No responses match your filter criteria.';
+        container.appendChild(emptyState);
+        
+        // Clear pagination
+        paginationContainer.innerHTML = '';
+        return;
     }
     
-    // Show more responses button
-    if (data.totalResponses > data.responses.length) {
-        const moreButton = document.createElement('button');
-        moreButton.className = 'btn secondary more-responses';
-        moreButton.textContent = `Show All ${data.totalResponses} Responses`;
+    // Create response list
+    const responseList = document.createElement('div');
+    responseList.className = 'response-list';
+    
+    // Add responses for current page
+    for (let i = startIdx; i < endIdx; i++) {
+        const response = responses[i];
+        const text = typeof response === 'object' ? 
+            (response.value || '').toString() : 
+            (response || '').toString();
         
-        moreButton.addEventListener('click', () => {
-            // In a real app, this would fetch more responses
-            // For now, just show a message
-            alert(`In a real implementation, this would show all ${data.totalResponses} responses.`);
-        });
+        const responseItem = document.createElement('div');
+        responseItem.className = 'response-item';
         
-        listContainer.appendChild(moreButton);
+        // Sanitize text - in a real app, use a proper sanitizer
+        const sanitizedText = text
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        
+        responseItem.innerHTML = `
+            <div class="response-number">#${i + 1}</div>
+            <div class="response-text">${sanitizedText}</div>
+        `;
+        
+        responseList.appendChild(responseItem);
     }
     
-    container.appendChild(listContainer);
+    container.appendChild(responseList);
+    
+    // Render pagination controls if needed
+    renderPagination(responses, paginationContainer, currentPage, totalPages, itemsPerPage, (newPage) => {
+        // Update current page and re-render
+        currentPage = newPage;
+        renderResponsePage(responses, container, paginationContainer, currentPage, itemsPerPage);
+    });
+}
+
+/**
+ * Render pagination controls
+ * @param {Array} responses - All filtered responses
+ * @param {HTMLElement} container - Container for pagination controls
+ * @param {Number} currentPage - Current page number
+ * @param {Number} totalPages - Total number of pages
+ * @param {Number} itemsPerPage - Items per page
+ * @param {Function} onPageChange - Callback when page changes
+ */
+function renderPagination(responses, container, currentPage, totalPages, itemsPerPage, onPageChange) {
+    // Clear container
+    container.innerHTML = '';
+    
+    // Don't show pagination if not needed
+    if (totalPages <= 1) {
+        return;
+    }
+    
+    // Create pagination controls
+    const pagination = document.createElement('div');
+    pagination.className = 'pagination';
+    
+    // Prev button
+    const prevButton = document.createElement('button');
+    prevButton.className = 'pagination-button prev';
+    prevButton.textContent = '←';
+    prevButton.disabled = currentPage === 1;
+    prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            onPageChange(currentPage - 1);
+        }
+    });
+    pagination.appendChild(prevButton);
+    
+    // Page number buttons
+    const totalDisplayPages = 5; // Number of page buttons to show
+    let startPage = Math.max(1, currentPage - Math.floor(totalDisplayPages / 2));
+    let endPage = Math.min(totalPages, startPage + totalDisplayPages - 1);
+    
+    // Adjust if we're near the end
+    if (endPage - startPage + 1 < totalDisplayPages) {
+        startPage = Math.max(1, endPage - totalDisplayPages + 1);
+    }
+    
+    // First page button if needed
+    if (startPage > 1) {
+        const firstButton = document.createElement('button');
+        firstButton.className = 'pagination-button';
+        firstButton.textContent = '1';
+        firstButton.addEventListener('click', () => onPageChange(1));
+        pagination.appendChild(firstButton);
+        
+        if (startPage > 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'pagination-ellipsis';
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+        }
+    }
+    
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.className = 'pagination-button';
+        if (i === currentPage) {
+            pageButton.classList.add('active');
+        }
+        pageButton.textContent = i.toString();
+        pageButton.addEventListener('click', () => onPageChange(i));
+        pagination.appendChild(pageButton);
+    }
+    
+    // Last page button if needed
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'pagination-ellipsis';
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+        }
+        
+        const lastButton = document.createElement('button');
+        lastButton.className = 'pagination-button';
+        lastButton.textContent = totalPages.toString();
+        lastButton.addEventListener('click', () => onPageChange(totalPages));
+        pagination.appendChild(lastButton);
+    }
+    
+    // Next button
+    const nextButton = document.createElement('button');
+    nextButton.className = 'pagination-button next';
+    nextButton.textContent = '→';
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            onPageChange(currentPage + 1);
+        }
+    });
+    pagination.appendChild(nextButton);
+    
+    // Page info
+    const pageInfo = document.createElement('div');
+    pageInfo.className = 'page-info';
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages} (${responses.length} responses)`;
+    pagination.appendChild(pageInfo);
+    
+    container.appendChild(pagination);
 }
