@@ -5,7 +5,7 @@
     {
       "surveyId": "unknown",
       "surveyTitle": "Conclusion European Cloud Survey",
-      "completedAt": "2025-07-03T06:13:26.967Z",
+      "completedAt": "2025-07-05T06:13:26.967Z",
       "responses": {
         "industry": {
           "value": "retail",
@@ -117,9 +117,9 @@
         },
         "challenges": {
           "value": [
-            "security",
             "compliance",
             "vendor_lock",
+            "security",
             "data_sovereignty"
           ],
           "timestamp": "2025-07-02T14:18:05.456Z"
@@ -144,10 +144,10 @@
         },
         "cloud_priorities": {
           "value": [
-            "security",
             "cost_optimization",
             "scalability",
             "time_to_market",
+            "security",
             "innovation"
           ],
           "timestamp": "2025-07-02T14:22:35.890Z"
@@ -159,7 +159,7 @@
               "azure": 85,
               "gcp": 65,
               "ibm": 40,
-              "oracle": 30
+              "oracle": 80
             }
           },
           "timestamp": "2025-07-02T14:23:20.901Z"
@@ -560,10 +560,10 @@
         },
         "cloud_priorities": {
           "value": [
-            "security",
             "scalability",
             "cost_optimization",
             "privacy",
+            "security",
             "user_experience"
           ],
           "timestamp": "2025-07-04T14:23:05.456Z"
@@ -638,10 +638,10 @@
         },
         "cloud_priorities": {
           "value": [
-            "security",
             "compliance",
             "sovereignty",
             "reliability",
+            "security",
             "cost_optimization"
           ],
           "timestamp": "2025-07-02T09:40:05.456Z"
@@ -734,9 +734,9 @@
         "cloud_priorities": {
           "value": [
             "reliability",
-            "security",
             "performance",
             "scalability",
+            "security",
             "cost_optimization"
           ],
           "timestamp": "2025-07-03T16:09:05.456Z"
@@ -827,7 +827,7 @@
         },
         "cloud_tech_tags": {
           "value": [
-            "Google Cloud Healthcare API",
+            "Google Cloud",
             "HIPAA Compliance",
             "GDPR",
             "Data Encryption",
@@ -838,9 +838,9 @@
         },
         "cloud_priorities": {
           "value": [
-            "security",
             "compliance",
             "privacy",
+            "security",
             "innovation",
             "user_experience"
           ],

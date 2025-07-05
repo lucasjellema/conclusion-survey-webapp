@@ -12,7 +12,7 @@
  * @param {HTMLElement} container - The DOM element to render the visualizations in
  * @param {Array} responses - Array of question responses
  * @param {Object} question - The question definition
- * @param {string} [type='rankedOrder'] - Type of visualization ('rankedOrder', 'stackedPositions')
+ * @param {string} [type='rankedOrder'] - Type of visualization ('rankedOrder', 'stackedPositions', 'irv')
  */
 export function createRankVisualization(container, responses, question, type = 'rankedOrder') {
     if (!container || !Array.isArray(responses) || responses.length === 0) {
@@ -40,6 +40,10 @@ export function createRankVisualization(container, responses, question, type = '
         case 'stackedPositions':
             renderStackedPositionsVisualization(container, rankingData, question);
             break;
+        case 'irv':
+            const irvResult = runInstantRunoffVoting(responses, question);
+            renderIRVVisualization(container, irvResult, question);
+            break;
         default:
             // If unknown type, show both visualizations
             const orderContainer = document.createElement('div');
@@ -63,6 +67,138 @@ export function createRankVisualization(container, responses, question, type = '
 }
 
 /**
+ * Run the Instant-Runoff Voting (IRV) algorithm
+ * @param {Array} responses - Array of question responses
+ * @param {Object} question - The question definition
+ * @returns {Object} - The winner and the history of rounds
+ */
+function runInstantRunoffVoting(responses, question) {
+    const options = question.rankOptions.options.map(opt => opt.value);
+    let ballots = responses.filter(r => Array.isArray(r));
+
+    const rounds = [];
+    let activeCandidates = [...options];
+
+    while (activeCandidates.length > 1) {
+        const voteCounts = {};
+        activeCandidates.forEach(c => voteCounts[c] = 0);
+
+        ballots.forEach(ballot => {
+            for (const candidate of ballot) {
+                if (activeCandidates.includes(candidate)) {
+                    voteCounts[candidate]++;
+                    break;
+                }
+            }
+        });
+
+        const totalVotes = ballots.length;
+        const roundResult = {
+            counts: { ...voteCounts },
+            totalVotes: totalVotes,
+            eliminated: null
+        };
+
+
+
+        let minVotes = Infinity;
+        activeCandidates.forEach(c => {
+            if (voteCounts[c] < minVotes) {
+                minVotes = voteCounts[c];
+            }
+        });
+
+        const toEliminate = activeCandidates.filter(c => voteCounts[c] === minVotes);
+        
+        if (toEliminate.length === activeCandidates.length) {
+            return { winner: null, rounds: rounds };
+        }
+
+        roundResult.eliminated = toEliminate;
+        rounds.push(roundResult);
+
+        activeCandidates = activeCandidates.filter(c => !toEliminate.includes(c));
+        
+        if (activeCandidates.length === 0) {
+            return { winner: null, rounds: rounds };
+        }
+    }
+
+    return { winner: activeCandidates.length > 0 ? activeCandidates[0] : null, rounds: rounds };
+}
+
+/**
+ * Render the Instant-Runoff Voting (IRV) visualization
+ * @param {HTMLElement} container - Container element
+ * @param {Object} irvResult - The result from runInstantRunoffVoting
+ * @param {Object} question - Question definition
+ */
+function renderIRVVisualization(container, irvResult, question) {
+    container.innerHTML = '';
+
+    const { winner, rounds } = irvResult;
+    const options = question.rankOptions.options;
+
+    const getOptionLabel = (id) => {
+        const option = options.find(o => o.value === id);
+        return option ? option.label : id;
+    };
+
+    const finalRankingContainer = document.createElement('div');
+    finalRankingContainer.className = 'irv-final-ranking';
+
+    if (winner) {
+        const finalRankingIds = [winner];
+        const eliminatedInOrder = rounds.flatMap(r => r.eliminated || []);
+        const rankedEliminated = [...eliminatedInOrder].reverse();
+        finalRankingIds.push(...rankedEliminated);
+
+        finalRankingContainer.innerHTML = `<h4>Final Ranking (IRV)</h4>`;
+        const rankingList = document.createElement('ol');
+        rankingList.className = 'irv-ranking-list';
+        finalRankingIds.forEach(candidateId => {
+            const li = document.createElement('li');
+            li.textContent = getOptionLabel(candidateId);
+            rankingList.appendChild(li);
+        });
+        finalRankingContainer.appendChild(rankingList);
+    } else {
+        finalRankingContainer.innerHTML = '<h3>No clear winner (tie)</h3>';
+    }
+    container.appendChild(finalRankingContainer);
+
+    const roundsContainer = document.createElement('div');
+    roundsContainer.className = 'irv-rounds';
+    roundsContainer.innerHTML = '<h4>Voting Rounds</h4>';
+
+    rounds.forEach((round, index) => {
+        const roundDiv = document.createElement('div');
+        roundDiv.className = 'irv-round';
+        roundDiv.innerHTML = `<h5>Round ${index + 1}</h5>`;
+
+        const countsList = document.createElement('ul');
+        Object.entries(round.counts).sort((a, b) => b[1] - a[1]).forEach(([candidate, count]) => {
+            const li = document.createElement('li');
+            const percentage = round.totalVotes > 0 ? ((count / round.totalVotes) * 100).toFixed(1) : 0;
+            li.textContent = `${getOptionLabel(candidate)}: ${count} votes (${percentage}%)`;
+            countsList.appendChild(li);
+        });
+        roundDiv.appendChild(countsList);
+
+        if (round.eliminated && round.eliminated.length > 0) {
+            const eliminatedP = document.createElement('p');
+            eliminatedP.className = 'eliminated-candidate';
+            eliminatedP.textContent = `Eliminated: ${round.eliminated.map(getOptionLabel).join(', ')}`;
+            roundDiv.appendChild(eliminatedP);
+        }
+        
+        roundsContainer.appendChild(roundDiv);
+    });
+
+    container.appendChild(roundsContainer);
+}
+
+/**
  * Process rank responses to extract ranking data
  * @param {Array} responses - Array of question responses
  * @param {Object} question - The question definition
@@ -80,8 +216,8 @@ function processRankResponses(responses, question) {
     }
     
     // Extract options from question definition
-    const options = question.options ? 
-        question.options.map(opt => ({ id: opt.value, label: opt.label || opt.value })) :
+    const options = question.rankOptions && question.rankOptions.options ?
+        question.rankOptions.options.map(opt => ({ id: opt.value, label: opt.label || opt.value })) :
         [];
     
     // Count how many options we have

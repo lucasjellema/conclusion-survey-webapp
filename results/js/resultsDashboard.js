@@ -10,6 +10,9 @@ import { createTextSummary } from './visualizations/textVisualizer.js';
 import { createMatrixVisualization } from './visualizations/matrixVisualizer.js';
 import { createSliderVisualization } from './visualizations/sliderVisualizer.js';
 import { createRankVisualization } from './visualizations/rankVisualizer.js';
+import { createLikertVisualization } from './visualizations/likertVisualizer.js';
+import rangeSliderVisualizer from './visualizations/rangeSliderVisualizer.js';
+import { createTagsVisualization } from './visualizations/tagsVisualizer.js';
 import { getVisualizationPreferences, saveVisualizationPreference } from './admin/visualizationSettings.js';
 
 // Question type constants
@@ -19,8 +22,11 @@ const QUESTION_TYPES = {
     SHORT_TEXT: 'shortText',
     LONG_TEXT: 'longText',
     MATRIX_2D: 'matrix2d',
+    LIKERT: 'likert',
     MULTI_VALUE_SLIDER: 'multiValueSlider',
-    RANK_OPTIONS: 'rankOptions'
+    RANK_OPTIONS: 'rankOptions',
+    RANGE_SLIDER: 'rangeSlider',
+    TAGS: 'tags'
 };
 
 // Visualization type options by question type
@@ -28,8 +34,11 @@ const VISUALIZATION_TYPES = {
     [QUESTION_TYPES.RADIO]: ['pie', 'doughnut', 'horizontalBar', 'verticalBar'],
     [QUESTION_TYPES.CHECKBOX]: ['horizontalBar', 'verticalBar', 'stackedBar', 'radar'],
     [QUESTION_TYPES.MATRIX_2D]: ['heatmap', 'groupedBar', 'radar', 'bubble'],
+    [QUESTION_TYPES.LIKERT]: ['heatmap', 'stackedBar'],
+    [QUESTION_TYPES.RANGE_SLIDER]: ['histogram'],
+    [QUESTION_TYPES.TAGS]: ['wordcloud'],
     [QUESTION_TYPES.MULTI_VALUE_SLIDER]: ['histogram', 'boxplot', 'line'],
-    [QUESTION_TYPES.RANK_OPTIONS]: ['rankedOrder', 'stackedPositions', 'horizontalBar', 'verticalBar'],
+    [QUESTION_TYPES.RANK_OPTIONS]: ['rankedOrder', 'stackedPositions', 'irv', 'horizontalBar', 'verticalBar'],
     [QUESTION_TYPES.SHORT_TEXT]: ['wordcloud', 'list'],
     [QUESTION_TYPES.LONG_TEXT]: ['wordcloud', 'list']
 };
@@ -39,6 +48,9 @@ const DEFAULT_VISUALIZATION = {
     [QUESTION_TYPES.RADIO]: 'pie',
     [QUESTION_TYPES.CHECKBOX]: 'horizontalBar',
     [QUESTION_TYPES.MATRIX_2D]: 'heatmap',
+    [QUESTION_TYPES.LIKERT]: 'heatmap',
+    [QUESTION_TYPES.RANGE_SLIDER]: 'histogram',
+    [QUESTION_TYPES.TAGS]: 'wordcloud',
     [QUESTION_TYPES.MULTI_VALUE_SLIDER]: 'histogram',
     [QUESTION_TYPES.RANK_OPTIONS]: 'rankedOrder',
     [QUESTION_TYPES.SHORT_TEXT]: 'list',
@@ -232,6 +244,15 @@ function calculateAverageROI() {
  * Setup filter controls
  */
 function setupFilters() {
+    // Add "Today" option to date range filter
+    const dateRangeSelect = document.getElementById('date-range');
+    if (dateRangeSelect && !dateRangeSelect.querySelector('option[value="today"]')) {
+        const todayOption = document.createElement('option');
+        todayOption.value = 'today';
+        todayOption.textContent = 'Today';
+        dateRangeSelect.add(todayOption, 1); // Add as second option, after "All Time"
+    }
+
     // Setup industry filter
     const industryQuestion = questionDefinitions.find(q => q.id === 'industry');
     if (industryQuestion && industryQuestion.options) {
@@ -328,6 +349,9 @@ function applyFilters(results) {
             let cutoffDate;
             
             switch (currentFilters.dateRange) {
+                case 'today':
+                    cutoffDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    break;
                 case 'week':
                     cutoffDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
                     break;
@@ -724,6 +748,32 @@ function renderQuestionResult(question, results) {
                     preferredType
                 );
                 break;
+
+            case QUESTION_TYPES.LIKERT:
+                createLikertVisualization(
+                    visualizationContainer, 
+                    questionResponses, 
+                    question, 
+                    preferredType
+                );
+                break;
+
+            case QUESTION_TYPES.RANGE_SLIDER:
+                rangeSliderVisualizer.render(
+                    visualizationContainer,
+                    question,
+                    questionResponses
+                );
+                break;
+
+            case QUESTION_TYPES.TAGS:
+                createTagsVisualization(
+                    visualizationContainer,
+                    questionResponses,
+                    question,
+                    preferredType
+                );
+                break;
                 
             default:
                 visualizationContainer.innerHTML = `
@@ -751,15 +801,21 @@ function createVisualizationToolbar(question, currentType) {
     toolbar.className = 'visualization-toolbar';
     
     // Only show the type selector if there are options for this question type
-    const options = VISUALIZATION_TYPES[question.type];
-    if (options && options.length > 0) {
+    const availableTypes = VISUALIZATION_TYPES[question.type] || [];
+    if (question.type === QUESTION_TYPES.RANK_OPTIONS) {
+        // Add IRV as a special case for the toolbar
+        if (!availableTypes.includes('irv')) {
+            availableTypes.push('irv');
+        }
+    }
+    if (availableTypes.length > 0) {
         const selector = document.createElement('div');
         selector.className = 'visualization-type-selector';
         
         selector.innerHTML = `
             <label for="viz-type-${question.id}">Chart Type:</label>
             <select id="viz-type-${question.id}">
-                ${options.map(option => `
+                ${availableTypes.map(option => `
                     <option value="${option}" ${option === currentType ? 'selected' : ''}>
                         ${formatVisualizationType(option)}
                     </option>
@@ -793,6 +849,9 @@ function createVisualizationToolbar(question, currentType) {
                     break;
                 case QUESTION_TYPES.MATRIX_2D:
                     createMatrixVisualization(container, getResponsesForQuestion(question.id), question, newType);
+                    break;
+                case QUESTION_TYPES.LIKERT:
+                    createLikertVisualization(container, getResponsesForQuestion(question.id), question, newType);
                     break;
                 case QUESTION_TYPES.MULTI_VALUE_SLIDER:
                     createSliderVisualization(container, getResponsesForQuestion(question.id), question, newType);
@@ -831,6 +890,9 @@ function getResponsesForQuestion(questionId) {
  * @returns {string} - Formatted type
  */
 function formatVisualizationType(type) {
+    if (type === 'irv') {
+        return 'Instant-Runoff Voting';
+    }
     return type
         .replace(/([A-Z])/g, ' $1') // Add space before capital letters
         .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
