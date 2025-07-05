@@ -15,13 +15,13 @@ const VISUALIZATION_TYPES = {
 };
 
 /**
- * Create a visualization for multi-value slider responses
- * @param {HTMLElement} container - The DOM element to render the chart in
+ * Create slider visualizations for multi-value slider question responses
+ * @param {HTMLElement} container - The DOM element to render the visualization in
  * @param {Array} responses - Array of question responses
  * @param {Object} question - The question definition
- * @param {string} [type='histogram'] - Type of visualization ('histogram', 'boxplot', 'line')
+ * @param {string} [type='histogram'] - Type of visualization ('histogram', 'boxplot')
  */
-export function createSliderVisualization(container, responses, question, type = VISUALIZATION_TYPES.HISTOGRAM) {
+export function createSliderVisualization(container, responses, question, type = 'histogram') {
     if (!container || !Array.isArray(responses) || responses.length === 0) {
         container.innerHTML = '<p class="no-data">No data available for this question.</p>';
         return;
@@ -36,16 +36,26 @@ export function createSliderVisualization(container, responses, question, type =
         return;
     }
     
-    // Render appropriate chart based on type
+    // Create a completely isolated container for this visualization
+    // Clear the main container first
+    container.innerHTML = '';
+    
+    // Create a wrapper to ensure proper isolation
+    const vizWrapper = document.createElement('div');
+    vizWrapper.className = 'slider-viz-wrapper';
+    vizWrapper.dataset.questionId = question.id;
+    container.appendChild(vizWrapper);
+    
+    // Render appropriate visualization based on type
     switch (type) {
         case VISUALIZATION_TYPES.HISTOGRAM:
-            renderHistogram(container, aggregatedData, question);
+            renderHistogram(vizWrapper, aggregatedData, question);
             break;
         case VISUALIZATION_TYPES.BOXPLOT:
-            renderBoxPlot(container, aggregatedData, question);
+            renderBoxPlot(vizWrapper, aggregatedData, question);
             break;
         default:
-            renderHistogram(container, aggregatedData, question);
+            renderHistogram(vizWrapper, aggregatedData, question);
     }
     
     // Add summary statistics table
@@ -347,32 +357,7 @@ function addStatisticsTable(container, data) {
     statsContainer.appendChild(table);
     container.appendChild(statsContainer);
     
-    // Add some CSS for the table
-    const style = document.createElement('style');
-    style.textContent = `
-        .statistics-table-container {
-            margin-top: 30px;
-            overflow-x: auto;
-        }
-        .statistics-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        .statistics-table th,
-        .statistics-table td {
-            padding: 8px 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-        .statistics-table th {
-            background-color: #f5f7fa;
-            font-weight: 500;
-        }
-        .statistics-table td:first-child,
-        .statistics-table th:first-child {
-            text-align: left;
-        }
-    `;
-    container.appendChild(style);
+    // Apply specific classes instead of adding inline styles
+    statsContainer.classList.add('slider-stats-container');
+    table.classList.add('slider-stats-table');
 }
