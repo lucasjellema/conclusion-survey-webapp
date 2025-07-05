@@ -37,8 +37,8 @@ const VISUALIZATION_TYPES = {
     [QUESTION_TYPES.LIKERT]: ['heatmap', 'stackedBar'],
     [QUESTION_TYPES.RANGE_SLIDER]: ['histogram'],
     [QUESTION_TYPES.TAGS]: ['wordcloud'],
-    [QUESTION_TYPES.MULTI_VALUE_SLIDER]: ['histogram', 'boxplot', 'line'],
-    [QUESTION_TYPES.RANK_OPTIONS]: ['rankedOrder', 'stackedPositions', 'irv', 'horizontalBar', 'verticalBar'],
+    [QUESTION_TYPES.MULTI_VALUE_SLIDER]: ['histogram', 'boxplot'],
+    [QUESTION_TYPES.RANK_OPTIONS]: ['rankedOrder', 'stackedPositions', 'irv'],
     [QUESTION_TYPES.SHORT_TEXT]: ['wordcloud'],
     [QUESTION_TYPES.LONG_TEXT]: ['wordcloud']
 };

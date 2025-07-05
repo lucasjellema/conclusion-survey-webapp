@@ -11,8 +11,7 @@ import { aggregateSliderResponses } from '../resultsDataService.js';
 // Constants for visualization types
 const VISUALIZATION_TYPES = {
     HISTOGRAM: 'histogram',
-    BOXPLOT: 'boxplot',
-    LINE: 'line'
+    BOXPLOT: 'boxplot'
 };
 
 /**
@@ -44,9 +43,6 @@ export function createSliderVisualization(container, responses, question, type =
             break;
         case VISUALIZATION_TYPES.BOXPLOT:
             renderBoxPlot(container, aggregatedData, question);
-            break;
-        case VISUALIZATION_TYPES.LINE:
-            renderLineChart(container, aggregatedData, question);
             break;
         default:
             renderHistogram(container, aggregatedData, question);
@@ -285,135 +281,6 @@ function renderBoxPlot(container, data, question) {
                     },
                     anchor: 'center',
                     align: 'center'
-                }
-            }
-        }
-    };
-    
-    // Create chart
-    new Chart(canvas, config);
-}
-
-/**
- * Render a line chart visualization for slider responses
- * @param {HTMLElement} container - Container element
- * @param {Object} data - Aggregated data
- * @param {Object} question - Question definition
- */
-function renderLineChart(container, data, question) {
-    // Clear container
-    container.innerHTML = '';
-    
-    // Create canvas for chart
-    const canvas = document.createElement('canvas');
-    canvas.id = `chart-${question.id}-line`;
-    canvas.width = 600;
-    canvas.height = 400;
-    container.appendChild(canvas);
-    
-    // Generate colors for each option
-    const colors = [
-        '#4a86e8', '#6aa84f', '#e69138', '#8e63ce', '#d5573b',
-        '#45818e', '#a64d79', '#674ea7', '#990000', '#0c343d'
-    ];
-    
-    // Create datasets for each statistical measure (min, avg, max)
-    const datasets = [
-        {
-            label: 'Average',
-            data: data.options.map(option => data.statistics[option].average),
-            borderColor: 'rgb(54, 162, 235)',
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderWidth: 2,
-            tension: 0.3,
-            fill: false
-        },
-        {
-            label: 'Minimum',
-            data: data.options.map(option => data.statistics[option].min),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            borderWidth: 1,
-            tension: 0.3,
-            fill: false,
-            borderDash: [5, 5]
-        },
-        {
-            label: 'Maximum',
-            data: data.options.map(option => data.statistics[option].max),
-            borderColor: 'rgb(255, 205, 86)',
-            backgroundColor: 'rgba(255, 205, 86, 0.5)',
-            borderWidth: 1,
-            tension: 0.3,
-            fill: false,
-            borderDash: [5, 5]
-        }
-    ];
-    
-    // Create labels from options
-    const labels = data.options.map(option => {
-        // Look up option label if available
-        let optionLabel = option;
-        
-        if (question.options && Array.isArray(question.options)) {
-            const optionObj = question.options.find(opt => opt.value === option);
-            if (optionObj && optionObj.label) {
-                optionLabel = optionObj.label;
-            }
-        }
-        
-        return optionLabel;
-    });
-    
-    // Create chart configuration
-    const config = {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: datasets
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: {
-                        display: true,
-                        text: 'Rating Value'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: (context) => {
-                            const label = context.dataset.label || '';
-                            const value = context.raw || 0;
-                            
-                            return `${label}: ${value}`;
-                        }
-                    }
-                },
-                datalabels: {
-                    formatter: (value) => {
-                        return value;
-                    },
-                    color: '#333',
-                    font: {
-                        weight: 'bold',
-                        size: 10
-                    },
-                    anchor: 'end',
-                    align: 'end',
-                    offset: 5,
-                    display: function(context) {
-                        return context.datasetIndex === 0; // Only show for average line
-                    }
                 }
             }
         }
