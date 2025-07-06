@@ -4,6 +4,7 @@
   "responses": [
     {
       "surveyId": "unknown",
+      "label": "EuroTech Solutions",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-07-05T06:13:26.967Z",
       "responses": {
@@ -71,6 +72,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "CloudBridge Innovations",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-07-02T14:23:45.123Z",
       "responses": {
@@ -129,7 +131,7 @@
           "timestamp": "2025-07-02T14:18:05.456Z"
         },
         "security_details": {
-          "value": "Our organization faces significant regulatory challenges with data protection requirements across multiple EU jurisdictions. Security certification processes are time-consuming and costly.",
+          "value": "Our financial institution is focusing on developing a multi-cloud strategy to avoid vendor lock-in. Security certification processes with cloud providers have been time-consuming but necessary for regulatory compliance. We've established a Cloud Center of Excellence to standardize cloud adoption practices across departments.",
           "timestamp": "2025-07-02T14:19:25.567Z"
         },
         "future_investments": {
@@ -178,6 +180,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "DataSphere Corp",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-07-01T09:48:32.456Z",
       "responses": {
@@ -277,6 +280,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "GlobalNet Services",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-06-30T16:42:18.789Z",
       "responses": {
@@ -394,6 +398,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "Quantum Leap Inc.",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-06-28T11:35:42.123Z",
       "responses": {
@@ -496,6 +501,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "Pinnacle Systems",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-07-04T14:23:12.456Z",
       "responses": {
@@ -575,6 +581,18 @@
             "user_experience"
           ],
           "timestamp": "2025-07-04T14:23:05.456Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 50,
+              "azure": 60,
+              "gcp": 85,
+              "ibm": 55,
+              "oracle": 40
+            }
+          },
+          "timestamp": "2025-07-04T14:23:12.456Z"
         }
       },
       "username": "maria.rossi@univ-europe.edu",
@@ -582,6 +600,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "Horizon Digital",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-07-02T09:42:18.789Z",
       "responses": {
@@ -672,6 +691,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "Apex Innovations",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-07-03T16:12:33.654Z",
       "responses": {
@@ -767,6 +787,7 @@
     },
     {
       "surveyId": "unknown",
+      "label": "Future Systems Inc.",
       "surveyTitle": "Conclusion European Cloud Survey",
       "completedAt": "2025-07-05T08:02:45.321Z",
       "responses": {
@@ -869,6 +890,75 @@
       },
       "username": "pierre.dubois@health-tech.fr",
       "lastModified": "2025-07-05T08:02:45.321Z"
+    },
+    {
+      "surveyId": "unknown",
+      "label": "Innovate Corp.",
+      "surveyTitle": "Conclusion European Cloud Survey",
+      "completedAt": "2025-07-06T07:08:49.000Z",
+      "responses": {
+        "industry": {
+          "value": "finance",
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        },
+        "orgSize": {
+          "value": "medium",
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        },
+        "cloudUsage": {
+          "value": [
+            "iaas",
+            "saas"
+          ],
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        },
+        "challenges": {
+          "value": [
+            "cost",
+            "security"
+          ],
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        },
+        "cloud_cost_benefit": {
+          "value": {
+            "value": {
+              "aws": 70,
+              "azure": 60,
+              "gcp": 50,
+              "ibm": 40,
+              "oracle": 30
+            },
+            "comment": "Cost optimization is a key driver for our cloud strategy."
+          },
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        },
+        "additional_comments": {
+          "value": "We are exploring multi-cloud options to enhance resilience and optimize costs. Data governance and security remain our top concerns.",
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        },
+        "cloud_placement": {
+          "value": {
+            "value": {
+              "aws": 60,
+              "azure": 70,
+              "gcp": 50,
+              "alibaba": 20,
+              "ibm": 30,
+              "stackit": 40,
+              "scaleway": 10,
+              "oracle": 20
+            },
+            "comment": ""
+          },
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        },
+        "future_investments": {
+          "value": "increase_somewhat",
+          "timestamp": "2025-07-06T07:08:49.000Z"
+        }
+      },
+      "username": "john.doe@example.com",
+      "lastModified": "2025-07-06T07:08:49.000Z"
     }
   ]
 }
