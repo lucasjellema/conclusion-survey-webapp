@@ -37,7 +37,7 @@ const VISUALIZATION_TYPES = {
     [QUESTION_TYPES.LIKERT]: ['heatmap', 'stackedBar'],
     [QUESTION_TYPES.RANGE_SLIDER]: ['histogram'],
     [QUESTION_TYPES.TAGS]: ['wordcloud'],
-    [QUESTION_TYPES.MULTI_VALUE_SLIDER]: ['histogram', 'boxplot'],
+    [QUESTION_TYPES.MULTI_VALUE_SLIDER]: ['histogram', 'boxplot', 'stackedPositions'],
     [QUESTION_TYPES.RANK_OPTIONS]: ['rankedOrder', 'stackedPositions', 'irv'],
     [QUESTION_TYPES.SHORT_TEXT]: ['wordcloud'],
     [QUESTION_TYPES.LONG_TEXT]: ['wordcloud']
@@ -60,10 +60,10 @@ const DEFAULT_VISUALIZATION = {
 // State management
 let questionDefinitions = [];
 let surveyResults = [];
+let filterableQuestions = []; // Store questions that can be used as filters
 let currentFilters = {
-    dateRange: 'all',
-    industry: [],
-    orgSize: []
+    dateRange: 'all'
+    // Other filters will be added dynamically
 };
 
 // Wizard navigation state
@@ -94,6 +94,9 @@ async function initDashboard() {
             getQuestionDefinitions(),
             getResults()
         ]);
+        
+        // Identify questions that can be used as filters
+        filterableQuestions = identifyFilterableQuestions(questionDefinitions);
         
         // Update overview statistics
         updateOverviewStats();
@@ -151,99 +154,64 @@ function updateOverviewStats() {
  * Calculate overview statistics
  */
 function calculateOverviewStats() {
-    // Find industry distribution
-    const industries = {};
-    let topIndustry = { name: 'Unknown', count: 0 };
-    
-    surveyResults.forEach(response => {
-        const industry = response.responses?.industry?.value;
-        if (industry) {
-            industries[industry] = (industries[industry] || 0) + 1;
-            if (industries[industry] > topIndustry.count) {
-                topIndustry = { name: industry, count: industries[industry] };
-            }
-        }
-    });
-    
-    // Find organization size distribution
-    const orgSizes = {};
-    let topOrgSize = { name: 'Unknown', count: 0 };
-    
-    surveyResults.forEach(response => {
-        const orgSize = response.responses?.orgSize?.value;
-        if (orgSize) {
-            orgSizes[orgSize] = (orgSizes[orgSize] || 0) + 1;
-            if (orgSizes[orgSize] > topOrgSize.count) {
-                topOrgSize = { name: orgSize, count: orgSizes[orgSize] };
-            }
-        }
-    });
-    
-    // Format industry name for display
-    let formattedIndustryName = topIndustry.name;
-    
-    // Look up industry label from question definition
-    const industryQuestion = questionDefinitions.find(q => q.id === 'industry');
-    if (industryQuestion && industryQuestion.options) {
-        const industryOption = industryQuestion.options.find(opt => opt.value === topIndustry.name);
-        if (industryOption) {
-            formattedIndustryName = industryOption.label;
-        }
-    }
-    
-    // Format org size name for display
-    let formattedOrgSizeName = topOrgSize.name;
-    
-    // Look up org size label from question definition
-    const orgSizeQuestion = questionDefinitions.find(q => q.id === 'orgSize');
-    if (orgSizeQuestion && orgSizeQuestion.options) {
-        const orgSizeOption = orgSizeQuestion.options.find(opt => opt.value === topOrgSize.name);
-        if (orgSizeOption) {
-            formattedOrgSizeName = orgSizeOption.label;
-        }
-    }
     
     return {
         'Total Responses': {
             value: surveyResults.length,
             subtext: 'responses collected'
-        },
-        'Top Industry': {
-            value: formattedIndustryName,
-            subtext: `${topIndustry.count} responses (${Math.round((topIndustry.count / surveyResults.length) * 100)}%)`
-        },
-        'Top Organization Size': {
-            value: formattedOrgSizeName,
-            subtext: `${topOrgSize.count} responses (${Math.round((topOrgSize.count / surveyResults.length) * 100)}%)`
-        },
-        'Avg. Cloud ROI': {
-            value: calculateAverageROI() + '%',
-            subtext: 'average reported ROI'
         }
     };
 }
-
 /**
- * Calculate average ROI from responses
+ * Identify which questions are suitable for use as filters
+ * @param {Array} questions - Array of question definitions
+ * @returns {Array} - Array of filterable questions
  */
-function calculateAverageROI() {
-    let totalROI = 0;
-    let roiCount = 0;
+function identifyFilterableQuestions(questions) {
+    // Questions that make good filters are typically:
+    // 1. Single-select or multi-select questions (radio, checkbox, etc.)
+    // 2. Questions with a reasonable number of options
+    // 3. Questions that categorize/segment the respondents
     
-    surveyResults.forEach(response => {
-        if (response.responses?.roi?.value) {
-            totalROI += Number(response.responses.roi.value);
-            roiCount++;
+    return questions.filter(question => {
+        // Only include questions with specific types that make good filters
+        if (!question.id || !question.type) return false;
+        
+        const goodFilterTypes = [
+            QUESTION_TYPES.RADIO,
+            QUESTION_TYPES.CHECKBOX,
+            QUESTION_TYPES.MATRIX_2D,
+            QUESTION_TYPES.TAGS
+        ];
+        
+        // Check if the question type is suitable for filtering
+        if (!goodFilterTypes.includes(question.type)) return false;
+        
+        // For radio and checkbox questions, ensure they have options
+        if ((question.type === QUESTION_TYPES.RADIO || question.type === QUESTION_TYPES.CHECKBOX) 
+            && (!question.options || question.options.length === 0)) {
+            return false;
         }
+        
+        // Exclude questions with too many options (would make filtering unwieldy)
+        if (question.options && question.options.length > 20) return false;
+        
+        // Question is suitable for filtering
+        return true;
     });
-    
-    return roiCount > 0 ? Math.round(totalROI / roiCount) : 0;
 }
 
 /**
  * Setup filter controls
  */
 function setupFilters() {
+    const filtersContainer = document.querySelector('.filters-section');
+    if (!filtersContainer) return;
+    
+    // Clear any existing filter containers except date range
+    const existingContainers = filtersContainer.querySelectorAll('.filter-container:not(#date-range-container)');
+    existingContainers.forEach(container => container.remove());
+    
     // Add "Today" option to date range filter
     const dateRangeSelect = document.getElementById('date-range');
     if (dateRangeSelect && !dateRangeSelect.querySelector('option[value="today"]')) {
@@ -252,32 +220,72 @@ function setupFilters() {
         todayOption.textContent = 'Today';
         dateRangeSelect.add(todayOption, 1); // Add as second option, after "All Time"
     }
-
-    // Setup industry filter
-    const industryQuestion = questionDefinitions.find(q => q.id === 'industry');
-    if (industryQuestion && industryQuestion.options) {
-        industryFilterContainer.innerHTML = `
-            <label for="industry-filter">Industry</label>
-            <select id="industry-filter" multiple>
-                ${industryQuestion.options.map(option => `
-                    <option value="${option.value}">${option.label}</option>
-                `).join('')}
-            </select>
-        `;
-    }
     
-    // Setup org size filter
-    const orgSizeQuestion = questionDefinitions.find(q => q.id === 'orgSize');
-    if (orgSizeQuestion && orgSizeQuestion.options) {
-        orgSizeFilterContainer.innerHTML = `
-            <label for="org-size-filter">Organization Size</label>
-            <select id="org-size-filter" multiple>
-                ${orgSizeQuestion.options.map(option => `
-                    <option value="${option.value}">${option.label}</option>
-                `).join('')}
-            </select>
-        `;
-    }
+    // Initialize the dynamic filters structure
+    currentFilters = {
+        dateRange: 'all'
+    };
+    
+    // For each filterable question, create a filter UI
+    filterableQuestions.forEach(question => {
+        // Create filter container
+        const filterContainer = document.createElement('div');
+        filterContainer.className = 'filter-container';
+        filterContainer.id = `${question.id}-filter-container`;
+        
+        // Initialize filter in currentFilters
+        currentFilters[question.id] = [];
+        
+        switch(question.type) {
+            case QUESTION_TYPES.RADIO:
+            case QUESTION_TYPES.CHECKBOX:
+                // Create a multi-select dropdown for options
+                if (question.options && question.options.length > 0) {
+                    filterContainer.innerHTML = `
+                        <label for="${question.id}-filter">${question.title}</label>
+                        <select id="${question.id}-filter" multiple>
+                            ${question.options.map(option => `
+                                <option value="${option.value}">${option.label}</option>
+                            `).join('')}
+                        </select>
+                    `;
+                }
+                break;
+                
+            case QUESTION_TYPES.TAGS:
+                // Create a multi-select dropdown for tag options
+                if (question.tagOptions && question.tagOptions.tags && question.tagOptions.tags.length > 0) {
+                    filterContainer.innerHTML = `
+                        <label for="${question.id}-filter">${question.title}</label>
+                        <select id="${question.id}-filter" multiple>
+                            ${question.tagOptions.tags.map(tag => `
+                                <option value="${tag}">${tag}</option>
+                            `).join('')}
+                        </select>
+                    `;
+                }
+                break;
+                
+            case QUESTION_TYPES.MATRIX_2D:
+                // Create a multi-select dropdown for matrix rows
+                if (question.matrix && question.matrix.rows && question.matrix.rows.length > 0) {
+                    filterContainer.innerHTML = `
+                        <label for="${question.id}-filter">${question.title}</label>
+                        <select id="${question.id}-filter" multiple>
+                            ${question.matrix.rows.map(row => `
+                                <option value="${row.id}">${row.label}</option>
+                            `).join('')}
+                        </select>
+                    `;
+                }
+                break;
+        }
+        
+        // Only add the filter if content was generated
+        if (filterContainer.innerHTML) {
+            filtersContainer.appendChild(filterContainer);
+        }
+    });
 }
 
 /**
@@ -286,21 +294,34 @@ function setupFilters() {
 function setupEventListeners() {
     // Apply filters
     applyFiltersButton.addEventListener('click', () => {
-        // Get filter values
+        // Get date range filter value
         const dateRangeFilter = document.getElementById('date-range').value;
-        const industryFilter = Array.from(document.getElementById('industry-filter')?.selectedOptions || [])
-            .map(option => option.value);
-        const orgSizeFilter = Array.from(document.getElementById('org-size-filter')?.selectedOptions || [])
-            .map(option => option.value);
         
-        // Update current filters
-        currentFilters = {
-            dateRange: dateRangeFilter,
-            industry: industryFilter,
-            orgSize: orgSizeFilter
+        // Start with the date range filter
+        const newFilters = {
+            dateRange: dateRangeFilter
         };
         
-        // Re-render results with filters
+        // For each filterable question, get its filter value
+        filterableQuestions.forEach(question => {
+            const filterId = `${question.id}-filter`;
+            const filterElement = document.getElementById(filterId);
+            
+            if (filterElement) {
+                // Get selected values if it's a select element
+                if (filterElement.tagName === 'SELECT') {
+                    const selectedValues = Array.from(filterElement.selectedOptions || [])
+                        .map(option => option.value);
+                    newFilters[question.id] = selectedValues;
+                }
+                // Add support for other filter types here if needed
+            }
+        });
+        
+        // Update current filters
+        currentFilters = newFilters;
+        
+        // Re-render with filters applied
         renderResults();
     });
     
@@ -368,21 +389,7 @@ function applyFilters(results) {
             }
         }
         
-        // Industry filter
-        if (currentFilters.industry.length > 0) {
-            const industry = response.responses?.industry?.value;
-            if (!industry || !currentFilters.industry.includes(industry)) {
-                return false;
-            }
-        }
-        
-        // Org size filter
-        if (currentFilters.orgSize.length > 0) {
-            const orgSize = response.responses?.orgSize?.value;
-            if (!orgSize || !currentFilters.orgSize.includes(orgSize)) {
-                return false;
-            }
-        }
+   
         
         return true;
     });
