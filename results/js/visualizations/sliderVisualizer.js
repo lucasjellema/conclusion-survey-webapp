@@ -11,7 +11,8 @@ import { aggregateSliderResponses } from '../resultsDataService.js';
 // Constants for visualization types
 const VISUALIZATION_TYPES = {
     HISTOGRAM: 'histogram',
-    BOXPLOT: 'boxplot'
+    BOXPLOT: 'boxplot',
+    STACKED_POSITIONS: 'stackedPositions'
 };
 
 /**
@@ -53,6 +54,9 @@ export function createSliderVisualization(container, responses, question, type =
             break;
         case VISUALIZATION_TYPES.BOXPLOT:
             renderBoxPlot(vizWrapper, aggregatedData, question);
+            break;
+        case VISUALIZATION_TYPES.STACKED_POSITIONS:
+            renderStackedPositions(vizWrapper, aggregatedData, question);
             break;
         default:
             renderHistogram(vizWrapper, aggregatedData, question);
@@ -291,6 +295,139 @@ function renderBoxPlot(container, data, question) {
                     },
                     anchor: 'center',
                     align: 'center'
+                }
+            }
+        }
+    };
+    
+    // Create chart
+    new Chart(canvas, config);
+}
+
+/**
+ * Render a stacked positions visualization for slider responses
+ * @param {HTMLElement} container - Container element
+ * @param {Object} data - Aggregated data
+ * @param {Object} question - Question definition
+ */
+function renderStackedPositions(container, data, question) {
+    // Clear container
+    container.innerHTML = '';
+    
+    // Create canvas for chart
+    const canvas = document.createElement('canvas');
+    canvas.id = `chart-${question.id}-stacked`;
+    canvas.style.width = '100%';
+    canvas.style.maxHeight = '500px';
+    container.appendChild(canvas);
+    
+    // Define position ranges - divide the slider range (0-100) into segments
+    const ranges = [
+        { min: 0, max: 20, label: '0-20' },
+        { min: 21, max: 40, label: '21-40' },
+        { min: 41, max: 60, label: '41-60' },
+        { min: 61, max: 80, label: '61-80' },
+        { min: 81, max: 100, label: '81-100' }
+    ];
+    
+    // Count values in each range for each option
+    const positionCounts = {};
+    data.options.forEach(option => {
+        positionCounts[option] = ranges.map(range => {
+            // If we have raw values, count them directly, otherwise estimate from statistics
+            if (data.rawValues && data.rawValues[option]) {
+                return data.rawValues[option].filter(
+                    val => val >= range.min && val <= range.max
+                ).length;
+            } else {
+                // Estimate distribution based on min/max/avg
+                const stats = data.statistics[option];
+                // Simple estimation - this could be improved with more sophisticated distribution modeling
+                if (range.min <= stats.average && range.max >= stats.average) {
+                    return stats.count * 0.6; // Majority near the average
+                } else if (
+                    (range.min <= stats.min && range.max >= stats.min) ||
+                    (range.min <= stats.max && range.max >= stats.max)
+                ) {
+                    return stats.count * 0.2; // Some at the edges
+                } else {
+                    return 0;
+                }
+            }
+        });
+    });
+    
+    // Generate colors for each option
+    const colors = [
+        '#4a86e8', '#6aa84f', '#e69138', '#8e63ce', '#d5573b',
+        '#45818e', '#a64d79', '#674ea7', '#990000', '#0c343d'
+    ];
+    
+    // Create datasets for the chart
+    const datasets = data.options.map((option, index) => {
+        // Look up option label if available
+        let optionLabel = option;
+        
+        if (data.optionLabels && data.optionLabels[option]) {
+            optionLabel = data.optionLabels[option];
+        }
+        
+        return {
+            label: optionLabel,
+            data: positionCounts[option],
+            backgroundColor: colors[index % colors.length],
+            borderColor: colors[index % colors.length].replace('1)', '0.7)'),
+            borderWidth: 1
+        };
+    });
+    
+    // Create chart configuration
+    const config = {
+        type: 'bar',
+        data: {
+            labels: ranges.map(range => range.label),
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Value Range'
+                    }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribution of Values by Position Range',
+                    font: {
+                        size: 16
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    align: 'center'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => {
+                            const label = context.dataset.label || '';
+                            const value = context.raw || 0;
+                            return `${label}: ${Math.round(value)} responses`;
+                        }
+                    }
                 }
             }
         }
