@@ -353,21 +353,25 @@ export function aggregateSliderResponses(responses, question) {
     
     // If we have values in the response, use those to determine options
     if (validResponses.length > 0) {
-        const firstResponse = validResponses[0].value;
-        
-        if (typeof firstResponse === 'object') {
-            Object.keys(firstResponse).forEach(key => {
-                if (key !== 'comment') {
-                    options.push(key);
-                }
-            });
-        }
+        // Collect all possible option keys from all responses
+        validResponses.forEach(response => {
+            if (typeof response.value === 'object' && response.value !== null) {
+                const valueObj = response.value.value || response.value;
+                Object.keys(valueObj).forEach(key => {
+                    if (key !== 'comment' && !options.includes(key)) {
+                        options.push(key);
+                    }
+                });
+            }
+        });
     }
     
     // If we couldn't extract options from responses, try from the question definition
     if (options.length === 0 && question.options && Array.isArray(question.options)) {
         question.options.forEach(option => {
-            options.push(option.value);
+            if (!options.includes(option.value)) {
+                options.push(option.value);
+            }
         });
     }
     
@@ -379,7 +383,16 @@ export function aggregateSliderResponses(responses, question) {
         const values = [];
         
         validResponses.forEach(response => {
-            const value = response.value[option];
+            // Check for both direct value and nested value object structure
+            let value;
+            if (response.value[option] !== undefined) {
+                // Direct key-value structure
+                value = response.value[option];
+            } else if (response.value.value && response.value.value[option] !== undefined) {
+                // Nested value object structure
+                value = response.value.value[option];
+            }
+            
             if (typeof value === 'number') {
                 values.push(value);
             }
@@ -392,12 +405,12 @@ export function aggregateSliderResponses(responses, question) {
             const min = Math.min(...values);
             const max = Math.max(...values);
             
-            // Store statistics
+            // Store statistics with the count equal to the number of surveys that rated this option
             statistics[option] = {
                 average: avg,
                 min,
                 max,
-                count: values.length
+                count: values.length // This will now be the actual number of responses for this option
             };
         } else {
             statistics[option] = {
