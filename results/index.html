@@ -47,31 +47,38 @@
             </div>
         </div>
 
-        <div class="results-filters">
-            <h3>Filters</h3>
-            <div class="filter-row">
-                <div class="filter-item">
-                    <label for="date-range">Date Range</label>
-                    <select id="date-range">
-                        <option value="all">All Time</option>
-                        <option value="today">Today</option>
-                        <option value="week">Last Week</option>
-                        <option value="month">Last Month</option>
-                        <option value="quarter">Last Quarter</option>
-                    </select>
+        <section class="results-filters" aria-labelledby="filters-heading" style="display: none;">
+            <h3 id="filters-heading">Filters</h3>
+            <div class="filter-controls">
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <label for="date-range">Date Range</label>
+                        <select id="date-range">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">Last Week</option>
+                            <option value="month">Last Month</option>
+                            <option value="quarter">Last Quarter</option>
+                        </select>
+                    </div>
+                    <!-- Dynamic filter containers for industry and organization size -->
+                    <div class="filter-item" id="industry-filter-container">
+                        <!-- Industry filter will be dynamically populated -->
+                        <p class="loading-placeholder">Loading industry filter...</p>
+                    </div>
+                    <div class="filter-item" id="org-size-filter-container">
+                        <!-- Org size filter will be dynamically populated -->
+                        <p class="loading-placeholder">Loading organization size filter...</p>
+                    </div>
                 </div>
-                <div class="filter-item" id="industry-filter-container">
-                    <!-- Industry filter will be dynamically populated -->
+                <div class="filter-actions">
+                    <button id="apply-filters" class="btn primary">Apply Filters</button>
+                    <button id="reset-filters" class="btn secondary">Reset</button>
                 </div>
-                <div class="filter-item" id="org-size-filter-container">
-                    <!-- Org size filter will be dynamically populated -->
-                </div>
-                <button id="apply-filters" class="btn primary">Apply Filters</button>
-                <button id="reset-filters" class="btn secondary">Reset</button>
             </div>
-        </div>
+        </section>
 
-        <div class="results-overview">
+        <div class="results-overview" style="display: none;">
             <h2>Overview</h2>
             <div class="overview-stats">
                 <!-- Overview statistics will be populated dynamically -->
