@@ -697,6 +697,9 @@ function renderQuestionResult(question, results) {
             ? response.responses[question.id].value 
             : null;
     }).filter(Boolean);
+    const questionResponseLabels = results.map(response => {
+        return response.label 
+    }).filter(Boolean);
     
     // Generate visualization based on question type
     try {
@@ -705,7 +708,8 @@ function renderQuestionResult(question, results) {
                 createRadioVisualization(
                     visualizationContainer, 
                     questionResponses, 
-                    question, 
+                    question,
+                    questionResponseLabels, 
                     preferredType
                 );
                 break;
@@ -845,7 +849,7 @@ function createVisualizationToolbar(question, currentType) {
             // Re-create visualization with the new type
             switch (question.type) {
                 case QUESTION_TYPES.RADIO:
-                    createRadioVisualization(container, getResponsesForQuestion(question.id), question, newType);
+                    createRadioVisualization(container, getResponsesForQuestion(question.id), question,getResponderLabels(), newType);
                     break;
                 case QUESTION_TYPES.CHECKBOX:
                     createCheckboxVisualization(container, getResponsesForQuestion(question.id), question, newType);
@@ -890,6 +894,23 @@ function getResponsesForQuestion(questionId) {
             : null;
     }).filter(Boolean);
 }
+
+
+
+
+/**
+ * Get labels for filtered responders
+ * @returns {Array} - Array of responders labels 
+ */
+function getResponderLabels() {
+    // Apply current filters to the results
+    const filteredResults = applyFilters(surveyResults);
+    
+    return filteredResults.map(response => {
+        return response.label;
+    }).filter(Boolean);
+}
+
 
 /**
  * Format visualization type for display

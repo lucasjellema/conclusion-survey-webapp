@@ -15,14 +15,14 @@ import { aggregateRadioResponses } from '../resultsDataService.js';
  * @param {Object} question - The question definition
  * @param {string} [type='pie'] - Type of visualization ('pie', 'doughnut', 'horizontalBar', 'verticalBar')
  */
-export function createRadioVisualization(container, responses, question, type = 'pie') {
+export function createRadioVisualization(container, responses, question,  responseLabels,type = 'pie') {
     if (!container || !Array.isArray(responses) || responses.length === 0) {
         container.innerHTML = '<p class="no-data">No data available for this question.</p>';
         return;
     }
     
     // Aggregate responses
-    const aggregatedData = aggregateRadioResponses(responses, question);
+    const aggregatedData = aggregateRadioResponses(responses, question,responseLabels);
     
     // Don't render if no data
     if (aggregatedData.total === 0) {
@@ -101,7 +101,8 @@ function renderPieChart(container, data, question) {
                             const label = context.label || '';
                             const value = context.raw || 0;
                             const percentage = data.percentages[context.dataIndex];
-                            return `${label}: ${value} (${percentage}%)`;
+                            const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
+                            return `${label}: ${value} (${percentage}%)${associatedLabels}`;
                         }
                     }
                 },
@@ -172,7 +173,9 @@ function renderDoughnutChart(container, data, question) {
                             const label = context.label || '';
                             const value = context.raw || 0;
                             const percentage = data.percentages[context.dataIndex];
-                            return `${label}: ${value} (${percentage}%)`;
+                           const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
+
+                            return `${label}: ${value} (${percentage}%)${associatedLabels}`;
                         }
                     }
                 },
@@ -236,7 +239,8 @@ function renderBarChart(container, data, question, horizontal = false) {
                             const label = context.label || '';
                             const value = context.raw || 0;
                             const percentage = data.percentages[context.dataIndex];
-                            return `${label}: ${value} (${percentage}%)`;
+                            const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
+                            return `${label}: ${value} (${percentage}%)${associatedLabels}`;
                         }
                     }
                 },

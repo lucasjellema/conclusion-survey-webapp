@@ -110,23 +110,27 @@ export async function getResults(forceRefresh = false) {
  * @param {Object} question - Question definition
  * @returns {Object} Aggregated data ready for visualization
  */
-export function aggregateRadioResponses(responses, question) {
+export function aggregateRadioResponses(responses, question, responseLabels = []) {
     // Count occurrences of each option
     const counts = {};
+    const tooltips = {}; // To store tooltip labels for each value
+    
     let total = 0;
     
     // Initialize counts for all options
     if (question.options && Array.isArray(question.options)) {
         question.options.forEach(option => {
             counts[option.value] = 0;
+            tooltips[option.value] = ''; 
         });
     }
     
     // Count responses
-    responses.forEach(response => {
+    responses.forEach((response, index) => {
         const value = response;
         if (value) {
             counts[value] = (counts[value] || 0) + 1;
+            tooltips[value] = tooltips[value] +', '+ responseLabels[index] ; // Use responseLabels if provided
             total++;
         }
     });
@@ -135,7 +139,8 @@ export function aggregateRadioResponses(responses, question) {
     const labels = [];
     const data = [];
     const colors = [];
-    
+    const tooltipLabels = [];
+
     // Default color palette
     const defaultColors = [
         '#4a86e8', '#6aa84f', '#e69138', '#8e63ce', '#d5573b',
@@ -154,6 +159,7 @@ export function aggregateRadioResponses(responses, question) {
         
         labels.push(label);
         data.push(count);
+        tooltipLabels.push(tooltips[value] || ''); // Use tooltip labels if available
         colors.push(defaultColors[index % defaultColors.length]);
     });
     
@@ -162,7 +168,8 @@ export function aggregateRadioResponses(responses, question) {
         data,
         colors,
         total,
-        percentages: data.map(value => total > 0 ? Math.round((value / total) * 100) : 0)
+        percentages: data.map(value => total > 0 ? Math.round((value / total) * 100) : 0),
+        tooltipLabels
     };
 }
 
