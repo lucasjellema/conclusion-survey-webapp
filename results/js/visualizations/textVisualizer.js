@@ -269,9 +269,13 @@ function renderResponsePage(responses, container, paginationContainer, currentPa
     const responseList = document.createElement('div');
     responseList.className = 'response-list';
     
+
+    // created a randomly sorted array of responses
+    const shuffledResponses = responses.sort(() => 0.5 - Math.random());
+
     // Add responses for current page
     for (let i = startIdx; i < endIdx; i++) {
-        const response = responses[i];
+        const response = shuffledResponses[i];
         const text = typeof response === 'object' ? 
             (response.value || '').toString() : 
             (response || '').toString();
