@@ -719,6 +719,7 @@ function renderQuestionResult(question, results) {
                     visualizationContainer, 
                     questionResponses, 
                     question, 
+                    questionResponseLabels, 
                     preferredType
                 );
                 break;
@@ -852,7 +853,7 @@ function createVisualizationToolbar(question, currentType) {
                     createRadioVisualization(container, getResponsesForQuestion(question.id), question,getResponderLabels(), newType);
                     break;
                 case QUESTION_TYPES.CHECKBOX:
-                    createCheckboxVisualization(container, getResponsesForQuestion(question.id), question, newType);
+                    createCheckboxVisualization(container, getResponsesForQuestion(question.id), question, getResponderLabels(), newType);
                     break;
                 case QUESTION_TYPES.SHORT_TEXT:
                 case QUESTION_TYPES.LONG_TEXT:

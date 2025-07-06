@@ -15,14 +15,14 @@ import { aggregateCheckboxResponses } from '../resultsDataService.js';
  * @param {Object} question - The question definition
  * @param {string} [type='horizontalBar'] - Type of visualization ('horizontalBar', 'verticalBar', 'stackedBar', 'radar')
  */
-export function createCheckboxVisualization(container, responses, question, type = 'horizontalBar') {
+export function createCheckboxVisualization(container, responses, question, responseLabels,type = 'horizontalBar') {
     if (!container || !Array.isArray(responses) || responses.length === 0) {
         container.innerHTML = '<p class="no-data">No data available for this question.</p>';
         return;
     }
     
     // Aggregate responses
-    const aggregatedData = aggregateCheckboxResponses(responses, question);
+    const aggregatedData = aggregateCheckboxResponses(responses, question, responseLabels);
     
     // Don't render if no data
     if (aggregatedData.totalResponses === 0) {
@@ -102,7 +102,9 @@ function renderBarChart(container, data, question, horizontal = false) {
                             const label = context.label || '';
                             const value = context.raw || 0;
                             const percentage = data.percentages[context.dataIndex];
-                            return `${label}: ${value} (${percentage}% of respondents)`;
+                            
+                            const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
+                            return `${label}: ${value} (${percentage}% of respondents)${associatedLabels}`;
                         }
                     }
                 },
@@ -220,6 +222,15 @@ function renderStackedBarChart(container, data, question) {
                             const label = context.dataset.label || '';
                             const value = context.raw || 0;
                             const percentage = Math.round((value / data.totalResponses) * 100);
+                            // For stacked bar, we need to get the labels for the specific segment (Selected/Not Selected)
+                            // This might require more complex logic if we want to show labels for 'Not Selected'
+                            // For now, only show labels for 'Selected' segment
+                            if (context.datasetIndex === 0) { // 'Selected' dataset
+
+                                
+                           const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
+                            return `${label}: ${value} (${percentage}% of respondents)${associatedLabels}`;
+                             }
                             return `${label}: ${value} (${percentage}%)`;
                         }
                     }
@@ -326,8 +337,9 @@ function renderRadarChart(container, data, question) {
                             const label = context.label || '';
                             const value = context.raw || 0;
                             const percentage = data.percentages[context.dataIndex];
-                            return `${label}: ${value} (${percentage}%)`;
-                        }
+                           const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
+                            return `${label}: ${value} (${percentage}% of respondents)${associatedLabels}`;
+                         }
                     }
                 },
                 datalabels: {
