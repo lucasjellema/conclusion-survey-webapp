@@ -300,7 +300,7 @@ export function aggregateTextResponses(responses) {
         totalResponses,
         averageLength,
         topWords,
-        responses: validResponses.slice(0, 5) // Only include a few sample responses
+        responses: validResponses
     };
 }
 
@@ -310,7 +310,7 @@ export function aggregateTextResponses(responses) {
  * @param {Object} question - Question definition
  * @returns {Object} Aggregated data ready for visualization
  */
-export function aggregateMatrixResponses(responses, question) {
+export function aggregateMatrixResponses(responses, question, responseLabels = []) {
     // Initialize data structure
     const rows = question.matrix?.rows || [];
     const columns = question.matrix?.columns || [];
@@ -318,20 +318,25 @@ export function aggregateMatrixResponses(responses, question) {
 
     // Initialize counts matrix
     const counts = {};
+    const tooltips = {}; 
+
     rows.forEach(row => {
         counts[row.id] = {};
+        tooltips[row.id] = {}; // Initialize tooltips for each row
         columns.forEach(col => {
             counts[row.id][col.id] = 0;
+            tooltips[row.id][col.id] = '';
         });
     });
 
     // Count responses
-    responses.forEach(response => {
+    responses.forEach((response,index) => {
         if (typeof response !== 'object' || response === null) return;
 
         Object.entries(response).forEach(([rowId, colId]) => {
             if (counts[rowId] && counts[rowId][colId] !== undefined) {
                 counts[rowId][colId]++;
+                tooltips[rowId][colId] = tooltips[rowId][colId] + ', ' + responseLabels[index]; // Use responseLabels if provided
 
                 // Track totals for percentages
                 totals[rowId] = (totals[rowId] || 0) + 1;
@@ -357,6 +362,7 @@ export function aggregateMatrixResponses(responses, question) {
         counts,
         percentages,
         totalResponses: responses.length
+        ,tooltips
     };
 }
 

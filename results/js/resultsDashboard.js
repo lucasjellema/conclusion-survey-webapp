@@ -739,6 +739,7 @@ function renderQuestionResult(question, results) {
                     visualizationContainer, 
                     questionResponses, 
                     question, 
+                    questionResponseLabels, 
                     preferredType
                 );
                 break;
@@ -860,7 +861,7 @@ function createVisualizationToolbar(question, currentType) {
                     createTextSummary(container, getResponsesForQuestion(question.id), question, newType);
                     break;
                 case QUESTION_TYPES.MATRIX_2D:
-                    createMatrixVisualization(container, getResponsesForQuestion(question.id), question, newType);
+                    createMatrixVisualization(container, getResponsesForQuestion(question.id), question, getResponderLabels(), newType);
                     break;
                 case QUESTION_TYPES.LIKERT:
                     createLikertVisualization(container, getResponsesForQuestion(question.id), question, newType);

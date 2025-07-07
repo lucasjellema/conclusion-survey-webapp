@@ -15,14 +15,14 @@ import { aggregateMatrixResponses } from '../resultsDataService.js';
  * @param {Object} question - The question definition
  * @param {string} [type='heatmap'] - Type of visualization ('heatmap', 'groupedBar', 'bubble', 'radar')
  */
-export function createMatrixVisualization(container, responses, question, type = 'heatmap') {
+export function createMatrixVisualization(container, responses, question, responseLabels, type = 'heatmap') {
     if (!container || !Array.isArray(responses) || responses.length === 0) {
         container.innerHTML = '<p class="no-data">No data available for this question.</p>';
         return;
     }
     
     // Aggregate responses
-    const aggregatedData = aggregateMatrixResponses(responses, question);
+    const aggregatedData = aggregateMatrixResponses(responses, question, responseLabels);
     
     // Don't render if no data
     if (aggregatedData.totalResponses === 0) {
@@ -107,13 +107,14 @@ function renderHeatmap(container, data, question) {
             
             const count = data.counts[row.id][column.id] || 0;
             const percentage = data.percentages[row.id][column.id] || 0;
+            const tooltip = data.tooltips[row.id][column.id] || '';
             
             // Calculate color intensity based on percentage
             const intensity = Math.min(0.9, percentage / 100 + 0.1);
             td.style.backgroundColor = `rgba(74, 134, 232, ${intensity})`;
             
             // Set tooltip data
-            td.title = `${row.label} - ${column.label}: ${count} (${percentage}%)`;
+            td.title = `${row.label} - ${column.label}: ${count} (${percentage}%) ${tooltip}`;
             
             // Add content
             td.innerHTML = `<span class="cell-value">${count}</span><span class="cell-percentage">${percentage}%</span>`;
@@ -278,8 +279,9 @@ function renderGroupedBarChart(container, data, question) {
                             const rowId = data.rows[context.dataIndex].id;
                             const colId = data.columns[context.datasetIndex].id;
                             const percentage = data.percentages[rowId][colId] || 0;
-                            
-                            return `${label}: ${value} (${percentage}%)`;
+                            const tooltip = data.tooltips[rowId][colId] || '';
+
+                            return `${label}: ${value} (${percentage}%) ${tooltip}`;
                         }
                     }
                 },
@@ -342,7 +344,9 @@ function renderBubbleChart(container, data, question) {
                     count: count,
                     percentage: data.percentages[row.id][col.id] || 0,
                     rowLabel: row.label,
-                    colLabel: col.label
+                    colLabel: col.label,
+                    // Add tooltip data
+                    tooltip: data.tooltips[row.id][col.id] || ''
                 });
             }
         });
@@ -390,7 +394,8 @@ function renderBubbleChart(container, data, question) {
                     callbacks: {
                         label: (context) => {
                             const dataPoint = context.raw;
-                            return `${dataPoint.rowLabel} - ${dataPoint.colLabel}: ${dataPoint.count} (${dataPoint.percentage}%)`;
+                            
+                            return `${dataPoint.rowLabel} - ${dataPoint.colLabel}: ${dataPoint.count} (${dataPoint.percentage}%) ${dataPoint.tooltip}`;
                         }
                     }
                 },
@@ -475,8 +480,8 @@ function renderRadarChart(container, data, question) {
                             const rowId = data.rows[context.datasetIndex].id;
                             const colId = data.columns[context.dataIndex].id;
                             const percentage = data.percentages[rowId][colId] || 0;
-                            
-                            return `${label}: ${value} (${percentage}%)`;
+                            const tooltip = data.tooltips[rowId][colId] || '';
+                            return `${label}: ${value} (${percentage}%) ${tooltip}`;
                         }
                     }
                 },
