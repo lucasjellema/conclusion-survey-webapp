@@ -366,6 +366,104 @@ export function aggregateMatrixResponses(responses, question, responseLabels = [
     };
 }
 
+
+/**
+ * Get aggregated data for a Likert question
+ * @param {Array} responses - Question responses
+ * @param {Object} question - Question definition
+ * @returns {Object} Aggregated data ready for visualization
+ */
+export function aggregateLikertResponses(responses, question, responseLabels = []) {
+    const options = question.options || [];
+    const likertScale = question.likertScale;
+
+    if (!likertScale || typeof likertScale.min === 'undefined' || typeof likertScale.max === 'undefined') {
+        console.error('Invalid Likert scale definition:', question);
+        return {
+            options: [],
+            likertScaleLabels: {},
+            likertScaleValues: [],
+            counts: {},
+            percentages: {},
+            totalResponsesPerOption: {},
+            tooltips: {},
+            totalResponses: 0
+        };
+    }
+
+    const likertScaleValues = [];
+    for (let i = likertScale.min; i <= likertScale.max; i++) {
+        likertScaleValues.push(i.toString()); // Ensure they are strings for consistency with object keys
+    }
+
+    const likertScaleLabels = likertScale.labels || {};
+
+    const counts = {};
+    const tooltips = {};
+    const totalResponsesPerOption = {};
+
+    // Initialize counts, tooltips, and totals for each option and scale value
+    options.forEach(option => {
+        counts[option.value] = {};
+        tooltips[option.value] = {};
+        totalResponsesPerOption[option.value] = 0;
+
+        likertScaleValues.forEach(scaleValue => {
+            counts[option.value][scaleValue] = 0;
+            tooltips[option.value][scaleValue] = '';
+        });
+    });
+
+    // Process responses
+    responses.forEach((response, index) => {
+        if (typeof response !== 'object' || response === null) return;
+
+        options.forEach(option => {
+            const optionValue = option.value;
+            const selectedScaleValue = response[optionValue]; // e.g., response.cost_savings = 4
+
+            // Ensure the selected scale value is within the defined Likert range
+            if (typeof selectedScaleValue === 'number' &&
+                selectedScaleValue >= likertScale.min &&
+                selectedScaleValue <= likertScale.max) {
+
+                const scaleValueStr = selectedScaleValue.toString(); // Convert to string for object key
+
+                counts[optionValue][scaleValueStr]++;
+                tooltips[optionValue][scaleValueStr] += (tooltips[optionValue][scaleValueStr] ? ', ' : '') + responseLabels[index];
+                totalResponsesPerOption[optionValue]++;
+            }
+        });
+    });
+
+    // Calculate percentages
+    const percentages = {};
+    options.forEach(option => {
+        const optionValue = option.value;
+        percentages[optionValue] = {};
+        const totalForOption = totalResponsesPerOption[optionValue];
+
+        likertScaleValues.forEach(scaleValue => {
+            const count = counts[optionValue][scaleValue];
+            percentages[optionValue][scaleValue] = totalForOption > 0
+                ? Math.round((count / totalForOption) * 100)
+                : 0;
+        });
+    });
+
+    return {
+        options, // The items being rated (e.g., cost_savings, scalability)
+        likertScaleLabels, // The labels for the scale (e.g., "1": "No benefit")
+        likertScaleValues, // The numeric values of the scale (e.g., [1, 2, 3, 4, 5])
+        counts,
+        percentages,
+        totalResponsesPerOption, // Total number of responses for each option (e.g., how many rated 'cost_savings')
+        tooltips,
+        totalResponses: responses.length // Total number of survey responses processed
+    };
+}
+
+
 /**
  * Get aggregated data for a multi-value slider question
  * @param {Array} responses - Question responses

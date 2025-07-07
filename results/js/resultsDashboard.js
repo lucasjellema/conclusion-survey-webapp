@@ -767,6 +767,7 @@ function renderQuestionResult(question, results) {
                     visualizationContainer, 
                     questionResponses, 
                     question, 
+                    questionResponseLabels, 
                     preferredType
                 );
                 break;
@@ -864,7 +865,7 @@ function createVisualizationToolbar(question, currentType) {
                     createMatrixVisualization(container, getResponsesForQuestion(question.id), question, getResponderLabels(), newType);
                     break;
                 case QUESTION_TYPES.LIKERT:
-                    createLikertVisualization(container, getResponsesForQuestion(question.id), question, newType);
+                    createLikertVisualization(container, getResponsesForQuestion(question.id), question, getResponderLabels(), newType);
                     break;
                 case QUESTION_TYPES.MULTI_VALUE_SLIDER:
                     createSliderVisualization(container, getResponsesForQuestion(question.id), question, newType);

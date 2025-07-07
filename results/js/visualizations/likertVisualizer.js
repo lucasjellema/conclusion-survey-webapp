@@ -3,7 +3,7 @@
  * Visualization component for Likert scale questions
  */
 
-import { aggregateMatrixResponses } from '../resultsDataService.js';
+import { aggregateLikertResponses } from '../resultsDataService.js';
 
 /**
  * Create a visualization for Likert scale question responses
@@ -12,13 +12,13 @@ import { aggregateMatrixResponses } from '../resultsDataService.js';
  * @param {Object} question - The question definition
  * @param {string} [type='heatmap'] - Type of visualization ('heatmap', 'stackedBar')
  */
-export function createLikertVisualization(container, responses, question, type = 'heatmap') {
+export function createLikertVisualization(container, responses, question, responseLabels, type = 'heatmap') {
     if (!container || !Array.isArray(responses) || responses.length === 0) {
         container.innerHTML = '<p class="no-data">No data available for this question.</p>';
         return;
     }
 
-    const aggregatedData = aggregateMatrixResponses(responses, question);
+    const aggregatedData = aggregateLikertResponses(responses, question, responseLabels);
 
     if (aggregatedData.totalResponses === 0) {
         container.innerHTML = '<p class="no-data">No responses for this question yet.</p>';
@@ -57,10 +57,10 @@ function renderHeatmap(container, data, question) {
     cornerCell.className = 'heatmap-corner';
     headerRow.appendChild(cornerCell);
 
-    data.columns.forEach(column => {
+    data.likertScaleValues.forEach(value => {
         const th = document.createElement('th');
         th.className = 'heatmap-column-header';
-        th.textContent = column.label;
+        th.textContent = data.likertScaleLabels[value];
         headerRow.appendChild(th);
     });
 
@@ -68,22 +68,23 @@ function renderHeatmap(container, data, question) {
     table.appendChild(thead);
 
     const tbody = document.createElement('tbody');
-    data.rows.forEach(row => {
+    data.options.forEach(option => {
         const tr = document.createElement('tr');
         const rowHeader = document.createElement('th');
         rowHeader.className = 'heatmap-row-header';
-        rowHeader.textContent = row.label;
+        rowHeader.textContent = option.label;
         tr.appendChild(rowHeader);
 
-        data.columns.forEach(column => {
+        data.likertScaleValues.forEach(value => {
             const td = document.createElement('td');
             td.className = 'heatmap-cell';
-            const count = data.counts[row.id][column.id] || 0;
-            const percentage = data.percentages[row.id][column.id] || 0;
+            const count = data.counts[option.value][value] || 0;
+            const percentage = data.percentages[option.value][value] || 0;
             const intensity = Math.min(0.9, percentage / 100 + 0.1);
             td.style.backgroundColor = `rgba(74, 134, 232, ${intensity})`;
-            td.title = `${row.label} - ${column.label}: ${count} (${percentage}%)`;
-            td.innerHTML = `<span class="cell-value">${count}</span><span class="cell-percentage">${percentage}%</span>`;
+            const companies = data.tooltips[option.value][value];
+            td.title = `${option.label}  - ${data.likertScaleLabels[value]}: ${count} (${percentage}%)` + (companies ? ` - Companies: ${companies}` : '');
+            td.innerHTML = `<span class="cell-value">${count}</span><span class="cell-percentage"> (${percentage}%) </span>`;
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -104,16 +105,17 @@ function renderStackedBarChart(container, data, question) {
     const canvas = document.createElement('canvas');
     canvas.id = `chart-${question.id}`;
     canvas.width = 600;
-    canvas.height = Math.max(400, data.rows.length * 50);
+    canvas.height = Math.max(400, data.options.length * 50);
     container.innerHTML = '';
     container.appendChild(canvas);
 
     const colors = ['#d5573b', '#e69138', '#f1c232', '#6aa84f', '#4a86e8'];
 
-    const datasets = data.columns.map((column, index) => {
+    const datasets = data.likertScaleValues.map((value, index) => {
         return {
-            label: column.label,
-            data: data.rows.map(row => data.percentages[row.id][column.id] || 0),
+            label: data.likertScaleLabels[value],
+            data: data.options.map(option => data.percentages[option.value][value] || 0),
+            tt: data.options.map(option => data.tooltips[option.value][value] || ''),
             backgroundColor: colors[index % colors.length],
             borderWidth: 1
         };
@@ -122,7 +124,7 @@ function renderStackedBarChart(container, data, question) {
     const config = {
         type: 'bar',
         data: {
-            labels: data.rows.map(row => row.label),
+            labels: data.options.map(option => option.label),
             datasets: datasets
         },
         options: {
@@ -147,7 +149,7 @@ function renderStackedBarChart(container, data, question) {
                         label: (context) => {
                             const label = context.dataset.label || '';
                             const value = context.raw || 0;
-                            return `${label}: ${value.toFixed(1)}%`;
+                            return `${label}: ${value.toFixed(1)}% ${context.dataset.tt[context.dataIndex] ? `- Companies: ${context.dataset.tt[context.dataIndex]}` : ''   }`;
                         }
                     }
                 }
