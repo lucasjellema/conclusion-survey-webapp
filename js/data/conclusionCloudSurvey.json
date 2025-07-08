@@ -231,56 +231,64 @@
                 "label": "Amazon Web Services",
                 "letter": "A",
                 "shape": "circle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#FF9900"
               },
               {
                 "id": "azure",
                 "label": "Microsoft Azure",
                 "letter": "M",
                 "shape": "rectangle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#0078D4"
               },
               {
                 "id": "gcp",
                 "label": "Google Cloud Platform",
                 "letter": "G",
                 "shape": "triangle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#4285F4"
               },
               {
                 "id": "alibaba",
                 "label": "Alibaba Cloud",
                 "letter": "L",
                 "shape": "circle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#FF6A00"
               },
               {
                 "id": "ibm",
                 "label": "IBM Cloud",
                 "letter": "I",
                 "shape": "circle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#006699"
               },
               {
                 "id": "oracle",
                 "label": "Oracle Cloud Infrastructure",
                 "letter": "O",
                 "shape": "rectangle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#F80000"
               },
               {
                 "id": "dig",
                 "label": "Digital Ocean",
                 "letter": "D",
                 "shape": "rectangle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#0080FF"
               },
               {
                 "id": "sf",
                 "label": "Salesforce",
                 "letter": "S",
                 "shape": "circle",
-                "defaultPosition": 50
+                "defaultPosition": 50,
+                "color": "#00A1E0"
               }
             ],
             "zones": [

@@ -312,7 +312,7 @@ function createD3Slider(container, config, questionId) {
         group.append('circle')
           .attr('class', 'option-shape')
           .attr('r', OPTION_RADIUS)
-          .attr('fill', '#007bff');
+          .attr('fill', d.color || '#007bff');
       } else if (shape === 'rectangle') {
         group.append('rect')
           .attr('class', 'option-shape')
@@ -320,7 +320,7 @@ function createD3Slider(container, config, questionId) {
           .attr('y', -OPTION_RADIUS)
           .attr('width', Math.abs(OPTION_RADIUS * 2)) // Ensure positive width
           .attr('height', Math.abs(OPTION_RADIUS * 2)) // Ensure positive height
-          .attr('fill', '#28a745');
+          .attr('fill', d.color || '#28a745');
       } else if (shape === 'triangle') {
         const triangleSize = OPTION_RADIUS * 1.5;
         const trianglePath = `M0,${-triangleSize} L${triangleSize},${triangleSize} L${-triangleSize},${triangleSize} Z`;
@@ -332,7 +332,7 @@ function createD3Slider(container, config, questionId) {
         triangleGroup.append('path')
           .attr('class', 'option-shape')
           .attr('d', trianglePath)
-          .attr('fill', '#dc3545');
+          .attr('fill', d.color || '#dc3545');
       }
       
       // Add letter with different positioning based on shape
@@ -750,7 +750,7 @@ function createLegend(container, options) {
       circle.setAttribute('cx', '12');
       circle.setAttribute('cy', '12');
       circle.setAttribute('r', '12');
-      circle.setAttribute('fill', '#007bff');
+      circle.setAttribute('fill', option.color || '#007bff');
       svg.appendChild(circle);
     } else if (shape === 'rectangle') {
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -758,12 +758,12 @@ function createLegend(container, options) {
       rect.setAttribute('y', '0');
       rect.setAttribute('width', '24');
       rect.setAttribute('height', '24');
-      rect.setAttribute('fill', '#28a745');
+      rect.setAttribute('fill', option.color || '#28a745');
       svg.appendChild(rect);
     } else if (shape === 'triangle') {
       const triangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
       triangle.setAttribute('points', '12,0 24,24 0,24');
-      triangle.setAttribute('fill', '#dc3545');
+      triangle.setAttribute('fill', option.color || '#dc3545');
       svg.appendChild(triangle);
     }
     
