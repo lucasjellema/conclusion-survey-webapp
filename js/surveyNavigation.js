@@ -46,6 +46,14 @@ export function initNavigation(
   // Create navigation controls
   createNavigationControls();
   
+  // Populate pagination circles
+  populatePaginationCircles();
+
+  // Add event listener for progress bar navigation
+  if (navState.progressBar) {
+    navState.progressBar.parentElement.addEventListener('click', handleProgressBarNavigation);
+  }
+
   // Load the first step
   loadCurrentStep();
 }
@@ -57,7 +65,7 @@ function createNavigationControls() {
   // Create navigation container
   const navContainer = document.createElement('div');
   navContainer.className = 'survey-navigation';
-  
+
   // Create previous button
   const prevButton = document.createElement('button');
   prevButton.id = NAV_BUTTON_IDS.prev;
@@ -65,7 +73,12 @@ function createNavigationControls() {
   prevButton.textContent = 'Previous';
   prevButton.addEventListener('click', handlePrevStep);
   navContainer.appendChild(prevButton);
-  
+
+  // Create pagination circles container
+  const paginationContainer = document.createElement('div');
+  paginationContainer.className = 'survey-pagination';
+  navContainer.appendChild(paginationContainer);
+
   // Create next button
   const nextButton = document.createElement('button');
   nextButton.id = NAV_BUTTON_IDS.next;
@@ -73,7 +86,7 @@ function createNavigationControls() {
   nextButton.textContent = 'Next';
   nextButton.addEventListener('click', handleNextStep);
   navContainer.appendChild(nextButton);
-  
+
   // Create submit button (initially hidden)
   const submitButton = document.createElement('button');
   submitButton.id = NAV_BUTTON_IDS.submit;
@@ -82,9 +95,109 @@ function createNavigationControls() {
   submitButton.style.display = 'none';
   submitButton.addEventListener('click', handleSubmitSurvey);
   navContainer.appendChild(submitButton);
-  
+
   // Add navigation container to survey container
   navState.surveyContainer.appendChild(navContainer);
+}
+
+/**
+ * Populate the pagination circles based on survey steps
+ */
+function populatePaginationCircles() {
+  const paginationContainer = navState.surveyContainer.querySelector('.survey-pagination');
+  if (!paginationContainer) {
+    return;
+  }
+
+  paginationContainer.innerHTML = ''; // Clear existing circles
+
+  const allSteps = surveyData.getAllSteps();
+  allSteps.forEach((step, index) => {
+    const circle = document.createElement('span');
+    circle.className = 'survey-pagination-circle';
+    circle.dataset.stepIndex = index; // Store the step index
+    circle.addEventListener('click', () => handleCircleNavigation(index));
+    paginationContainer.appendChild(circle);
+  });
+}
+
+/**
+ * Handle navigation when a pagination circle is clicked
+ * @param {number} index - The index of the step to navigate to
+ */
+function handleCircleNavigation(index) {
+  // Clear validation errors before navigating
+  clearValidationErrors();
+
+  // Go to the selected step
+  if (surveyData.goToStep(index)) {
+    loadCurrentStep();
+
+    // Scroll to the progress bar container
+    if (navState.progressBar && navState.progressBar.parentElement) {
+      navState.progressBar.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
+
+/**
+ * Update the visual state of pagination circles
+ */
+function updateNavigationCircles() {
+  const paginationContainer = navState.surveyContainer.querySelector('.survey-pagination');
+  if (!paginationContainer) {
+    return;
+  }
+
+  const circles = paginationContainer.querySelectorAll('.survey-pagination-circle');
+  const currentStepIndex = surveyData.getCurrentStepIndex();
+  const allSteps = surveyData.getAllSteps();
+
+  circles.forEach((circle, index) => {
+    circle.classList.remove('active', 'visited', 'unvisited-unanswered');
+
+    if (index === currentStepIndex) {
+      circle.classList.add('active');
+    }
+
+    // Check if the step has been visited (index <= currentStepIndex)
+    // And if all required questions on that step are answered
+    const step = allSteps[index];
+    const isVisited = surveyData.hasVisitedStep(index);
+    const isAnswered = surveyData.areAllRequiredQuestionsAnswered(step.id);
+
+    if (isVisited && isAnswered) {
+      circle.classList.add('visited');
+    } else if (isVisited && !isAnswered) {
+      circle.classList.add('unvisited-unanswered'); // Or a class indicating visited but incomplete
+    } else {
+      circle.classList.add('unvisited-unanswered'); // Default for unvisited or incomplete
+    }
+  });
+}
+
+/**
+ * Validate if all required questions on a given step are answered.
+ * This is a helper function for updateNavigationCircles.
+ * @param {string} stepId - The ID of the step to validate.
+ * @returns {boolean} - True if all required questions are answered, false otherwise.
+ */
+function areAllRequiredQuestionsAnswered(stepId) {
+  const step = surveyData.getStepById(stepId);
+  if (!step || !step.questions) {
+    return true;
+  }
+
+  const requiredQuestions = step.questions.filter(q => q.required);
+  for (const question of requiredQuestions) {
+    const response = surveyData.getResponse(question.id);
+    if (!response || response.value === undefined || response.value === null ||
+        (Array.isArray(response.value) && response.value.length === 0) ||
+        (typeof response.value === 'string' && response.value.trim() === '')) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -204,6 +317,9 @@ export function loadCurrentStep() {
   
   // Update progress bar
   updateProgressBar();
+
+  // Update navigation circles
+  updateNavigationCircles();
 }
 
 /**
@@ -287,8 +403,10 @@ function handleNextStep() {
   if (surveyData.nextStep()) {
     loadCurrentStep();
     
-    // Scroll to top of questions
-    navState.questionsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll to the progress bar container
+    if (navState.progressBar && navState.progressBar.parentElement) {
+      navState.progressBar.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
 
@@ -303,8 +421,10 @@ function handlePrevStep() {
   if (surveyData.prevStep()) {
     loadCurrentStep();
     
-    // Scroll to top of questions
-    navState.questionsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll to the progress bar container
+    if (navState.progressBar && navState.progressBar.parentElement) {
+      navState.progressBar.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
 
@@ -401,4 +521,46 @@ function showSubmitError(errorMessage) {
   
   // Scroll to error message
   errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/**
+ * Handle navigation when the progress bar is clicked
+ * @param {MouseEvent} event - The click event
+ */
+function handleProgressBarNavigation(event) {
+  if (!navState.progressBar) {
+    return;
+  }
+
+  const progressBarContainer = navState.progressBar.parentElement;
+  const totalWidth = progressBarContainer.offsetWidth;
+  const clickX = event.clientX - progressBarContainer.getBoundingClientRect().left;
+
+  // Calculate the percentage of the click relative to the progress bar width
+  const clickPercentage = (clickX / totalWidth);
+
+  const allSteps = surveyData.getAllSteps();
+  if (!allSteps || allSteps.length === 0) {
+    return;
+  }
+
+  // Determine the target step index based on the click percentage
+  // Ensure the index is within bounds [0, allSteps.length - 1]
+  const targetStepIndex = Math.min(
+    Math.max(0, Math.floor(clickPercentage * allSteps.length)),
+    allSteps.length - 1
+  );
+
+  // Clear validation errors before navigating
+  clearValidationErrors();
+
+  // Go to the selected step
+  if (surveyData.goToStep(targetStepIndex)) {
+    loadCurrentStep();
+
+    // Scroll to the progress bar container
+    if (navState.progressBar && navState.progressBar.parentElement) {
+      navState.progressBar.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }

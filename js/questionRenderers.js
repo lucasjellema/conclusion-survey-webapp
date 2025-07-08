@@ -15,7 +15,7 @@ import * as questionRenderersTags from './questionRenderersTags.js';
 import { renderMultiValueSlider } from './questionRenderersMultiValueSliderD3.js';
 // Import condition evaluator
 import { shouldShowQuestion } from './conditionEvaluator.js';
-
+import { renderRadar } from './questionRenderersRadar.js';
 // Constants for question types
 const QUESTION_TYPES = {
   SHORT_TEXT: 'shortText',
@@ -27,7 +27,8 @@ const QUESTION_TYPES = {
   MATRIX_2D: 'matrix2d',
   RANK_OPTIONS: 'rankOptions',
   TAGS: 'tags',
-  MULTI_VALUE_SLIDER: 'multiValueSlider'
+  MULTI_VALUE_SLIDER: 'multiValueSlider',
+  RADAR: 'radar'
 };
 
 /**
@@ -637,6 +638,9 @@ export function renderQuestion(question) {
     case QUESTION_TYPES.MULTI_VALUE_SLIDER:
       // Use the imported renderMultiValueSlider function
       return renderMultiValueSlider(question);
+    case QUESTION_TYPES.RADAR:
+      // Use the imported renderRadar function
+      return renderRadar(question);
     default:
       console.error(`Unknown question type: ${question.type}`);
       return null;

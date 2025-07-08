@@ -109,7 +109,8 @@
               {
                 "id": "scw",
                 "label": "Scaleway"
-              },              {
+              },
+              {
                 "id": "htz",
                 "label": "Hetzner"
               },
@@ -139,7 +140,6 @@
               }
             ],
             "columns": [
-     
               {
                 "id": "interesse",
                 "label": "Interesse",
@@ -168,6 +168,73 @@
               }
             ],
             "allowMultiple": true
+          }
+        },
+        {
+          "id": "cloudProviderRadar",
+          "type": "radar",
+          "title": "Position Cloud Providers on the Radar",
+          "description": "Assign two variables from predefined ordered lists to several cloud provider options by positioning their markers in a pie segment and a ring.",
+          "radar": {
+            "options": [
+              {
+                "id": "aws",
+                "label": "Amazon Web Services",
+                "letter": "A",
+                "shape": "circle",
+                "segment": "High Maturity",
+                "ring": "High Importance"
+              },
+              {
+                "id": "azure",
+                "label": "Microsoft Azure",
+                "letter": "M",
+                "shape": "rectangle",
+                "segment": "High Maturity",
+                "ring": "High Importance"
+              },
+              {
+                "id": "gcp",
+                "label": "Google Cloud Platform",
+                "letter": "G",
+                "shape": "triangle",
+                "segment":  "Medium Maturity",
+                  "ring": "High Importance"
+              },
+              {
+                "id": "alibaba",
+                "label": "Alibaba Cloud",
+                "letter": "L",
+                "shape": "circle",
+               "segment": "Low Maturity",
+                "ring": "Medium Importance"
+              },
+              {
+                "id": "ibm",
+                "label": "IBM Cloud",
+                "letter": "I",
+                "shape": "circle",
+                "segment": "Medium Maturity",
+                "ring": "High Importance"
+              }
+            ],
+            "variable1": {
+              "labels": [
+                "No Maturity",
+                "Low Maturity",
+                "Medium Maturity",
+                "High Maturity"
+              ]
+            },
+            "variable2": {
+              "labels": [
+                "Low Importance",
+                "Medium Importance",
+                "High Importance"
+              ]
+            },
+            "showLabels": true,
+            "showLegend": true
           }
         }
       ]

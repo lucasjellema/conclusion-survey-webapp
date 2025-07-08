@@ -156,3 +156,123 @@ footer {
 .matrix-2d-table .striped-row {
   background-color: #e2d5d5; /* Light redgrayish background */
 }
+
+/* Radar Chart Styles */
+.radar-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.radar-ring {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1px;
+}
+
+.radar-ring-label {
+  font-size: 0.9em; /* Slightly larger font */
+  font-weight: bold; /* Boldness */
+  fill: #3a3a7e; /* Darker color */
+}
+
+.radar-axis {
+  stroke: #682687;
+  stroke-width: 1px;
+}
+
+.radar-axis-label {
+  font-size: 0.9em; /* Slightly larger font */
+  font-weight: bold; /* Boldness */
+  fill: #892626; /* Darker color */
+}
+
+.radar-marker {
+  fill: var(--primary-color);
+  stroke: #333;
+  stroke-width: 1.5px;
+  cursor: grab;
+}
+
+.radar-marker.circle {
+  /* default circle styles */
+}
+
+.radar-marker.rectangle {
+  /* default rectangle styles */
+}
+
+.radar-marker.triangle {
+  /* default triangle styles */
+}
+
+.radar-marker-letter {
+  font-size: 0.7em;
+  fill: white;
+  pointer-events: none; /* Allow dragging through text */
+}
+
+.radar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 1px solid #e1e1e1;
+  width: 100%;
+}
+
+.radar-legend-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 10px;
+  font-size: 0.9em;
+  color: #323130;
+}
+
+.radar-legend-item svg {
+  margin-right: 5px;
+}
+
+/* Survey Pagination Circles */
+.survey-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0 20px; /* Space between buttons and circles */
+}
+
+.survey-pagination-circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc; /* Default: unvisited, unanswered */
+  border: 1px solid #999;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.survey-pagination-circle.active {
+  background-color: var(--primary-color); /* Current page */
+  border-color: var(--primary-color);
+}
+
+.survey-pagination-circle.visited {
+  background-color: var(--secondary-color); /* Visited and all required answered */
+  border-color: var(--secondary-color);
+}
+
+.survey-pagination-circle.unvisited-unanswered {
+  background-color: #fff; /* Unvisited or visited with open required questions */
+  border-color: #999;
+}
+
+.survey-pagination-circle:hover {
+  opacity: 0.8;
+}

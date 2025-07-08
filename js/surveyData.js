@@ -182,6 +182,39 @@ export function hasPrevStep() {
 }
 
 /**
+ * Check if a step has been visited.
+ * A step is considered visited if its index is less than or equal to the current step index.
+ * @param {number} index - The index of the step to check.
+ * @returns {boolean} - True if the step has been visited, false otherwise.
+ */
+export function hasVisitedStep(index) {
+  return index <= surveyState.currentStepIndex;
+}
+
+/**
+ * Validate if all required questions on a given step are answered.
+ * @param {string} stepId - The ID of the step to validate.
+ * @returns {boolean} - True if all required questions are answered, false otherwise.
+ */
+export function areAllRequiredQuestionsAnswered(stepId) {
+  const step = getStepById(stepId);
+  if (!step || !step.questions) {
+    return true;
+  }
+
+  const requiredQuestions = step.questions.filter(q => q.required);
+  for (const question of requiredQuestions) {
+    const response = getResponse(question.id);
+    if (!response || response.value === undefined || response.value === null ||
+        (Array.isArray(response.value) && response.value.length === 0) ||
+        (typeof response.value === 'string' && response.value.trim() === '')) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
  * Save a response to a question
  * @param {string} questionId - The question ID
  * @param {any} value - The response value

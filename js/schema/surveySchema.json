@@ -47,7 +47,7 @@
                 },
                 "type": {
                   "type": "string",
-                  "enum": ["shortText", "longText", "radio", "checkbox", "likert", "rangeSlider", "matrix2d", "multiValueSlider"],
+                  "enum": ["shortText", "longText", "radio", "checkbox", "likert", "rangeSlider", "matrix2d", "multiValueSlider", "radar"],
                   "description": "Type of question"
                 },
                 "title": {
@@ -319,6 +319,96 @@
                       "type": "boolean",
                       "default": true,
                       "description": "Whether to show labels on the slider"
+                    },
+                    "showLegend": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Whether to show the legend mapping letters to options"
+                    }
+                  }
+                },
+                "radar": {
+                  "type": "object",
+                  "description": "Configuration for radar questions",
+                  "properties": {
+                    "options": {
+                      "type": "array",
+                      "description": "Options to position on the radar chart",
+                      "minItems": 1,
+                      "items": {
+                        "type": "object",
+                        "required": ["id", "label", "letter"],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier for the option"
+                          },
+                          "label": {
+                            "type": "string",
+                            "description": "Display label for the option"
+                          },
+                          "letter": {
+                            "type": "string",
+                            "description": "Capital letter to display inside the option marker",
+                            "pattern": "^[A-Z]$"
+                          },
+                          "shape": {
+                            "type": "string",
+                            "enum": ["circle", "rectangle", "triangle"],
+                            "default": "circle",
+                            "description": "Shape of the option marker"
+                          },
+                          "defaultPosition": {
+                            "type": "object",
+                            "description": "Initial position of the option on the radar chart",
+                            "properties": {
+                              "angle": {
+                                "type": "number",
+                                "description": "Angle position (0-360 degrees)"
+                              },
+                              "radius": {
+                                "type": "number",
+                                "description": "Radius position (0-100)"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "variable1": {
+                      "type": "object",
+                      "description": "Configuration for the first variable (pie segments)",
+                      "required": ["labels"],
+                      "properties": {
+                        "labels": {
+                          "type": "array",
+                          "description": "Ordered labels for pie segments",
+                          "minItems": 2,
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "variable2": {
+                      "type": "object",
+                      "description": "Configuration for the second variable (rings)",
+                      "required": ["labels"],
+                      "properties": {
+                        "labels": {
+                          "type": "array",
+                          "description": "Ordered labels for rings",
+                          "minItems": 2,
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "showLabels": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Whether to show labels on the radar chart"
                     },
                     "showLegend": {
                       "type": "boolean",
