@@ -179,6 +179,10 @@
                 "label": "Digital Ocean"
               },
               {
+                "id": "sf",
+                "label": "Salesforce"
+              },
+              {
                 "id": "ali",
                 "label": "Alibaba Cloud"
               }
@@ -270,6 +274,13 @@
                 "letter": "D",
                 "shape": "rectangle",
                 "defaultPosition": 50
+              },
+              {
+                "id": "sf",
+                "label": "Salesforce",
+                "letter": "S",
+                "shape": "circle",
+                "defaultPosition": 50
               }
             ],
             "zones": [
@@ -312,6 +323,12 @@
             "showLabels": true,
             "showLegend": true
           }
+        },
+        {
+          "id": "other_public_cloud_vendors",
+          "type": "longText",
+          "title": "Overige non-eu public cloud vendors",
+          "description": "Zijn er andere belangrijke non-EU public cloud vendors die een rol spelen bij jouw klanten? Wat zijn de belangrijkste overwegingen om deze te gebruiken? Zijn er specifieke use cases of toepassingen waarvoor deze vendors worden gekozen?"
         }
       ]
     },
