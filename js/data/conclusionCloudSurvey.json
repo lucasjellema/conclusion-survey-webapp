@@ -4,251 +4,19 @@
   "steps": [
     {
       "id": "step1",
-      "title": "Organization Profile",
-      "description": "Basic information about your organization",
+      "title": "Cloudgebruik",
+      "description": "Basisinformatie over het cloudgebruik binnen jouw organisatie en bij jouw klanten",
       "backgroundImage": {
         "url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72",
         "opacity": "light",
         "position": "center"
       },
       "questions": [
-        {
-          "id": "orgSize",
-          "type": "radio",
-          "title": "What is the size of your organization?",
-          "description": "Please select the option that best describes your organization's size.",
-          "required": true,
-          "options": [
-            {
-              "value": "small",
-              "label": "Small (1-50 employees)"
-            },
-            {
-              "value": "medium",
-              "label": "Medium (51-250 employees)"
-            },
-            {
-              "value": "large",
-              "label": "Large (251-1000 employees)"
-            },
-            {
-              "value": "enterprise",
-              "label": "Enterprise (1000+ employees)"
-            }
-          ]
-        },
-        {
-          "id": "industry",
-          "type": "radio",
-          "title": "Which industry does your organization primarily operate in?",
-          "description": "Select the most relevant industry sector.",
-          "required": true,
-          "allowComment": true,
-          "options": [
-            {
-              "value": "finance",
-              "label": "Financial Services"
-            },
-            {
-              "value": "healthcare",
-              "label": "Healthcare"
-            },
-            {
-              "value": "manufacturing",
-              "label": "Manufacturing"
-            },
-            {
-              "value": "retail",
-              "label": "Retail"
-            },
-            {
-              "value": "technology",
-              "label": "Technology"
-            },
-            {
-              "value": "education",
-              "label": "Education"
-            },
-            {
-              "value": "government",
-              "label": "Government"
-            },
-            {
-              "value": "other",
-              "label": "Other"
-            }
-          ]
-        },
-        {
-          "id": "euCloudProviders",
-          "type": "matrix2d",
-          "title": "Europese Cloud Providers",
-          "description": "Welke van van de volgende Europese cloudproviders staan op de radar en op welke manier",
-          "matrix": {
-            "rows": [
-              {
-                "id": "exo",
-                "label": "Exoscale"
-              },
-              {
-                "id": "elx",
-                "label": "Elastx"
-              },
-              {
-                "id": "stt",
-                "label": "StackIT"
-              },
-              {
-                "id": "otc",
-                "label": "Open Telekom Cloud"
-              },
-              {
-                "id": "ovh",
-                "label": "OVHcloud"
-              },
-              {
-                "id": "scw",
-                "label": "Scaleway"
-              },
-              {
-                "id": "htz",
-                "label": "Hetzner"
-              },
-              {
-                "id": "aru",
-                "label": "ArubaCloud"
-              },
-              {
-                "id": "upc",
-                "label": "UpCloud"
-              },
-              {
-                "id": "gsc",
-                "label": "GridScale"
-              },
-              {
-                "id": "ios",
-                "label": "Ionos"
-              },
-              {
-                "id": "fug",
-                "label": "FugaCloud"
-              },
-              {
-                "id": "acc",
-                "label": "ACC ICT"
-              }
-            ],
-            "columns": [
-              {
-                "id": "interesse",
-                "label": "Interesse",
-                "description": "Interesse in de diensten van deze provider"
-              },
-              {
-                "id": "bekeken",
-                "label": "Bekeken",
-                "description": "Onderzocht, misschien uitgeprobeerd"
-              },
-              {
-                "id": "poc",
-                "label": "Proof of Concept"
-              },
-              {
-                "id": "pilot",
-                "label": "Pilot"
-              },
-              {
-                "id": "intern",
-                "label": "Intern in gebruik"
-              },
-              {
-                "id": "klant",
-                "label": "Live bij klant"
-              }
-            ],
-            "allowMultiple": true
-          }
-        },
-        {
-          "id": "cloudProviderRadar",
-          "type": "radar",
-          "title": "Position Cloud Providers on the Radar",
-          "description": "Assign two variables from predefined ordered lists to several cloud provider options by positioning their markers in a pie segment and a ring.",
-          "radar": {
-            "options": [
-              {
-                "id": "aws",
-                "label": "Amazon Web Services",
-                "letter": "A",
-                "shape": "circle",
-                "segment": "High Maturity",
-                "ring": "High Importance"
-              },
-              {
-                "id": "azure",
-                "label": "Microsoft Azure",
-                "letter": "M",
-                "shape": "rectangle",
-                "segment": "High Maturity",
-                "ring": "High Importance"
-              },
-              {
-                "id": "gcp",
-                "label": "Google Cloud Platform",
-                "letter": "G",
-                "shape": "triangle",
-                "segment":  "Medium Maturity",
-                  "ring": "High Importance"
-              },
-              {
-                "id": "alibaba",
-                "label": "Alibaba Cloud",
-                "letter": "L",
-                "shape": "circle",
-               "segment": "Low Maturity",
-                "ring": "Medium Importance"
-              },
-              {
-                "id": "ibm",
-                "label": "IBM Cloud",
-                "letter": "I",
-                "shape": "circle",
-                "segment": "Medium Maturity",
-                "ring": "High Importance"
-              }
-            ],
-            "variable1": {
-              "labels": [
-                "No Maturity",
-                "Low Maturity",
-                "Medium Maturity",
-                "High Maturity"
-              ]
-            },
-            "variable2": {
-              "labels": [
-                "Low Importance",
-                "Medium Importance",
-                "High Importance"
-              ]
-            },
-            "showLabels": true,
-            "showLegend": true
-          }
-        }
-      ]
-    },
-    {
-      "id": "step2",
-      "title": "Cloud Adoption",
-      "description": "Information about your organization's cloud adoption status",
-      "questions": [
-        {
+  {
           "id": "cloudUsage",
           "type": "checkbox",
-          "title": "Which cloud services does your organization currently use?",
-          "description": "Select all that apply.",
+          "title": "Gebruik van Cloud Services",
+          "description": "Welke type cloud services wordt door jouw klanten en/of door jouw eigen organisatie gebruikt?",
           "required": true,
           "options": [
             {
@@ -256,549 +24,49 @@
               "label": "Infrastructure as a Service (IaaS)"
             },
             {
+              "value": "caas",
+              "label": "Container Service - zoals OpenShift, AKS of EKS"
+            },
+            {
               "value": "paas",
               "label": "Platform as a Service (PaaS)"
             },
             {
+              "value": "faas",
+              "label": "Function as a Service (FaaS) / Serverless Platform"
+            },
+            {
+              "value": "maas",
+              "label": "Model as a Service (MaaS) (LLM, AI/ML, ...)" 
+            },
+            {
               "value": "saas",
-              "label": "Software as a Service (SaaS)"
+              "label": "Software as a Service (SaaS) - zoals Salesforce, M365, Jira, Service Now, ChatGPT"
             },
             {
               "value": "private",
               "label": "Private Cloud"
             },
             {
+              "value": "pubprem",
+              "label": "Public Cloud on Prem - bijvoorbeeld Azure Local, AWS Outposts"
+            },
+            {
               "value": "hybrid",
-              "label": "Hybrid Cloud"
+              "label": "Hybrid Cloud - zowel een public als een private/on prem cloud"
             },
             {
               "value": "none",
-              "label": "We don't use cloud services"
+              "label": "Geen cloud services in gebruik"
             }
           ]
         },
         {
-          "id": "saas_details",
-          "type": "radio",
-          "title": "How extensively does your organization use {{option}}?",
-          "description": "Please indicate the level of {{option}} implementation within your organization.",
-          "linkedQuestionId": "cloudUsage",
-          "forOptionId": "saas",
-          "options": [
-            {
-              "value": "minimal",
-              "label": "Minimal - Only a few non-critical applications"
-            },
-            {
-              "value": "moderate",
-              "label": "Moderate - Several business applications"
-            },
-            {
-              "value": "extensive",
-              "label": "Extensive - Most business applications"
-            },
-            {
-              "value": "complete",
-              "label": "Complete - All or nearly all applications"
-            }
-          ]
-        },
-        {
-          "id": "cloudProviders",
-          "type": "matrix2d",
-          "title": "For each provider, indicate your organization's usage status:",
-          "description": "Click on the cell that represents your organization's relationship with each provider.",
-          "matrix": {
-            "rows": [
-              {
-                "id": "aws",
-                "label": "Amazon Web Services"
-              },
-              {
-                "id": "azure",
-                "label": "Microsoft Azure"
-              },
-              {
-                "id": "gcp",
-                "label": "Google Cloud Platform"
-              },
-              {
-                "id": "ibm",
-                "label": "IBM Cloud"
-              },
-              {
-                "id": "oracle",
-                "label": "Oracle Cloud"
-              }
-            ],
-            "columns": [
-              {
-                "id": "not_using",
-                "label": "Not Using"
-              },
-              {
-                "id": "evaluating",
-                "label": "Evaluating"
-              },
-              {
-                "id": "limited_use",
-                "label": "Limited Use"
-              },
-              {
-                "id": "extensive_use",
-                "label": "Extensive Use"
-              },
-              {
-                "id": "primary",
-                "label": "Primary Provider"
-              }
-            ],
-            "allowMultiple": true
-          }
-        }
-      ]
-    },
-    {
-      "id": "step3",
-      "title": "Cloud Benefits",
-      "description": "Assessment of the benefits your organization has experienced from cloud adoption",
-      "backgroundImage": {
-        "url": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
-        "opacity": "medium",
-        "position": "bottom"
-      },
-      "questions": [
-        {
-          "id": "benefitsRating",
-          "type": "likert",
-          "title": "Rate the benefits your organization has experienced from cloud adoption:",
-          "description": "For each benefit, indicate the level of impact experienced by your organization.",
-          "options": [
-            {
-              "value": "cost_savings",
-              "label": "Cost savings"
-            },
-            {
-              "value": "scalability",
-              "label": "Scalability"
-            },
-            {
-              "value": "agility",
-              "label": "Business agility"
-            },
-            {
-              "value": "innovation",
-              "label": "Innovation acceleration"
-            },
-            {
-              "value": "remote_work",
-              "label": "Support for remote work"
-            }
-          ],
-          "likertScale": {
-            "min": 1,
-            "max": 5,
-            "labels": {
-              "1": "No benefit",
-              "2": "Minimal benefit",
-              "3": "Moderate benefit",
-              "4": "Significant benefit",
-              "5": "Transformational benefit"
-            }
-          }
-        },
-        {
-          "id": "roi",
-          "type": "rangeSlider",
-          "title": "What has been your organization's estimated ROI from cloud adoption?",
-          "description": "Slide to indicate your estimated return on investment percentage.",
-          "rangeSlider": {
-            "min": -20,
-            "max": 100,
-            "step": 5,
-            "labels": {
-              "-20": "Negative ROI",
-              "0": "Break even",
-              "25": "25%",
-              "50": "50%",
-              "75": "75%",
-              "100": "100%+"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "step4",
-      "title": "Challenges and Concerns",
-      "description": "Information about challenges faced during cloud adoption",
-      "questions": [
-        {
-          "id": "ecosysteem",
-          "type": "checkbox",
-          "title": "Cloud Ecosysteem-diensten",
-          "description": "Wat wil je graag van het ecosysteem kunnen krijgen rond cloud?",
-          "required": true,
-          "options": [
-            {
-              "value": "diensten",
-              "label": "Diensten rond inrichting en beheer"
-            },
-            {
-              "value": "expertise",
-              "label": "Kennis, Ervaring, Expertise, Tips"
-            },
-            {
-              "value": "managed",
-              "label": "Managed omgeving (landing zone+)"
-            },
-            {
-              "value": "visie",
-              "label": "Visie op cloud"
-            },
-            {
-              "value": "marketing",
-              "label": "Zichtbaarheid richting markt"
-            },
-            {
-              "value": "sandbox",
-              "label": "Uitprobeeromgeving (sandbox)"
-            },
-            {
-              "value": "other",
-              "label": "Other"
-            }
-          ],
-          "allowComment": true
-        },
-        {
-          "id": "challenge_details",
+          "id": "cloud_gebruik_details",
           "type": "longText",
-          "title": "Please describe your biggest cloud adoption challenge in detail:",
-          "description": "Provide specifics about the most significant challenge your organization has faced."
-        },
-        {
-          "id": "security_details",
-          "type": "longText",
-          "title": "Please provide details about your security concerns:",
-          "description": "Explain the specific security challenges you've encountered with cloud adoption.",
-          "conditions": {
-            "rules": [
-              {
-                "questionId": "challenges",
-                "type": "contains",
-                "value": "security"
-              }
-            ]
-          }
-        },
-        {
-          "id": "cost_management_details",
-          "type": "shortText",
-          "title": "How much has {{option}} impacted your organization financially?",
-          "description": "Provide an estimate of the financial impact of {{option}} issues.",
-          "linkedQuestionId": "challenges",
-          "forOptionId": "cost"
-        },
-        {
-          "id": "skills_gap_details",
-          "type": "checkbox",
-          "title": "What specific {{option}} areas has your organization struggled with?",
-          "description": "Select all the skills areas where your team has faced challenges.",
-          "linkedQuestionId": "challenges",
-          "forOptionId": "skills",
-          "options": [
-            {
-              "value": "cloud_architecture",
-              "label": "Cloud Architecture"
-            },
-            {
-              "value": "security_expertise",
-              "label": "Security Expertise"
-            },
-            {
-              "value": "data_engineering",
-              "label": "Data Engineering"
-            },
-            {
-              "value": "devops",
-              "label": "DevOps Practices"
-            },
-            {
-              "value": "multicloud",
-              "label": "Multi-cloud Management"
-            }
-          ]
-        },
-        {
-          "id": "integration_details",
-          "type": "longText",
-          "title": "Describe the {{option}} challenges you've faced:",
-          "description": "What specific difficulties have you encountered when integrating cloud services with existing systems?",
-          "linkedQuestionId": "challenges",
-          "forOptionId": "integration"
-        }
-      ]
-    },
-    {
-      "id": "step5",
-      "title": "Future Plans",
-      "description": "Information about your organization's future cloud plans",
-      "questions": [
-        {
-          "id": "conditional_investment_reasoning",
-          "type": "longText",
-          "title": "Please explain why you expect significant increase in cloud investments:",
-          "description": "Provide details about the factors driving your organization's decision to significantly increase cloud investments.",
-          "conditions": {
-            "operator": "and",
-            "rules": [
-              {
-                "questionId": "cloudUsage",
-                "type": "answered"
-              },
-              {
-                "questionId": "future_investments",
-                "type": "equals",
-                "value": "increase_significantly"
-              },
-              {
-                "questionId": "roi",
-                "type": "greaterThan",
-                "threshold": 50
-              }
-            ]
-          }
-        },
-        {
-          "id": "future_investments",
-          "type": "radio",
-          "title": "How do you expect your organization's cloud investments to change over the next 2 years?",
-          "description": "Select the option that best describes your organization's plans.",
-          "required": true,
-          "options": [
-            {
-              "value": "decrease_significantly",
-              "label": "Decrease significantly"
-            },
-            {
-              "value": "decrease_somewhat",
-              "label": "Decrease somewhat"
-            },
-            {
-              "value": "stay_same",
-              "label": "Stay about the same"
-            },
-            {
-              "value": "increase_somewhat",
-              "label": "Increase somewhat"
-            },
-            {
-              "value": "increase_significantly",
-              "label": "Increase significantly"
-            }
-          ]
-        },
-        {
-          "id": "cloud_tech_tags",
-          "type": "tags",
-          "title": "Which cloud technologies are you currently using?",
-          "description": "Select or add the cloud technologies used in your organization.",
-          "required": false,
-          "allowComment": true,
-          "tagOptions": {
-            "allowCustom": true,
-            "maxTags": 0,
-            "tags": [
-              "AWS",
-              "Microsoft Azure",
-              "Google Cloud Platform",
-              "IBM Cloud",
-              "Oracle Cloud",
-              "Alibaba Cloud",
-              "Kubernetes",
-              "Docker",
-              "Serverless",
-              "Terraform",
-              "Ansible",
-              "CI/CD Pipelines"
-            ]
-          }
-        },
-        {
-          "id": "additional_comments",
-          "type": "longText",
-          "title": "Any additional comments about your organization's cloud strategy?",
-          "description": "Please share any other insights or information about your cloud adoption journey.",
-          "allowComment": false
-        },
-        {
-          "id": "cloud_placement",
-          "type": "multiValueSlider",
-          "title": "Position your cloud providers based on importance and maturity in your organization",
-          "description": "Drag each provider to indicate where they fit on the scale. Left side indicates lower importance/maturity, right side indicates higher importance/maturity.",
-          "multiValueSlider": {
-            "mode": "discrete",
-            "options": [
-              {
-                "id": "aws",
-                "label": "Amazon Web Services",
-                "letter": "A",
-                "shape": "circle",
-                "defaultPosition": 80
-              },
-              {
-                "id": "azure",
-                "label": "Microsoft Azure",
-                "letter": "M",
-                "shape": "rectangle",
-                "defaultPosition": 60
-              },
-              {
-                "id": "gcp",
-                "label": "Google Cloud Platform",
-                "letter": "G",
-                "shape": "triangle",
-                "defaultPosition": 40
-              },
-              {
-                "id": "alibaba",
-                "label": "Alibaba Cloud",
-                "letter": "L",
-                "shape": "circle",
-                "defaultPosition": 30
-              },
-              {
-                "id": "ibm",
-                "label": "IBM Cloud",
-                "letter": "I",
-                "shape": "circle",
-                "defaultPosition": 20
-              },
-              {
-                "id": "stackit",
-                "label": "StackIT",
-                "letter": "S",
-                "shape": "triangle",
-                "defaultPosition": 15
-              },
-              {
-                "id": "scaleway",
-                "label": "Scaleway",
-                "letter": "C",
-                "shape": "rectangle",
-                "defaultPosition": 5
-              },
-              {
-                "id": "oracle",
-                "label": "Oracle Cloud",
-                "letter": "O",
-                "shape": "rectangle",
-                "defaultPosition": 10
-              }
-            ],
-            "zones": [
-              {
-                "id": "low",
-                "label": "Low Priority",
-                "color": "#f8d7da",
-                "start": 0,
-                "end": 25
-              },
-              {
-                "id": "medium-low",
-                "label": "Medium-Low Priority",
-                "color": "#fff3cd",
-                "start": 25,
-                "end": 50
-              },
-              {
-                "id": "medium-high",
-                "label": "Medium-High Priority",
-                "color": "#d1e7dd",
-                "start": 50,
-                "end": 75
-              },
-              {
-                "id": "high",
-                "label": "High Priority",
-                "color": "#cfe2ff",
-                "start": 75,
-                "end": 100
-              }
-            ],
-            "showLabels": true,
-            "showLegend": true
-          }
-        },
-        {
-          "id": "cloud_cost_benefit",
-          "type": "multiValueSlider",
-          "title": "Rate your cloud providers on the cost-benefit spectrum",
-          "description": "Position each provider along the spectrum from high cost/low benefit (left) to low cost/high benefit (right).",
-          "multiValueSlider": {
-            "mode": "continuous",
-            "options": [
-              {
-                "id": "aws",
-                "label": "Amazon Web Services",
-                "letter": "A",
-                "shape": "circle",
-                "defaultPosition": 65
-              },
-              {
-                "id": "azure",
-                "label": "Microsoft Azure",
-                "letter": "M",
-                "shape": "rectangle",
-                "defaultPosition": 50
-              },
-              {
-                "id": "gcp",
-                "label": "Google Cloud Platform",
-                "letter": "G",
-                "shape": "triangle",
-                "defaultPosition": 75
-              },
-              {
-                "id": "ibm",
-                "label": "IBM Cloud",
-                "letter": "I",
-                "shape": "circle",
-                "defaultPosition": 30
-              },
-              {
-                "id": "oracle",
-                "label": "Oracle Cloud",
-                "letter": "O",
-                "shape": "rectangle",
-                "defaultPosition": 20
-              }
-            ],
-            "colorStart": "#dc3545",
-            "colorEnd": "#198754",
-            "min": 0,
-            "max": 100,
-            "showLabels": true,
-            "showLegend": true
-          }
-        },
-        {
-          "id": "top_provider_strategy",
-          "type": "longText",
-          "title": "Describe your strategy with your top-ranked cloud provider:",
-          "description": "Please share details about your strategic plans with the provider you ranked highest on the cost-benefit spectrum.",
-          "conditions": {
-            "rules": [
-              {
-                "questionId": "cloud_cost_benefit",
-                "type": "topRanked",
-                "optionId": "gcp"
-              }
-            ]
-          }
-        },
-        {
+          "title": "Toelichting op gebruik van Cloud Services",
+          "description": "Kan je meer vertellen over het huidige gebruik van clouddiensten en de overwegingen daarbij?"
+        }    ,    {
           "id": "cloud_overwegingen",
           "type": "rankOptions",
           "title": "Overwegingen bij cloud keuzes",
@@ -842,6 +110,394 @@
           }
         }
       ]
-    }
-  ]
+    },
+    {
+      "id": "step2",
+      "title": "Public Cloud gebruik",
+      "description": "Huidig gebruik van public cloud diensten en providers - van buiten de EU",
+      "questions": [
+        
+        {
+          "id": "saas_details",
+          "type": "radio",
+          "title": "Huidige betekenis van public cloud",
+          "description": "Hoe verstrekkend is bij jouw klanten de toepassing van public cloud?",
+          "linkedQuestionId": "cloudUsage",
+      
+          "options": [
+            {
+              "value": "geen",
+              "label": "Geen "
+            },
+            {
+              "value": "minimal",
+              "label": "Minimaal - Een zeer beperkt aantal toepassingen"
+            },
+            {
+              "value": "moderate",
+              "label": "Gemiddeld - Enkele applicaties/systemen"
+            },
+            {
+              "value": "extensive",
+              "label": "Extensief - De meeste zakelijke toepassingen"
+            },
+            {
+              "value": "complete",
+              "label": "Volledig/Cloud First - alles gaat in principe naar de cloud"
+            }
+          ]
+        },
+        {
+          "id": "cloudProviders",
+          "type": "matrix2d",
+          "title": "Gebruik van niet-EU cloud providers ",
+          "description": "Geef graag aan in welke mate jouw klanten van onderstaande leveranciers gebruikmaken.",
+          "matrix": {
+            "rows": [
+              {
+                "id": "aws",
+                "label": "Amazon Web Services"
+              },
+              {
+                "id": "azure",
+                "label": "Microsoft Azure"
+              },
+              {
+                "id": "gcp",
+                "label": "Google Cloud Platform"
+              },
+              {
+                "id": "ibm",
+                "label": "IBM Cloud"
+              },
+              {
+                "id": "oracle",
+                "label": "Oracle Cloud Infrastructure"
+              },
+              {
+                "id": "dig",
+                "label": "Digital Ocean"
+              },
+              {
+                "id": "ali",
+                "label": "Alibaba Cloud"
+              }
+            ],
+            "columns": [
+              {
+                "id": "not_using",
+                "label": "Niet"
+              },
+              {
+                "id": "evaluating",
+                "label": "Evaluatie"
+              },
+              {
+                "id": "limited_use",
+                "label": "Beperkt gebruik"
+              },
+              {
+                "id": "extensive_use",
+                "label": "Uitgebreid gebruik"
+              },
+              {
+                "id": "primary",
+                "label": "Primaire leverancier"
+              }
+            ],
+            "allowMultiple": true
+          }
+        },
+        {
+          "id": "overige_cloud_providers",
+          "type": "longText",
+          "title": "Andere leveranciers? Toelichting",
+          "description": "Zijn er nog andere leveranciers die een rol spelen? Valt er verder iets te zeggen over wat je bij klanten tegenkomt qua cloud-voorkeur en -toepassing?"
+        },
+        {
+          "id": "public_cloud_future",
+          "type": "multiValueSlider",
+          "title": "Toekomstige inzet van public cloud provider",
+          "description": "Versleep elke provider om aan te geven waar ze passen op de schaal. De linkerkant geeft een afnemend belang aan, de rechterkant een sterke groei.",
+          "multiValueSlider": {
+            "mode": "discrete",
+            "options": [
+              {
+                "id": "aws",
+                "label": "Amazon Web Services",
+                "letter": "A",
+                "shape": "circle",
+                "defaultPosition": 50
+              },
+              {
+                "id": "azure",
+                "label": "Microsoft Azure",
+                "letter": "M",
+                "shape": "rectangle",
+                "defaultPosition": 50
+              },
+              {
+                "id": "gcp",
+                "label": "Google Cloud Platform",
+                "letter": "G",
+                "shape": "triangle",
+                "defaultPosition": 50
+              },
+              {
+                "id": "alibaba",
+                "label": "Alibaba Cloud",
+                "letter": "L",
+                "shape": "circle",
+                "defaultPosition": 50
+              },
+              {
+                "id": "ibm",
+                "label": "IBM Cloud",
+                "letter": "I",
+                "shape": "circle",
+                "defaultPosition": 50
+              },
+              {
+                "id": "oracle",
+                "label": "Oracle Cloud Infrastructure",
+                "letter": "O",
+                "shape": "rectangle",
+                "defaultPosition": 50
+              },
+              {
+                "id": "dig",
+                "label": "Digital Ocean",
+                "letter": "D",
+                "shape": "rectangle",
+                "defaultPosition": 50
+              }
+            ],
+            "zones": [
+              {
+                "id": "no",
+                "label": "Geen",
+                "color": "#f8d7da",
+                "start": 0,
+                "end": 25
+              },
+              {
+                "id": "medium-low",
+                "label": "Afnemend",
+                "color": "#fff3cd",
+                "start": 25,
+                "end": 45
+              },
+              {
+                "id": "equal",
+                "label": "Gelijkblijvend",
+                "color": "#d1e7dd",
+                "start": 45,
+                "end": 65
+              },
+              {
+                "id": "high",
+                "label": "Toenemend",
+                "color": "#cfe2ff",
+                "start": 65,
+                "end": 80
+              },
+              {
+                "id": "veryhigh",
+                "label": "Sterk Toenemend",
+                "color": "#8284cc",
+                "start": 80,
+                "end": 100
+              }
+            ],
+            "showLabels": true,
+            "showLegend": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "step3",
+      "title": "Europese Cloud Providers",
+      "description": "Kijken jouw klanten naar Europese leveranciers?",
+      "backgroundImage": {
+        "url": "https://images.unsplash.com/photo-1608817576203-3c27ed168bd2?q=80&w=1592&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "opacity": "medium",
+        "position": "bottom"
+      },
+      "questions": [
+        {
+          "id": "visie_eu_cloud_providers",
+          "type": "longText",
+          "title": "Visie op Europese (soevereine) Cloud Providers",
+          "description": "Hebben jouw klanten (en jouw bedrijf) een visie over soevereine cloud? Wat hoor je over dit onderwerp van klanten - houdt het ze bezig? Zo ja, op welke manier en waarom?"
+        },
+        
+        {
+          "id": "euCloudProviders",
+          "type": "matrix2d",
+          "title": "Europese Cloud Providers",
+          "description": "Welke van van de volgende Europese cloudproviders staan op de radar en op welke manier",
+          "matrix": {
+            "rows": [
+              {
+                "id": "exo",
+                "label": "Exoscale",
+                "description": "Exoscale is a cloud computing platform from Switzerland with several server locations within Europe. It offers virtual servers, object storage (S3 compatible), managed kubernetes, managed databases, DNS and CDN. The managed database service offers Apache Kafka and Redis in addition to the commonly offered MySQL and PostgreSQL. The virtual servers are available in different strengths and specializations such as CPU, memory, storage optimized. In addition, own GPU instances are offered, which can be used for GPU intensive computations."
+              },
+              {
+                "id": "elx",
+                "label": "Elastx",
+                "description": "Elastx is a cloud computing platform from Sweden. They use OpenStack and offer managed Kubernetes, object storage and a web application firewall. They operate three accessibility zones (AZ) in separate data centers in Sweden 20 km away from each other to host high availability applications."
+              },
+              {
+                "id": "stt",
+                "label": "StackIT",
+                "description": "STACKIT is a cloud computing platform by the German retail group Schwarz Group. They offers managed services like object storage, kubernetes, block storage and databases. Besides the often offered managed services MySQL and Postgres, STACKIT also offers managed Redis, MongoDB, RabbitMQ and ELK (Elasticsearch, Logstash and Kibana). STACKIT currently operates two data centers, one in Germany and one in Austria."
+              },
+              {
+                "id": "otc",
+                "label": "Open Telekom Cloud",
+                "description": "Open Telekom Cloud (Germany) is a cloud computing platform by the German telecommunications company Deutsche Telekom AG. The cloud provider is based on OpenStack which is open source and can reduce the vendor lock-in of cloud providers."
+              },
+              {
+                "id": "ovh",
+                "label": "OVHcloud",
+                "description": "OVHcloud is a public cloud provider from France with a wide range of services. It offers the classic services such as virtual servers for different applications, object storage, managed databases and managed Kubernetes."
+              },
+              {
+                "id": "scw",
+                "label": "Scaleway",
+                "description": "Scaleway (France) is a cloud provider with a variety of services. Besides the public cloud called Scaleway Elements, they also offer dedicated servers and even renting racks in data centers."
+              },
+              {
+                "id": "htz",
+                "label": "Hetzner",
+                "description": "Hetzner is a European cloud provider known for its high-performance cloud servers and competitive pricing."
+              },
+              {
+                "id": "aru",
+                "label": "ArubaCloud",
+                "description": "Aruba Cloud is a VPS provider from Italy with many data centers in Europe. It offers virtual servers, managed databases, domains and DNS."
+              },
+              {
+                "id": "upc",
+                "label": "UpCloud",
+                "description": "UpCloud (Finland) is a cloud computing platform with servers around the world. They offer typical services like virtual servers, VPC, managed databases, managed Kubernetes and object storage. The block storage can be upgraded to achieve higher read and write speeds (IOPS), which can be useful for databases or other memory-intensive applications."
+              },
+              {
+                "id": "gsc",
+                "label": "GridScale",
+                "description": "GridScale (part of OVHcloud)  is a cloud computing platform from Germany. Like most general cloud providers, gridscale provides virtual servers, managed Kubernetes, managed databases, load balancers and object storage. They offer a big variety of database types like Postgres, Microsoft SQL, MariaDB, MySQL and Redis as a cache and as a storage. They also provide managed NFS (network file storage) servers, that can be helpful to share data between Kubernetes nodes. gridscale offers servers in Germany, Austria, Switzerland, and the Netherlands."
+              },
+              {
+                "id": "del",
+                "label": "Delos Cloud (SAP)",
+                "description": "Delos Cloud (SAP, Germany) for Public Sector"
+              },
+              {
+                "id": "ios",
+                "label": "Ionos",
+                "description": "IONOS is a German cloud computing platform. They offer typical services like virtual servers, VPC, managed databases and object storage."
+              },
+              {
+                "id": "fug",
+                "label": "FugaCloud",
+                "description": "Fuga Cloud is a cloud platform from the Netherlands. It offers virtual servers in many different sizes and also GPU and memory optimized instances. It is possible to attach block storage to the instances. Fuga Cloud also offers object storage (more about Fuga Cloud Object Store here), load balancers, managed kubernetes and DNS."
+              },
+              {
+                "id": "neb",
+                "label": "Nebul",
+                "description": "Dutch, specialized in NVIDIA based services for AI applications; also offers container platform."
+              }
+            ],
+            "columns": [
+              {
+                "id": "interesse",
+                "label": "Interesse",
+                "description": "Interesse in de diensten van deze provider"
+              },
+              {
+                "id": "bekeken",
+                "label": "Bekeken",
+                "description": "Onderzocht, misschien uitgeprobeerd"
+              },
+              {
+                "id": "poc",
+                "label": "Proof of Concept"
+              },
+              {
+                "id": "pilot",
+                "label": "Pilot"
+              },
+              {
+                "id": "intern",
+                "label": "Intern in gebruik"
+              },
+              {
+                "id": "klant",
+                "label": "Live bij klant"
+              }
+            ],
+            "allowMultiple": true
+          }
+        },
+        {
+          "id": "toelichting_eu_cloud_providers",
+          "type": "longText",
+          "title": "Toelichting op ervaring Europese Cloud Providers",
+          "description": "Kan je meer vertellen over alle EU cloud providers waarmee je Pilot hebt gedaan, intern live bent of voor een klant aan de slag bent? Wat is de toepassing, wat zijn je ervaringen?"
+        }
+      ]
+    },
+    {
+      "id": "step4",
+      "title": "Europese Cloud en Conclusion Ecosysteem",
+      "description": "Hoe gaan we ons als Conclusion richten op de markt rond de soevereine, Europese Cloud?",
+      "questions": [
+        {
+          "id": "ecosysteem",
+          "type": "checkbox",
+          "title": "Cloud Ecosysteem-diensten",
+          "description": "Wat wil je graag van het ecosysteem kunnen krijgen rond cloud?",
+          "required": true,
+          "options": [
+            {
+              "value": "diensten",
+              "label": "Diensten rond inrichting en beheer"
+            },
+            {
+              "value": "expertise",
+              "label": "Kennis, Ervaring, Expertise, Tips"
+            },
+            {
+              "value": "managed",
+              "label": "Managed omgeving (landing zone+)"
+            },
+            {
+              "value": "visie",
+              "label": "Visie op cloud"
+            },
+            {
+              "value": "marketing",
+              "label": "Zichtbaarheid richting markt"
+            },
+            {
+              "value": "sandbox",
+              "label": "Uitprobeeromgeving (sandbox)"
+            },
+            {
+              "value": "other",
+              "label": "Other"
+            }
+          ],
+          "allowComment": true
+        },
+        {
+          "id": "toelichting_next_steps",
+          "type": "longText",
+          "title": "Toelichting op volgende stappen",
+          "description": "Hoe kijk je aan tegen het thema cloud, public cloud en soevereine cloud? Welke rol wil jij / jouw bedrijf daar in spelen? Wil je diensten aanbieden specifiek rond soevereine cloud - of wil zoals migratie, landschapsbrede voorzieningen (federated identity management, data synchronization | backup, cross cloud event hub, observability, ...)? Wil je onderzoek doen, je profileren, ... Op welke manier denk je dat we gezamenlijk verder kunnen? Geef graag je visie en ambities en verwachtingen."
+        }
+      ]
+    } ]
 }
