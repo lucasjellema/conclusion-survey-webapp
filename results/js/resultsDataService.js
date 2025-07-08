@@ -12,6 +12,7 @@ import { getData } from '../../js/dataService.js';
 let surveyDefinitionCache = null;
 let surveyResultsCache = null;
 
+const surveyDefinitionFile = '../js/data/conclusionCloudSurvey.json';
 /**
  * Get survey definition with questions and steps
  * @returns {Promise<Array>} Array of question definitions
@@ -25,7 +26,7 @@ export async function getQuestionDefinitions() {
         // Load survey definition from file/API
         // For demo purposes, we're loading from a static file path
         // In production, this would come from an API endpoint
-        const response = await fetch('../js/data/sampleSurvey.json');
+        const response = await fetch(surveyDefinitionFile);
         const surveyData = await response.json();
 
         if (!surveyData || !surveyData.steps) {

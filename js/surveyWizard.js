@@ -22,7 +22,7 @@ const ELEMENT_IDS = {
 
 // Constants for default survey
 const DEFAULT_SURVEY = {
-  path: 'js/data/sampleSurvey.json'
+  path: 'js/data/conclusionCloudSurvey.json'
 };
 
 // Survey state
@@ -30,6 +30,8 @@ const surveyState = {
   initialized: false,
   active: false
 };
+
+
 
 /**
  * Initialize the survey wizard
@@ -39,7 +41,15 @@ const surveyState = {
 export async function initSurveyWizard(surveyPath = DEFAULT_SURVEY.path) {
   try {
     // Try to load the survey definition
-    await surveyData.loadSurveyDefinition(surveyPath);
+    const surveyD = await surveyData.loadSurveyDefinition(surveyPath);
+    // initialize survey description
+    const surveyDescription = document.getElementById('survey-description');
+    if (surveyDescription) {
+      surveyDescription.style.display = 'block';
+      surveyDescription.textContent = surveyD.description || 'No description available for this survey.';
+    } else {
+      console.warn('Survey description element not found, skipping description initialization.');
+    }
     
     // Get required DOM elements
     const surveySection = document.getElementById(ELEMENT_IDS.surveySection);

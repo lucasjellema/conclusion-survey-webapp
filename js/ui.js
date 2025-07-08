@@ -194,7 +194,6 @@ export function showAuthenticatedUser(user, tokenClaims) {
     const displayName = user.displayName || user.name || 'Authenticated User';
     elements.welcomeMessage.innerHTML = `
       <p>Welcome, <strong>${displayName}</strong>!</p>
-      <p class="user-info">You are signed in with Microsoft Entra ID</p>
     `;
   }
   

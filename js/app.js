@@ -406,6 +406,11 @@ function setupSurveyButton() {
 function handleStartSurvey() {
   // Check if user is authenticated
   if (APP_STATE.authenticated) {
+    // hide description
+    const descriptionElement = document.getElementById('survey-description');
+    if (descriptionElement) {
+      descriptionElement.style.display = 'none';
+    }
     // Show the survey wizard
     showSurvey();
   } else {
