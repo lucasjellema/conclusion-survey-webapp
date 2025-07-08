@@ -333,6 +333,9 @@ export function renderMatrix2D(question) {
     rowHeader.className = 'matrix-row-header';
     rowHeader.textContent = row.label;
     rowHeader.dataset.rowId = row.id;
+    if (row.description) {
+      rowHeader.title = row.description; // Set tooltip
+    }
     tr.appendChild(rowHeader);
     
     // Cells for each column
