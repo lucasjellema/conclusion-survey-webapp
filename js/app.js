@@ -426,9 +426,11 @@ function showSurvey() {
   // Hide other content sections
   const dataSection = document.getElementById('data-section');
   const adminSection = document.getElementById('admin-section');
+  const buttonContainer = document.querySelector('.button-container');
   
   if (dataSection) dataSection.style.display = 'none';
   if (adminSection) adminSection.style.display = 'none';
+  if (buttonContainer) buttonContainer.style.display = 'none'; // Hide the button container
   
   // Show the survey wizard
   surveyWizard.showSurveyWizard();
