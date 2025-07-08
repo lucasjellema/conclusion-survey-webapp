@@ -310,6 +310,9 @@ export function renderMatrix2D(question) {
     th.className = 'matrix-column-header';
     th.textContent = column.label;
     th.dataset.columnId = column.id;
+    if (column.description) {
+      th.title = column.description; // Set tooltip
+    }
     headerRow.appendChild(th);
   });
   
@@ -319,8 +322,11 @@ export function renderMatrix2D(question) {
   // Create table body with rows
   const tbody = document.createElement('tbody');
   
-  rows.forEach((row) => {
+  rows.forEach((row, index) => {
     const tr = document.createElement('tr');
+    if (index % 2 !== 0) { // Apply striped pattern to odd-indexed rows (which are even rows visually, as index is 0-based)
+      tr.classList.add('striped-row');
+    }
     
     // Row header
     const rowHeader = document.createElement('th');

@@ -151,3 +151,8 @@ footer {
   color: #666;
   font-size: 0.9rem;
 }
+
+/* Striped pattern for matrix rows */
+.matrix-2d-table .striped-row {
+  background-color: #e2d5d5; /* Light redgrayish background */
+}
