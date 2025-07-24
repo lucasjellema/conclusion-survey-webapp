@@ -12,7 +12,9 @@ import { getData, getSurveySummary } from '../../js/dataService.js';
 let surveyDefinitionCache = null;
 let surveyResultsCache = null;
 
-const surveyDefinitionFile = '/js/data/conclusionCloudSurvey.json';
+// 'https://lucasjellema.github.io/conclusion-survey-webapp/results/index.html'
+const surveyDefinitionFile =  window.location.href.replace(/\/results\/index\.html$/, '') + '/js/data/conclusionCloudSurvey.json';
+//const surveyDefinitionFile =  window.location.href '/js/data/conclusionCloudSurvey.json';
 const sampleSurveyResultsFile = '../../js/data/sampleSurveyResponse.json';
 /**
  * Get survey definition with questions and steps
