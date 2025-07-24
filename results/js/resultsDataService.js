@@ -289,7 +289,9 @@ export function aggregateTextResponses(responses) {
 
     // Word frequency analysis
     const wordCounts = {};
-    const commonWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'is', 'are', 'was', 'were']);
+    const commonWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'is', 'are', 'was', 'were',
+        'de','het','een','een','die','dat','dit','zijn','zich','niet','ook','als','meer','dan','over','uit','bij','tot','voor','wij','maar'
+    ]);
 
     validResponses.forEach(text => {
         // Tokenize and count words (simple implementation)
@@ -346,8 +348,13 @@ export function aggregateMatrixResponses(responses, question, responseLabels = [
     // Count responses
     responses.forEach((response,index) => {
         if (typeof response !== 'object' || response === null) return;
-
-        Object.entries(response).forEach(([rowId, colId]) => {
+// response is array with values: "rowId:colId"
+        if (!Array.isArray(response)) {
+            console.error('Invalid response format for matrix question:', response);
+            return;
+        }
+        for (const row of response) {
+            const [rowId, colId] = row.split(':');
             if (counts[rowId] && counts[rowId][colId] !== undefined) {
                 counts[rowId][colId]++;
                 tooltips[rowId][colId] = tooltips[rowId][colId] + ', ' + responseLabels[index]; // Use responseLabels if provided
@@ -355,7 +362,7 @@ export function aggregateMatrixResponses(responses, question, responseLabels = [
                 // Track totals for percentages
                 totals[rowId] = (totals[rowId] || 0) + 1;
             }
-        });
+        }
     });
 
     // Calculate percentages
