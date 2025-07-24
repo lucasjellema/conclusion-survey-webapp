@@ -23,6 +23,10 @@ let userSessionData = {
     accessToken: null
 };
 
+const saveUserSessionData = () => {
+ // TODO this is an ugly and insecure workaround to make token available in survey results 
+        localStorage.setItem("USER_SESSION_DATA", JSON.stringify(userSessionData));
+}
 /**
  * Initialize Microsoft Authentication Library
  */
@@ -44,8 +48,10 @@ export function initializeAuth() {
 
         if (message.eventType === 'msal:loginSuccess' || message.eventType === 'msal:acquireTokenSuccess') {
             console.log('Login successful:', message);
+
             userSessionData.idToken = message.payload.idToken;
             userSessionData.idTokenClaims = message.payload.idTokenClaims;
+            saveUserSessionData
             const event = new CustomEvent('msalLoginSuccess', { detail: message });
             window.dispatchEvent(event);
             // Update UI if needed
@@ -64,8 +70,8 @@ export function initializeAuth() {
  */
 export async function handleResponse(response) {
     if (response !== null) {
-      //  username = response.account.username;
-      //  showWelcomeMessage(username);
+        //  username = response.account.username;
+        //  showWelcomeMessage(username);
     } else {
         selectAccount();
     }
@@ -101,7 +107,7 @@ export function signOut() {
     userSessionData.userDetails = null;
     userSessionData.idToken = null;
     userSessionData.accessToken = null;
-
+    saveUserSessionData()
     // Find all accounts and remove them
     const currentAccounts = msalInstance.getAllAccounts();
     if (currentAccounts.length > 0) {
@@ -162,6 +168,7 @@ export async function getUserDetails() {
         // Store tokens in memory
         userSessionData.idToken = tokenResponse.idToken;
         userSessionData.accessToken = tokenResponse.accessToken;
+        saveUserSessionData()
 
         // Call Microsoft Graph API to get user details
         const response = await fetch("https://graph.microsoft.com/v1.0/me", {
@@ -173,6 +180,7 @@ export async function getUserDetails() {
         if (response.ok) {
             // Store user details in memory
             userSessionData.userDetails = await response.json();
+            saveUserSessionData()
             return userSessionData.userDetails;
         } else {
             console.error("Error fetching user data:", await response.text());
@@ -189,6 +197,10 @@ export async function getUserDetails() {
  * @returns {string|null} The ID token or null if not available
  */
 export function getIdToken() {
+    if (!userSessionData.idToken) {
+        // TODO this is an ugly and insecure workaround to make token available in survey results
+        userSessionData = JSON.parse(localStorage.getItem("USER_SESSION_DATA"));
+    }
     return userSessionData.idToken;
 }
 
@@ -198,6 +210,7 @@ export function getIdToken() {
  */
 export function getIdTokenClaims() {
     if (!userSessionData.idToken) {
+        
         return null;
     }
 

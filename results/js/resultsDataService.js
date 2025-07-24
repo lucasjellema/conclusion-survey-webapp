@@ -6,7 +6,7 @@
  * retrieving both the survey definition and results data.
  */
 
-import { getData } from '../../js/dataService.js';
+import { getData, getSurveySummary } from '../../js/dataService.js';
 
 // Cache for survey definition and results
 let surveyDefinitionCache = null;
@@ -78,9 +78,21 @@ export async function getResults(forceRefresh = false) {
 
         // Try to get data from the actual API first
         try {
-            const apiData = await getData(forceRefresh);
-            if (apiData && apiData.responses && Array.isArray(apiData.responses)) {
-                // Format might be different based on API structure
+            const apiData = await getSurveySummary(forceRefresh);
+            if (apiData && apiData.responses) {
+                if (Array.isArray(apiData.responses)) {
+                    // If already an array, just return it
+                    console.log('Using responses as is:', apiData.responses);
+                } else if (typeof apiData.responses === 'object') {
+                    // If it's an object, convert to array
+                    apiData.responses = Object.values(apiData.responses);
+
+                } else {
+                    console.error('Unexpected format for responses:', data.responses);
+                    return [];
+                }
+
+
                 surveyResultsCache = apiData.responses;
                 return surveyResultsCache;
             }
@@ -92,11 +104,11 @@ export async function getResults(forceRefresh = false) {
         const response = await fetch(sampleSurveyResultsFile);
         const data = await response.json();
 
-        if (!data || !data.responses ) {
+        if (!data || !data.responses) {
             console.error('Invalid survey results format');
             return [];
         }
-// create array out of object ; each property value in the responses object becomes an element in the array
+        // create array out of object ; each property value in the responses object becomes an element in the array
         if (Array.isArray(data.responses)) {
             // If already an array, just return it
             console.log('Using responses as is:', data.responses);
@@ -210,7 +222,7 @@ export function aggregateCheckboxResponses(responses, question, responseLabels =
     }
 
     // Process responses - these can be arrays or objects depending on format
-    responses.forEach((response,index) => {
+    responses.forEach((response, index) => {
         if (Array.isArray(response)) {
             // Array format: ['option1', 'option2']
             response.forEach(value => {
@@ -290,7 +302,7 @@ export function aggregateTextResponses(responses) {
     // Word frequency analysis
     const wordCounts = {};
     const commonWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'is', 'are', 'was', 'were',
-        'de','het','een','een','die','dat','dit','zijn','zich','niet','ook','als','meer','dan','over','uit','bij','tot','voor','wij','maar'
+        'de', 'het', 'een', 'een', 'die', 'dat', 'dit', 'zijn', 'zich', 'niet', 'ook', 'als', 'meer', 'dan', 'over', 'uit', 'bij', 'tot', 'voor', 'wij', 'maar', 'van', 'wat', 'hoe', 'waar', 'wie', 'waarom', 'wanneer', 'welke', 'hoeveel', 'alleen', 'alleen maar', 'nog steeds', 'nog altijd', 'onze'
     ]);
 
     validResponses.forEach(text => {
@@ -334,7 +346,7 @@ export function aggregateMatrixResponses(responses, question, responseLabels = [
 
     // Initialize counts matrix
     const counts = {};
-    const tooltips = {}; 
+    const tooltips = {};
 
     rows.forEach(row => {
         counts[row.id] = {};
@@ -346,9 +358,9 @@ export function aggregateMatrixResponses(responses, question, responseLabels = [
     });
 
     // Count responses
-    responses.forEach((response,index) => {
+    responses.forEach((response, index) => {
         if (typeof response !== 'object' || response === null) return;
-// response is array with values: "rowId:colId"
+        // response is array with values: "rowId:colId"
         if (!Array.isArray(response)) {
             console.error('Invalid response format for matrix question:', response);
             return;
@@ -383,7 +395,7 @@ export function aggregateMatrixResponses(responses, question, responseLabels = [
         counts,
         percentages,
         totalResponses: responses.length
-        ,tooltips
+        , tooltips
     };
 }
 

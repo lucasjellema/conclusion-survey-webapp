@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,18 +16,13 @@
     <!-- Optional: Include chartjs-plugin-datalabels for better chart labels -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 </head>
+
 <body>
     <header class="app-header">
         <div class="header-content">
-            <div class="logo">
-                <img src="../img/logo.png" alt="Logo" class="logo-img">
-                <h1 id="survey-title">Survey Results</h1>
-            </div>
-            
             <nav class="main-nav">
                 <ul>
                     <li><a href="../index.html">Survey</a></li>
-                    <li><a href="index.html" class="active">Results</a></li>
                 </ul>
             </nav>
         </div>
@@ -42,8 +38,8 @@
                 <div class="last-response">
                     Last response: <span id="last-response-date">-</span>
                 </div>
- <button id="open-result-details" class="btn primary">View All Responses</button>
-                <div class="admin-controls" id="admin-panel">
+                <button id="open-result-details" class="btn primary">View All Responses</button>
+                <div class="admin-controls" id="admin-panel" style="display: none;">
                     <!-- Admin controls will be added here for authenticated admin users -->
                 </div>
             </div>
@@ -117,4 +113,5 @@
         </div>
     </div>
 </body>
+
 </html>

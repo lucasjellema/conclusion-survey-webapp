@@ -7,7 +7,7 @@
  * in memory throughout the session.
  */
 
-import { dataEndpoint, deltaEndpoint, adminEndpoint } from './dataConfig.js';
+import { dataEndpoint, deltaEndpoint, adminEndpoint, surveySummaryEndpoint } from './dataConfig.js';
 import { getIdToken } from './auth.js';
 
 // Constants for status and error messages
@@ -36,6 +36,11 @@ const dataCache = {
     userdata: null
 };
 
+
+export async function getSurveySummary(forceRefresh = false) {
+    return getDataFromEndpoint(surveySummaryEndpoint);
+}
+
 /**
  * Get data from the API using the authenticated user's ID token
  * @param {boolean} [forceRefresh=false] - Force a refresh even if data is already cached
@@ -47,6 +52,15 @@ export async function getData(forceRefresh = false) {
         console.log('Returning cached data from previous fetch');
         return dataCache.data;
     }
+    return getDataFromEndpoint(dataEndpoint);
+}
+
+/**
+ * Get data from the API using the authenticated user's ID token
+ * @param {boolean} [forceRefresh=false] - Force a refresh even if data is already cached
+ * @returns {Promise<Object>} The fetched data
+ */
+async function getDataFromEndpoint( theEndpoint) {
 
     // Get the ID token for authentication
     const idToken = getIdToken();
@@ -69,7 +83,7 @@ export async function getData(forceRefresh = false) {
             }
         };
 
-        const endpoint = dataEndpoint + "?ts=" + Date.now();
+        const endpoint = theEndpoint + "?ts=" + Date.now();
         console.log('Fetching data from endpoint:', endpoint);
         // Make authenticated request to the data endpoint ; bust caching by adding ts query parameter
         const response = await fetch(endpoint, options);
@@ -100,6 +114,7 @@ export async function getData(forceRefresh = false) {
         throw error;
     }
 }
+
 
 /**
  * Get data from the API using the authenticated user's ID token

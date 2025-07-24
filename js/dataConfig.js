@@ -5,3 +5,6 @@ export const deltaEndpoint = "https://odzno3g32mjesdrjipad23mbxq.apigateway.eu-a
 // it also allows uploading new files to the bucket to that specific folder
 // the requests should contain the Authorization header with the ID token and the reques header Asset-Path; this header identifies the folder path (to get a list) or a specific object (to GET or PUT)
 export const adminEndpoint = "https://odzno3g32mjesdrjipad23mbxq.apigateway.eu-amsterdam-1.oci.customer-oci.com/conclusion-admin-proxy/survey-admin";
+
+
+export const surveySummaryEndpoint = "https://odzno3g32mjesdrjipad23mbxq.apigateway.eu-amsterdam-1.oci.customer-oci.com/conclusion-proxy/cloud-survey-total-result";
