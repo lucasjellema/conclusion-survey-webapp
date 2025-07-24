@@ -81,6 +81,68 @@ const adminPanelElement = document.getElementById('admin-panel');
 const industryFilterContainer = document.getElementById('industry-filter-container');
 const orgSizeFilterContainer = document.getElementById('org-size-filter-container');
 
+// Modal elements
+const responseDetailsModal = document.getElementById('response-details-modal');
+const closeModalButton = responseDetailsModal ? responseDetailsModal.querySelector('.close-button') : null;
+const responseListElement = document.getElementById('response-list');
+const openResultDetailsButton = document.getElementById('open-result-details');
+/**
+ * Opens the response details modal.
+ */
+function openResponseDetailsModal() {
+    if (responseDetailsModal) {
+        responseDetailsModal.style.display = 'block';
+    }
+}
+
+/**
+ * Closes the response details modal.
+ */
+function closeResponseDetailsModal() {
+    if (responseDetailsModal) {
+        responseDetailsModal.style.display = 'none';
+    }
+}
+
+/**
+ * Populates the response details modal with all survey responses.
+ */
+function populateResponseDetailsModal() {
+    if (!responseListElement) return;
+
+    responseListElement.innerHTML = ''; // Clear previous content
+    surveyResults.sort((a, b) => {
+        const dateA = new Date(a.completedAt || 0);
+        const dateB = new Date(b.completedAt || 0);
+        return dateB - dateA;
+    });
+    surveyResults.forEach(response => {
+        const listItem = document.createElement('li');
+        listItem.className = 'response-item';
+
+        // Extract relevant properties for display
+        const responseId = response.id || 'N/A';
+        const username = response.username || response.email || 'Anonymous';
+        const bedrijf = response.label || 'Unknown';
+        const completedAt = response.completedAt ? new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'long' }).format(new Date(response.completedAt)) : 'N/A';
+        const lastModified = response.lastModified ? new Date(response.lastModified).toLocaleString() : 'N/A';
+
+        let responseDetailsHtml = `
+            <div class="response-meta">
+                <span><strong>Bedrijf:</strong> ${bedrijf}</span>
+                <span><strong>User:</strong> ${username}</span>
+                <span><strong>Completed:</strong> ${completedAt}</span>
+            </div>
+        `;
+        responseDetailsHtml += `            
+            </div>
+        `;
+        listItem.innerHTML = responseDetailsHtml;
+        responseListElement.appendChild(listItem);
+    });
+}
+
+
 /**
  * Initialize the dashboard
  */
@@ -125,6 +187,11 @@ async function initDashboard() {
  * Update overview statistics
  */
 function updateOverviewStats() {
+
+    openResultDetailsButton.addEventListener('click', () => {
+         populateResponseDetailsModal();
+        openResponseDetailsModal();
+    });
     // Update response count
     totalResponsesElement.textContent = surveyResults.length;
     
@@ -142,12 +209,20 @@ function updateOverviewStats() {
     const stats = calculateOverviewStats();
     
     overviewStats.innerHTML = Object.entries(stats).map(([key, value]) => `
-        <div class="stat-card">
+        <div class="stat-card clickable-stat">
             <h3>${key}</h3>
             <div class="stat-value">${value.value}</div>
             ${value.subtext ? `<div class="stat-subtext">${value.subtext}</div>` : ''}
         </div>
+        <button class="view-details-button" onclick="populateResponseDetailsModal(); openResponseDetailsModal();">View Details</button>
     `).join('');
+
+
+    // Add click listener to the overview stats container
+    overviewStats.addEventListener('click', () => {
+        populateResponseDetailsModal();
+        openResponseDetailsModal();
+    });
 }
 
 /**
@@ -353,6 +428,18 @@ function setupEventListeners() {
         
         // Re-render results
         renderResults();
+    });
+
+    // Close modal button
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', closeResponseDetailsModal);
+    }
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === responseDetailsModal) {
+            closeResponseDetailsModal();
+        }
     });
 }
 

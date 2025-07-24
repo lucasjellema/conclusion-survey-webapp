@@ -22,6 +22,7 @@
                 <img src="../img/logo.png" alt="Logo" class="logo-img">
                 <h1 id="survey-title">Survey Results</h1>
             </div>
+            
             <nav class="main-nav">
                 <ul>
                     <li><a href="../index.html">Survey</a></li>
@@ -41,6 +42,7 @@
                 <div class="last-response">
                     Last response: <span id="last-response-date">-</span>
                 </div>
+ <button id="open-result-details" class="btn primary">View All Responses</button>
                 <div class="admin-controls" id="admin-panel">
                     <!-- Admin controls will be added here for authenticated admin users -->
                 </div>
@@ -101,5 +103,18 @@
 
     <!-- Scripts -->
     <script type="module" src="js/resultsDashboard.js"></script>
+
+    <!-- Response Details Modal -->
+    <div id="response-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>All Responses</h2>
+            <div class="modal-body">
+                <ul id="response-list">
+                    <!-- Response items will be dynamically inserted here -->
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
