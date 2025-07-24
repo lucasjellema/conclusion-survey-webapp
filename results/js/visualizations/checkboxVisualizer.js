@@ -104,7 +104,7 @@ function renderBarChart(container, data, question, horizontal = false) {
                             const percentage = data.percentages[context.dataIndex];
                             
                             const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
-                            return `${label}: ${value} (${percentage}% of respondents)${associatedLabels}`;
+                            return `${value} (${percentage}%)${associatedLabels}`;
                         }
                     }
                 },
@@ -229,7 +229,7 @@ function renderStackedBarChart(container, data, question) {
 
                                 
                            const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
-                            return `${label}: ${value} (${percentage}% of respondents)${associatedLabels}`;
+                            return `${value} (${percentage}%)${associatedLabels}`;
                              }
                             return `${label}: ${value} (${percentage}%)`;
                         }
@@ -338,7 +338,7 @@ function renderRadarChart(container, data, question) {
                             const value = context.raw || 0;
                             const percentage = data.percentages[context.dataIndex];
                            const associatedLabels = data.tooltipLabels[context.dataIndex] || [];
-                            return `${label}: ${value} (${percentage}% of respondents)${associatedLabels}`;
+                            return `${value} (${percentage}%)` + (associatedLabels.length > 0 ? `\n${associatedLabels}` : '');
                          }
                     }
                 },

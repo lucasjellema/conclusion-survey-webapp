@@ -12,7 +12,8 @@ import { getData } from '../../js/dataService.js';
 let surveyDefinitionCache = null;
 let surveyResultsCache = null;
 
-const surveyDefinitionFile = '../js/data/conclusionCloudSurvey.json';
+const surveyDefinitionFile = '../../js/data/conclusionCloudSurvey.json';
+const sampleSurveyResultsFile = '../../js/data/sampleSurveyResponse.json';
 /**
  * Get survey definition with questions and steps
  * @returns {Promise<Array>} Array of question definitions
@@ -88,13 +89,25 @@ export async function getResults(forceRefresh = false) {
         }
 
         // Fall back to sample data
-        const response = await fetch('../js/data/sampleSurveyResponse.json');
+        const response = await fetch(sampleSurveyResultsFile);
         const data = await response.json();
 
-        if (!data || !data.responses || !Array.isArray(data.responses)) {
+        if (!data || !data.responses ) {
             console.error('Invalid survey results format');
             return [];
         }
+// create array out of object ; each property value in the responses object becomes an element in the array
+        if (Array.isArray(data.responses)) {
+            // If already an array, just return it
+            console.log('Using responses as is:', data.responses);
+        } else if (typeof data.responses === 'object') {
+            // If it's an object, convert to array
+            data.responses = Object.values(data.responses);
+        } else {
+            console.error('Unexpected format for responses:', data.responses);
+            return [];
+        }
+
 
         // Cache results
         surveyResultsCache = data.responses;

@@ -283,14 +283,9 @@ function renderResponsePage(responses, container, paginationContainer, currentPa
         const responseItem = document.createElement('div');
         responseItem.className = 'response-item';
         
-        // Sanitize text - in a real app, use a proper sanitizer
-        const sanitizedText = text
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-        
         responseItem.innerHTML = `
             <div class="response-number">#${i + 1}</div>
-            <div class="response-text">${sanitizedText}</div>
+            <div class="response-text">${text}</div>
         `;
         
         responseList.appendChild(responseItem);

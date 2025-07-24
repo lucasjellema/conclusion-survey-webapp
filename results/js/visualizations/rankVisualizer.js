@@ -85,8 +85,8 @@ function runInstantRunoffVoting(responses, question) {
 
         ballots.forEach(ballot => {
             for (const candidate of ballot) {
-                if (activeCandidates.includes(candidate)) {
-                    voteCounts[candidate]++;
+                if (activeCandidates.includes(candidate.id)) {
+                    voteCounts[candidate.id]++;
                     break;
                 }
             }
@@ -238,15 +238,15 @@ function processRankResponses(responses, question) {
     // Process each response
     validResponses.forEach(response => {
         if (Array.isArray(response)) {
-            // Array format: ['option3', 'option1', 'option2'] (in ranked order)
+            // Array format:[{id: 'portfolio', rank: 0}] 
             response.forEach((optionId, index) => {
-                if (positionCounts[optionId]) {
+                if (positionCounts[optionId.id]) {
                     // Record the position count (0-based index)
-                    positionCounts[optionId][index]++;
+                    positionCounts[optionId.id][optionId.rank]++;
                     
                     // Add Borda points (higher ranks get more points)
                     // Points are inverse of position (1st = n points, 2nd = n-1 points, etc.)
-                    points[optionId] += optionCount - index;
+                    points[optionId.id] += optionCount - optionId.rank;
                 }
             });
         } else if (typeof response === 'object' && response !== null) {
