@@ -12,7 +12,7 @@ import { getData, getSurveySummary } from '../../js/dataService.js';
 let surveyDefinitionCache = null;
 let surveyResultsCache = null;
 
-const surveyDefinitionFile = '../../js/data/conclusionCloudSurvey.json';
+const surveyDefinitionFile = '/js/data/conclusionCloudSurvey.json';
 const sampleSurveyResultsFile = '../../js/data/sampleSurveyResponse.json';
 /**
  * Get survey definition with questions and steps
