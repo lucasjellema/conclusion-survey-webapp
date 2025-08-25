@@ -93,7 +93,12 @@ export async function getResults(forceRefresh = false) {
                     console.error('Unexpected format for responses:', apiData);
                     return [];
                 }
-
+// for all objects in apiData that contain a property bedrijf but not a property label, derive label from bedrijf
+                apiData.forEach(item => {
+                    if (item.bedrijf && !item.label) {
+                        item.label = item.bedrijf;
+                    }
+                });
 
                 surveyResultsCache = apiData;
                 return surveyResultsCache;

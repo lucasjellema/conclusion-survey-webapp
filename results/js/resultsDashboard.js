@@ -123,7 +123,7 @@ function populateResponseDetailsModal() {
         // Extract relevant properties for display
         const responseId = response.id || 'N/A';
         const username = response.username || response.email || 'Anonymous';
-        const bedrijf = response.label || 'Unknown';
+        const bedrijf = response.bedrijf ||response.label || 'Unknown';
         const completedAt = response.completedAt ? new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'long' }).format(new Date(response.completedAt)) : 'N/A';
         const lastModified = response.lastModified ? new Date(response.lastModified).toLocaleString() : 'N/A';
 
