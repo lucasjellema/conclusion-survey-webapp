@@ -13,7 +13,7 @@ let surveyDefinitionCache = null;
 let surveyResultsCache = null;
 
 // 'https://lucasjellema.github.io/conclusion-survey-webapp/results/index.html'
-const surveyDefinitionFile =  window.location.href.replace(/\/results\/index\.html$/, '') + '/js/data/conclusionCloudSurvey.json';
+const surveyDefinitionFile = window.location.href.replace(/\/results\/index\.html$/, '') + '/js/data/conclusionCloudSurvey.json';
 //const surveyDefinitionFile =  window.location.href '/js/data/conclusionCloudSurvey.json';
 const sampleSurveyResultsFile = '../../js/data/sampleSurveyResponse.json';
 /**
@@ -100,32 +100,33 @@ export async function getResults(forceRefresh = false) {
             }
         } catch (apiError) {
             console.log('API data not available, falling back to sample data:', apiError);
+
+
+            // Fall back to sample data
+            const response = await fetch(sampleSurveyResultsFile);
+            const data = await response.json();
+
+            if (!data || !data.responses) {
+                console.error('Invalid survey results format');
+                return [];
+            }
+            // create array out of object ; each property value in the responses object becomes an element in the array
+            if (Array.isArray(data.responses)) {
+                // If already an array, just return it
+                console.log('Using responses as is:', data.responses);
+            } else if (typeof data.responses === 'object') {
+                // If it's an object, convert to array
+                data.responses = Object.values(data.responses);
+            } else {
+                console.error('Unexpected format for responses:', data.responses);
+                return [];
+            }
+
+
+            // Cache results
+            surveyResultsCache = data.responses;
+            return data.responses;
         }
-
-        // Fall back to sample data
-        const response = await fetch(sampleSurveyResultsFile);
-        const data = await response.json();
-
-        if (!data || !data.responses) {
-            console.error('Invalid survey results format');
-            return [];
-        }
-        // create array out of object ; each property value in the responses object becomes an element in the array
-        if (Array.isArray(data.responses)) {
-            // If already an array, just return it
-            console.log('Using responses as is:', data.responses);
-        } else if (typeof data.responses === 'object') {
-            // If it's an object, convert to array
-            data.responses = Object.values(data.responses);
-        } else {
-            console.error('Unexpected format for responses:', data.responses);
-            return [];
-        }
-
-
-        // Cache results
-        surveyResultsCache = data.responses;
-        return data.responses;
     } catch (error) {
         console.error('Error loading survey results:', error);
         return [];
