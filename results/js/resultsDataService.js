@@ -80,7 +80,7 @@ export async function getResults(forceRefresh = false) {
 
         // Try to get data from the actual API first
         try {
-            const apiData = await getSurveySummary(forceRefresh);
+            let apiData = await getSurveySummary(forceRefresh);
             if (apiData ) {
                 if (Array.isArray(apiData)) {
                     // If already an array, just return it
