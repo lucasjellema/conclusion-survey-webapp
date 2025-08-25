@@ -81,21 +81,21 @@ export async function getResults(forceRefresh = false) {
         // Try to get data from the actual API first
         try {
             const apiData = await getSurveySummary(forceRefresh);
-            if (apiData && apiData.responses) {
-                if (Array.isArray(apiData.responses)) {
+            if (apiData ) {
+                if (Array.isArray(apiData)) {
                     // If already an array, just return it
-                    console.log('Using responses as is:', apiData.responses);
-                } else if (typeof apiData.responses === 'object') {
+                    console.log('Using responses as is:', apiData);
+                } else if (typeof apiData === 'object') {
                     // If it's an object, convert to array
-                    apiData.responses = Object.values(apiData.responses);
+                    apiData = Object.values(apiData);
 
                 } else {
-                    console.error('Unexpected format for responses:', data.responses);
+                    console.error('Unexpected format for responses:', apiData);
                     return [];
                 }
 
 
-                surveyResultsCache = apiData.responses;
+                surveyResultsCache = apiData;
                 return surveyResultsCache;
             }
         } catch (apiError) {
